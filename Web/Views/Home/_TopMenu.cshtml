@@ -1,0 +1,34 @@
+﻿<div id="top-bar" class="">
+    <div class="container clearfix">
+
+        <div class="col_half col_last fright nobottommargin top_link_wrapper">
+            <div class="top-links">
+                <ul>
+
+
+                    <li>@Html.ActionLink("Về LeafShop", "Introduce", "Home")</li>
+
+
+
+                    <li><a href="/">Khuyến mãi</a></li>
+
+
+
+                    <li>@Html.ActionLink("Blog", "News", "Home")</li>
+                    <li><a href='/account'>Tài khoản</a></li>
+                    @{Html.RenderAction("RightHeader", "Users");}
+
+
+
+                    @*<li><a href='/account/login'>Đăng nhập / Đăng ký</a></li>*@
+
+                    <li></li>
+
+                </ul>
+            </div><!-- .top-links end -->
+
+        </div>
+
+    </div>
+
+</div>

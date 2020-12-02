@@ -1,0 +1,588 @@
+﻿@model IEnumerable<Models.Models.DataModels.Category>
+@using Models.Models.DataModels;
+@{
+    var Providers = ViewData["Providers"] as List<Provider>;
+    var products = ViewData["products"] as List<Product>;
+    var listCheck = Request.QueryString["listProviderID"];
+    string Checks = "-1";
+    
+    if (listCheck != null)
+    {
+        Checks = listCheck.Replace("%2C", ",");
+    }
+
+    var list = Checks.Split(',').Select(Int64.Parse).ToList();
+
+}
+<!-- begin: filters -->
+
+<div class="left-sidebar">
+    <div class="panel-heading">
+        <a data-toggle="collapse" href="#filter_group">
+            <h4 class="panel-title">
+                Danh mục sản phẩm
+            </h4>
+        </a>
+    </div>
+
+    <ul class="lv1">
+        @foreach (var item in Model)
+        {
+            string url;
+            if (item.ParentId == null)
+            {
+                if (Model.Where(x => x.ParentId == item.CategoryId).Count() <= 0)
+                {
+                    url = Url.Action("Products", "Home", new { id = item.CategoryId });
+                }
+                else
+                {
+                    url = "javascript:void(0)";
+                }
+                <li class="">
+                    <a href="@url" class="one1">
+                        @item.CategoryName@if (url == "javascript:void(0)")
+                    {<i class="fa fa-angle-right right-icon " aria-hidden="true"></i>}
+                    </a>
+                    <ul class="lv2">
+                        @foreach (var item1 in Model)
+                        {
+                            string url1;
+                            if (Model.Where(x => x.ParentId == item1.CategoryId).Count() <= 0)
+                            {
+                                url1 = Url.Action("Products", "Home", new { id = item1.CategoryId });
+                            }
+                            else
+                            {
+                                url1 = "javascript:void(0)";
+                            }
+                            if (item1.ParentId == item.CategoryId)
+                            {
+                                <li>
+                                    <a class="one2" href="@url1">
+                                        <i class="fa fa-angle-double-right" aria-hidden="true"></i>@item1.CategoryName@if (url1 == "javascript:void(0)")
+                                        {<i class="fa fa-angle-right right-icon " aria-hidden="true"></i>}
+                                    </a>
+
+                                    <ul class="lv3">
+                                        @foreach (var item2 in Model)
+                                        {
+                                            string url2;
+                                            if (Model.Where(x => x.ParentId == item2.CategoryId).Count() <= 0)
+                                            {
+                                                url2 = Url.Action("Products", "Home", new { id = item2.CategoryId });
+                                            }
+                                            else
+                                            {
+                                                url2 = "javascript:void(0)";
+                                            }
+                                            if (item2.ParentId == item1.CategoryId)
+                                            {
+                                                <li><a href="@url2"><i class="fa fa-angle-double-right" aria-hidden="true"></i>@item2.CategoryName</a></li>
+                                            }
+                                        }
+                                    </ul>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </li>
+            }
+
+        }
+
+</div>
+
+
+
+<style>
+    .right-icon {
+        float: right;
+        padding-right: 10px;
+    }
+
+    .lv1 {
+        list-style: none;
+        border: 1px solid #ccc;
+        border-top: none;
+    }
+
+        .lv1 > li {
+            border-bottom: 1px solid #ccc;
+        }
+
+            .lv1 > li > a {
+                color: #000;
+                padding: 5px 10px;
+                width: 100%;
+                display: block;
+            }
+
+    .lv2 {
+        list-style: none;
+        display: none;
+    }
+
+        .lv2 > li {
+            border-top: 1px solid #ccc;
+        }
+
+        .lv2 li > a {
+            font-size: 12px;
+            color: #000;
+            width: 100%;
+            padding: 3px 20px;
+            display: block;
+        }
+
+        .lv2 li:last-child, .lv1 > li:last-child, .lv3 li:last-child {
+            border-bottom: none;
+        }
+
+    .lv3 {
+        display: none;
+    }
+
+        .lv3 > li {
+            border-top: 1px solid #ccc;
+            list-style: none;
+        }
+
+        .lv3 li > a {
+            font-size: 12px;
+            color: #000;
+            width: 100%;
+            padding: 3px 0px;
+            padding-left: 30px;
+            display: block;
+        }
+</style>
+<script>
+    $(document).ready(function () {
+        $('.one1').click(function () {
+            if ($(this).next('.lv2').css('display') == ('none')) {
+                $('.lv2').hide();
+                $(this).next('.lv2').show();
+            } else {
+                $(this).next('.lv2').hide();
+            }
+        });
+    });
+
+
+    $(document).ready(function () {
+        $('.one2').click(function () {
+            if ($(this).next('.lv3').css('display') == ('none')) {
+                $('.lv3').hide();
+                $(this).next('.lv3').show();
+            } else {
+                $(this).next('.lv3').hide();
+            }
+        });
+    });
+
+
+    $(document).ready(function () {
+        $("ul.lv2 > li a").each(function (item) {
+            if (window.location.pathname === $(this).attr("href")) {
+                $(this).closest('ul.lv2 > li').addClass("active");
+                $(this).closest('lul.lv1').addClass("active");
+                $(this).closest('ul.lv2').show();
+            }
+        });
+        $("ul.lv1 > li > a").each(function (item) {
+            if (window.location.pathname === $(this).attr("data-href")) {
+                $(this).closest('ul.lv1 > li > a').addClass("active");
+            }
+        });
+    });
+
+</script>
+<div class="panel-group filter_group">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <a href="javascrip:0">
+                <h4 class="panel-title">
+                    LỌC SẢN PHẨM<!--<i class='fa fa-angle-down'></i>-->
+                </h4>
+            </a>
+        </div>
+        <div id="filter_group" class="panel-collapse collapse in">
+            <!-- BEGIN: Vendor filter -->
+
+
+            <div class="widget_links clearfix" id="thuonghieu">
+                <a href='#filter_group_1' data-toggle='collapse'><h4>Thương hiệu<i class='fa-angle-down fa'></i></h4></a>
+                <ul id='filter_group_1' class='panel-collapse collapse in filter_list'>
+
+                    <li class='col-xs-12 col-sm-12 col-md-12'>
+                        <label class='filter_checkbox'>
+                            <span>
+                                <i class='fa-check fa hidden'></i>
+                                <input class="vendor" data-type="checkAll" type="checkbox">
+                            </span>
+                            Khác
+                        </label>
+                    </li>
+
+                    @foreach (var item in Providers)
+                    {
+                        var chek = false;
+                        foreach (var li in list)
+                        {
+                            if (item.ProviderId == li)
+                            {
+                                chek = true;
+                                break;
+                            }
+                        }
+                        <li class='col-xs-12 col-sm-12 col-md-12'>
+                            <label class='filter_checkbox'>
+                                <span>
+                                    <i class='fa-check fa hidden'></i>
+                                    <input class="vendor" type="checkbox" checked="@chek" data-id-box="@item.ProviderId" @*value="(vendor:product=@item.ProviderName)"*@>
+                                </span>
+                                @item.ProviderName
+                            </label>
+                        </li>
+
+                    }
+
+                </ul>
+                <div class="mfj">
+                    <a class="view_ss view_ops" href="javascript:0">Xem Thêm</a>
+                    <a class="view_small view_ops" href="javascript:0">Thu Nhỏ</a>
+                </div>
+
+            </div>
+            <script>
+                var TH=$('#thuonghieu')
+                var listId = []
+                var idCategory = $('#idCategory').val();
+                TH.find('input[data-type="checkAll"]').each(function () {
+                    $(this).click(function () {
+                        listId = []
+                        TH.find('input:checkbox').not(this).prop('checked', this.checked);
+                        TH.find('input[type="checkbox"]').each(function () {
+                            var dataId = $(this).attr("data-id-box");
+                            if ($(this).is(":checked")) {
+                                if (dataId != undefined) {
+                                    listId.push(dataId);
+                                    console.log(listId)
+                                    deleteAll()
+                                }
+                            }
+                            else {
+                                var index = listId.indexOf(dataId);
+                                if (index > -1) {
+                                    listId.splice(index, 1);
+                                    deleteAll()
+                                }
+                                console.log(listId)
+                            }
+                        })
+                    })
+                })
+                TH.find('input[type="checkbox"]').each(function () {
+                    var dataId = $(this).attr("data-id-box");
+                    if (dataId != undefined) {
+                        $(this).click(function () {
+                            if ($(this).is(":checked")) {
+                                listId.push(dataId);
+                                console.log(listId)
+                                deleteAll()
+                            }
+                            else {
+                                var index = listId.indexOf(dataId);
+                                if (index > -1) {
+                                    listId.splice(index, 1);
+                                    deleteAll()
+                                }
+                                console.log(listId)
+                            }
+                        })
+                    }
+                })
+
+                function deleteAll() {
+                    var data = listId.toString();
+                    if (data.length != 0) {
+                        $.ajax({
+                            url: `/Home/ListProducts/?id=${idCategory}&orderby=@Request.QueryString["orderby"]`,
+                            method: "GET",
+                            data: {
+                                listProviderID:
+                                    data
+                            }
+                            , success: function (response) {
+
+                                $('#grid_pagination').html(response)
+                            }
+                        })
+                    }
+                    else {
+                        console.log("Bạn chưa chọn hiện vật để xóa")
+                    }
+                }
+            </script>
+
+            <!-- END: Vendor filter -->
+            <!-- BEGIN: Type filter -->
+            <!-- END: Type filter -->
+            <!-- BEGIN: Color filter -->
+            <!-- END: Color filter -->
+            <!-- BEGIN: Price filter -->
+
+            <div class="widget_links clearfix">
+                <a href='#filter_group_4' data-toggle='collapse'><h4>Giá<i class='fa-angle-down fa'></i></h4></a>
+                <ul id='filter_group_4' class='panel-collapse collapse in filter_list'>
+                    <li>
+                        <label class='filter_checkbox'>
+                            <span>
+                                <input class="price" type="checkbox" value="(price:product<=100000)">
+                            </span>
+                            dưới 100,000₫
+                        </label>
+                    </li>
+                    <li>
+                        <label class='filter_checkbox'>
+                            <span>
+                                <input class="price" type="checkbox" value="((price:product>=100000)&&(price:product<=300000))">
+                            </span>
+                            100,000₫ - 300,000₫
+                        </label>
+                    </li>
+                    <li>
+                        <label class='filter_checkbox'>
+                            <span>
+                                <input class="price" type="checkbox" value="((price:product>=300000)&&(price:product<=500000))">
+                            </span>
+                            300,000₫ - 500,000₫
+                        </label>
+                    </li>
+                    <li>
+                        <label class='filter_checkbox'>
+                            <span>
+                                <input class="price" type="checkbox" value="((price:product>=500000)&&(price:product<=1000000))">
+                            </span>
+                            500,000₫ - 1,000,000₫
+                        </label>
+                    </li>
+                    <li>
+                        <label class='filter_checkbox'>
+                            <span>
+                                <input class="price" type="checkbox" value="(price:product>=1000000)">
+                            </span>
+                            trên 1,000,000₫
+                        </label>
+                    </li>
+                </ul>
+
+                <div class="mfj">
+                    <a class="view_sss view_ops" href="javascript:0">Xem Thêm</a>
+                    <a class="view_smalls view_ops" href="javascript:0">Thu Nhỏ</a>
+                </div>
+            </div>
+
+            <!-- END: Price filter -->
+            <!-- BEGIN: Tag_Custom_1 filter -->
+            <!-- END: Tag_Custom_1 filter -->
+            <!-- BEGIN: Tag_Custom_2 filter -->
+            <!-- END: Tag_Custom_2 filter -->
+            <!-- BEGIN: Tag_Custom_3 filter -->
+            <!-- END: Tag_Custom_3 filter -->
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+
+        $('#sortControl option[sort_by=created-descending]').attr('selected', true);
+
+
+        $(".widget_links li input").click(function () {
+            var searchString = "";
+            $('#sortControl option[sort_by=manual]').attr('selected', true);
+            searchString = getStringFilter($(this));
+            var shop_url = '//leafshop.vn';
+            var urlState = shop_url + '/' + searchString;
+            window.history.pushState(null, null, urlState);
+            var url_final = '/' + searchString + '&view=grid_and_control';
+            loadResultBy(url_final, $("#shop"));
+            //$(this).parent().find('i').toggleClass('hidden');
+        });
+    });
+    $('#filter_group .widget_links > a').click(function () {
+        var $current = $(this).next().attr('id');
+        $.each($('#filter_group .widget_links .panel-collapse'), function () {
+            if ($(this).attr('id') != $current) {
+                $(this).removeClass('in');
+            }
+        })
+    })
+</script>
+
+
+<script>
+    $(document).ready(function () {
+
+        if ($('#filter_group_1').height() >= 232) {
+            $('#filter_group_1').css('height', '232px');
+            $('.view_small').hide();
+            $('.view_ss').click(function () {
+                $('#filter_group_1').css('height', 'auto');
+                $('.view_ss').hide();
+                $('.view_small').show();
+            });
+
+
+            $('.view_small').click(function () {
+                $('#filter_group_1').css('height', '232px');
+                $('.view_small').hide();
+                $('.view_ss').show();
+            });
+
+        }
+        else {
+            $('.view_small').hide();
+            $('.view_ss').hide();
+        }
+
+    });
+
+</script>
+
+
+
+<script>
+    $(document).ready(function () {
+
+        if ($('#filter_group_4').height() >= 232) {
+            $('#filter_group_4').css('height', '232px');
+            $('.view_smalls').hide();
+            $('.view_sss').click(function () {
+                $('#filter_group_4').css('height', 'auto');
+                $('.view_sss').hide();
+                $('.view_smalls').show();
+            });
+
+
+            $('.view_small').click(function () {
+                $('#filter_group_4').css('height', '232px');
+                $('.view_smalls').hide();
+                $('.view_sss').show();
+            });
+
+        }
+        else {
+            $('.view_smalls').hide();
+            $('.view_sss').hide();
+        }
+
+    });
+
+</script>
+
+<!-- end: filters -->
+
+<div class='hidden-xs hidden-sm'>
+    <!-- categories -->
+    <!-- end categories -->
+    <!-- recent product -->
+    @*<div class="widget clearfix">
+
+            <h4><a href='/collections/sale'>Sản phẩm khuyến mãi</a></h4>
+            <div id="post-list-footer" class='sidebar_menu'>
+            </div>
+
+        </div>*@
+
+    <!-- end recent product -->
+    <!-- most popular -->
+
+    <div class="widget clearfix">
+
+        <h4><a href='/collections/cham-soc-da-mat'>Sản phẩm nổi bật</a></h4>
+        <div id="Popular-item" class='sidebar_menu'>
+
+            @foreach (var item in products)
+            {
+                <div class="spost clearfix">
+                    <div class="entry-image">
+                        <a href="@Url.Action("Productsdetail","Home",new { id=@item.ProductId})"><img src="//product.hstatic.net/1000104489/product/z2140456780189_926d65ce114cdd24d7b1e732c7605e3f_eea800234bc44b11984afd96a88d2ba8_small.jpg" alt="Sữa rửa mặt hữu cơ Avril lô hội dạng gel 100ml"></a>
+                    </div>
+                    <div class="entry-c">
+                        <div class="entry-title">
+                            <h4><a href="@Url.Action("Productsdetail","Home",new { id=@item.ProductId})">@item.ProductName</a></h4>
+                        </div>
+                        <ul class="entry-meta">
+                            <li class="color">
+                                @if (item.Discount != null)
+                                {
+                                    <del class="sale-price">
+                                        @{
+                                            var vie = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+
+                                        }
+                                        @String.Format(vie, "{0:c00}", item.PriceOut)
+
+                                    </del>
+                                    <ins>
+                                        @{
+
+                                            var price = item.Discount > 0 ? item.PriceOut - item.PriceOut * item.Discount / 100 : @item.PriceOut;
+                                        }
+                                        @String.Format(vie, "{0:c00}", price)
+                                    </ins>
+                                }
+                                else
+                                {
+                                    <ins>
+                                        @{
+                                            var vie = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+
+                                        }
+                                        @String.Format(vie, "{0:c00}", item.PriceOut)
+
+                                    </ins>
+                                }
+                            </li>
+                            <!--<li><i class="icon-star3"></i> <i class="icon-star3"></i> <i class="icon-star3"></i> <i class="icon-star3"></i> <i class="icon-star-half-full"></i></li>-->
+                        </ul>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+
+    <!-- end most popular -->
+    <!-- recent view -->
+    <!--<div class="widget clearfix">
+
+        <h4>Sản phẩm vừa xem</h4>
+        <div class="widget-last-view sidebar_menu">
+
+        </div>
+
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            var $strHTML = get_viewed_items_html('');
+            $('.widget .widget-last-view').html($strHTML);
+        })
+    </script>-->
+    <!-- end recent view -->
+
+
+    <div class="widget clearfix">
+
+
+    </div>
+
+
+</div>
+
+
+

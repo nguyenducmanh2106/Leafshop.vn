@@ -1,0 +1,96 @@
+﻿
+@using Models.Models.DataModels
+@{
+    var product = ViewData["product"] as Product;
+    var item = product;
+}
+<div class="ajax-modal-title">
+    <a href=''><h2>@item.ProductName</h2></a>
+</div>
+
+<div class="product-page product modal-padding clearfix">
+    <div class="col-md-6 nobottommargin">
+        <div class="product-image">
+            <div class="product-main-image">
+                <div class="pd_slide_qv">
+                    <img data-lazy="@item.Images">
+                </div>
+                <div class='pd_slide_thumb_qv'>
+
+                </div>
+            </div>
+            @if (item.Discount != null)
+            {
+                <div class="sale-flash">-@item.Discount%</div>
+            }
+        </div>
+    </div>
+    <div class="col-md-6 nobottommargin product-desc">
+        <div class="product-price">
+            @if (item.Discount != null)
+            {
+                <del class="sale-price">
+                    @{
+                        var vie = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+
+                    }
+                    @String.Format(vie, "{0:c00}", item.PriceOut)
+
+                </del>
+                <ins>
+                    @{
+
+                        var price = item.Discount > 0 ? item.PriceOut - item.PriceOut * item.Discount / 100 : @item.PriceOut;
+                    }
+                    @String.Format(vie, "{0:c00}", price)
+                </ins>
+            }
+            else
+            {
+                <ins>
+                    @{
+                        var vie = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+
+                    }
+                    @String.Format(vie, "{0:c00}", item.PriceOut)
+
+                </ins>
+            }
+        </div>
+        <div class="clear"></div>
+        <div class="line"></div>
+        <div>
+           
+        </div>
+        <!-- Product Single - Quantity & Cart Button
+        ============================================= -->
+        <form id='ProductDetailsFormQV' class="nobottommargin clearfix">
+            <div class="quantity product-quantity clearfix col-xs-6 noleftpadding">
+                <input type="button" value="-" class="minus">
+                <input type="text" class='qty' id='product_quantity' readonly step="1" min="1" name="quantity" value="1" title="Qty" class="qty" size="4" />
+                <input type="button" value="+" class="plus">
+            </div>
+            <script>
+
+
+            </script>
+            <div class="hidden" style="">
+                <select id="product-select-qw" name="id">
+                </select>
+
+                <input type="hidden" class="unit_price_not_formated" value="">
+                <input type="hidden" class="product_url" value="">
+                <input type="hidden" class="product_title_hd" value="">
+                <input type="hidden" class="product_img_small" value="">
+            </div>
+            <button type="submit" id='addtocartQV' class="addtocartQV button nomargin col-xs-6">Add to cart</button>
+            <button class='buy_btn buynow buynow_qv button col-xs-12 noleftmargin norightmargin' id='buynow'>Mua ngay</button>
+        </form><!-- Product Single - Quantity & Cart Button End -->
+
+        <div class="clear"></div>
+        <div class="line"></div>
+        <p class="description"> @item.Description</p>
+    </div>
+</div>
+
+

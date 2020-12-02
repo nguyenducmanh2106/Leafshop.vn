@@ -1,0 +1,375 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@using Models.Models.DataModels;
+@model PagedList.IPagedList<Models.Models.DataModels.Product>
+@{
+    var countProducts = ViewData["countProducts"];
+    int NumberProducts = Int32.Parse(countProducts.ToString());
+    ViewBag.Title = "Products";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+    var Category = ViewData["Category"] as Category;
+    var listCheck = ViewData["listCheck"];
+   
+}
+
+<!-- Content
+============================================= -->
+<div class="zom_grr">
+    <!-- Page Title
+    ============================================= -->
+    <section id="page-title">
+        <div class="container clearfix">
+
+            <ol class="breadcrumb col-md-6 col-sm-6">
+                <li><a href="/">Trang chủ</a></li>
+
+
+                <li class='active'>Tất cả sản phẩm</li>
+
+
+            </ol>
+        </div>
+    </section>
+    <!-- #page-title end -->
+    <!-- Content
+    ============================================= -->
+    <input type="hidden" id="listCheck" value="@listCheck"/>
+    <input type='hidden' id='collection_id' value='=0'>
+    <section id="content">
+        <div class="content-wrap">
+            <div class="container clearfix">
+
+
+                <div class='collection_banner'>
+                    <img src="//theme.hstatic.net/1000104489/1000257823/14/col_all_banner.jpg?v=3503" />
+                </div>
+
+
+                <div class='row'>
+                    <!-- Post Content
+
+
+                    ============================================= -->
+
+                    <div class="col-xs-12">
+
+
+                    </div>
+                    <div class="post_content pull-right col-sm-12 col-xs-12 col-md-9" style="margin-bottom: 15px !important;">
+                        <span>@Category.CategoryName</span>
+                        <input type="hidden" id="idCategory" value="@Category.CategoryId" />
+                        <!-- Shop
+                        ============================================= -->
+                        <div id="shop" class="product-3 clearfix">
+                            <div class="dess">
+
+                            </div>
+
+                            <div class='sort-wrapper'>
+                                <div class="browse-tags" style='margin-bottom:20px;line-height: 30px; overflow:hidden;'>
+                                    <div class="col-sm-6 col-md-8 noleftpadding">
+                                        <p class="subtext nobottommargin">
+
+                                            @*Có <span class='require_symbol'>@NumberProducts</span> sản phẩm.*@
+
+                                        </p>
+                                    </div>
+
+                                    <div class='col-sm-6 col-md-4 noleftpadding text-right norightpadding'>
+                                        <span class='col-sm-5 col-xs-4 nopadding text-left'>Sắp xếp theo:</span>
+                                        <span class="custom-dropdown custom-dropdown--white pull-right col-sm-7 col-xs-8 norightpadding">
+                                            <select id='sortControl' class="form-control input-sm"
+                                                    onchange="window.location.href =this.options[this.selectedIndex].value">
+                                                <option value='@Url.Action("Products","Home",new {orderby="price_asc",page=Request.QueryString["page"],listProviderID=@listCheck})'>Giá: Tăng dần</option>
+                                                <option value='@Url.Action("Products","Home",new {orderby="price_desc",page=Request.QueryString["page"],listProviderID=@listCheck})'>Giá: Giảm dần</option>
+                                                <option value='@Url.Action("Products","Home",new {orderby="name_asc",page=Request.QueryString["page"],listProviderID=@listCheck})' selected="selected">Tên: A-Z</option>
+                                                <option value='@Url.Action("Products","Home",new {orderby="name_desc",page=Request.QueryString["page"],listProviderID=@listCheck})'>Tên: Z-A</option>
+                                                <option value='@Url.Action("Products","Home",new {orderby="oldest_day",page=Request.QueryString["page"],listProviderID=@listCheck})'>Cũ nhất</option>
+                                                <option value='@Url.Action("Products","Home",new {orderby="recent_day",page=Request.QueryString["page"],listProviderID=@listCheck})'>Mới nhất</option>
+                                                <option value='@Url.Action("Products","Home",new {orderby="best_selling",page=Request.QueryString["page"],listProviderID=@listCheck})'>Bán chạy nhất</option>
+                                            </select>
+                                        </span>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div id='grid_pagination'>
+
+                                @*Dữ liệu products*@
+                                <div class='grid'>
+                                    @if (NumberProducts <= 0)
+                                    {
+                                        <span>Sản phẩm đang cập nhật...</span>
+                                    }
+                                    @foreach (var item in Model)
+                                    {
+                                        <div class='col-sm-4 col-xs-12 noleftpadding norightpadding product_single'>
+                                            <div class="product clearfix">
+                                                <div class="haravan-product-reviews-badge" data-id="@item.ProductId">
+                                                </div>
+                                                <div class="product-image">
+                                                    <a href="@Url.Action("Productsdetail","Home",new { id=@item.ProductId})"><img src="https://product.hstatic.net/1000104489/product/mi_spa_ban_lut_196f9793c75c460e81773e905cbf46f2.jpg" data-lazyload="https://product.hstatic.net/1000104489/product/mi_spa_ban_lut_196f9793c75c460e81773e905cbf46f2.jpg" alt="@item.ProductName"></a>
+                                                    <div class="product-overlay">
+                                                        <a href="/products/thanh-ly-mi-spaghetti-ban-lut-huu-co-markal-500g" class="product_quick_add" data-toggle='tooltip' title='Thêm vào giỏ'><i class="fa fa-shopping-cart"></i><span class='hidden-md hidden-lg'> Thêm vào giỏ</span></a>
+                                                        <a href="#product-pop-up" onclick="Quick(@item.ProductId)" class="item-quick-view fancybox-fast-view hidden-sm hidden-xs" @*product_url="/products/thanh-ly-mi-spaghetti-ban-lut-huu-co-markal-500g"*@ data-toggle='tooltip' title='Xem nhanh'><i class="fa fa-eye"></i><span class='hidden-md hidden-lg'> Xem nhanh</span></a>
+                                                    </div>
+                                                </div>
+                                                <div class="product-title">
+                                                    <h4><a href="@Url.Action("Productsdetail","Home",new { id=@item.ProductId})" title="@item.ProductName">@item.ProductName</a></h4>
+                                                    <span>@item.ProductId</span>
+                                                </div>
+                                                <div class="product-desc">
+                                                    @if (item.Discount != null)
+                                                    {
+                                                        <div class="sale-flash">- @item.Discount%</div>
+                                                    }
+                                                    <div class="product-price">
+                                                        @if (item.Discount != null)
+                                                        {
+                                                            <del class="sale-price">
+                                                                @{
+                                                                    var vie = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+
+                                                                }
+                                                                @String.Format(vie, "{0:c00}", item.PriceOut)
+
+                                                            </del>
+                                                            <ins>
+                                                                @{
+
+                                                                    var price = item.Discount > 0 ? item.PriceOut - item.PriceOut * item.Discount / 100 : @item.PriceOut;
+                                                                }
+                                                                @String.Format(vie, "{0:c00}", price)
+                                                            </ins>
+                                                        }
+                                                        else
+                                                        {
+                                                            <ins>
+                                                                @{
+                                                                    var vie = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+
+                                                                }
+                                                                @String.Format(vie, "{0:c00}", item.PriceOut)
+
+                                                            </ins>
+                                                        }
+                                                    </div>
+                                                    <div class="buy_all">
+                                                        <a class="product_quick_add" href="/products/thanh-ly-mi-spaghetti-ban-lut-huu-co-markal-500g">Mua Ngay</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+
+                                </div>
+                                <div class='pagination_wrapper'>
+                                    @Html.PagedListPager(Model, page => Url.Action("Products", "Home", new { orderby = Request.QueryString["orderby"], listProviderID = @listCheck, page }))
+
+                                    <!-- BEGIN: AJAX-FILTER -->
+                                    <script>
+                                        $(".resetButton").click(function (e) {
+                                            e.preventDefault();	// không tự nhảy lên đầu trang
+                                            $(':input[filtertype=search]:checked').each(function () {
+                                                this.checked = false;
+                                                var searchString = getStringFilter($(this));
+                                                var url_final = '/' + searchString + '&view=grid_and_control';
+                                                //loadResultBy(url_final,$("#results"));
+                                            });
+                                        });
+
+                                        function getStringFilter(currentSelected) {
+                                            var vendor = "", product_type = "", price = "", color = '', tag_custom_1 = "", tag_custom_2 = "", tag_custom_3 = "";
+                                            var tag_prefix_1 = 'xuatxu',
+                                                tag_prefix_2 = 'manhinh',
+                                                tag_prefix_3 = 'dungtich';
+                                            var searchString = "search?q=";
+                                            // if current page is search
+                                            if ($("#collection_id").val() == ">=0") {
+                                                searchString += $("#search_term").val() + "&";
+                                            }
+                                            searchString += "filter=(";
+                                            // BEGIN: Filter
+                                            var collectionFilter = "";
+                                            if ($("#collection_id").val() != ">=0") {
+                                                if ($("#collection_id").val() != "=0") {
+                                                    collectionFilter += "(collectionid:product" + $("#collection_id").val() + ")";
+                                                }
+                                                else {
+                                                    collectionFilter = "(collectionid:product>=0)";
+                                                }
+                                            }
+                                            else {
+                                                collectionFilter = "(collectionid:product>=0)";
+                                            }
+
+
+
+                                            // BEGIN: GET All checked filter string
+                                            // standard filter
+                                            vendor = getCheckedBy("vendor", vendor).replace("=", "**");
+                                            product_type = getCheckedBy("product_type", product_type);
+                                            price = getCheckedBy("price", price);
+                                            // custom filer
+
+                                            color = getCheckedBy("mausac", color);
+
+                                            tag_custom_1 = (tag_prefix_1 != '') ? getCheckedBy(tag_prefix_1, tag_custom_1) : getCheckedBy('a', tag_custom_1);
+                                            tag_custom_2 = (tag_prefix_2 != '') ? getCheckedBy(tag_prefix_2, tag_custom_2) : getCheckedBy('a', tag_custom_2);
+                                            tag_custom_3 = (tag_prefix_3 != '') ? getCheckedBy(tag_prefix_3, tag_custom_3) : getCheckedBy('a', tag_custom_3);
+                                            // END: GET FILTER
+
+                                            //console.log(vendor);
+                                            //console.log(color);
+                                            // BEGIN: MERGE all filter string
+                                            collectionFilter = mergeFilterWith(vendor, collectionFilter);
+                                            collectionFilter = mergeFilterWith(product_type, collectionFilter);
+                                            collectionFilter = mergeFilterWith(price, collectionFilter);
+
+                                            collectionFilter = mergeFilterWith(color, collectionFilter);
+                                            collectionFilter = mergeFilterWith(tag_custom_1, collectionFilter);
+                                            collectionFilter = mergeFilterWith(tag_custom_2, collectionFilter);
+                                            collectionFilter = mergeFilterWith(tag_custom_3, collectionFilter);
+
+                                            searchString += collectionFilter;
+                                            searchString += ')';
+                                            // END: MERGE
+
+                                            // BEGIN: Sorting
+                                            if ($("#sortControl option:selected").val() != "") {
+                                                //searchString += "&sortby="+$( "#sortControl option:selected" ).attr('sort_by');
+                                            }
+                                            else {
+                                                //searchString+='&sortby=(updated_at:product=desc)';
+                                            }
+                                            // END: Sorting
+
+                                            return searchString;
+                                        }
+
+                                        function getCheckedBy(filterKey, filterOption) {
+                                            $(':input[class^=' + filterKey + ']:checked').each(function () {
+                                                if (filterOption == "") {
+                                                    filterOption = $(this).val();
+                                                }
+                                                else {
+                                                    filterOption = filterOption + '||' + $(this).val();
+                                                }
+                                            });
+                                            return filterOption;
+                                        }
+
+                                        function mergeFilterWith(filterCondition, currCollectionFilter) {
+                                            if (filterCondition != "") {
+                                                filterCondition = '(' + filterCondition + ')';
+                                                currCollectionFilter += '&&' + filterCondition;
+                                            }
+                                            return currCollectionFilter;
+                                        }
+
+                                        function loadResultBy(url_building, position_load) {
+                                            var c = url_building.replace('&view=grid_and_control', '');
+                                            console.log(c);
+                                            var a = encodeURIComponent(c.replace('/search?q=filter=', ''));
+                                            $.ajax({
+                                                'url': '/search?q=filter=' + a + '&view=gid-search',
+                                                'type': 'POST',
+                                                'success': function (data) {
+                                                    //console.log(data);
+                                                    position_load.html(data);
+                                                },
+                                                'complete': function () {
+                                                    ega.init();
+                                                }
+                                            });
+                                        }
+
+                                        // ajax sorting
+
+                                        jQuery('.sort-by').val('created-descending')
+                                            .bind('change', function () {
+                                                Haravan.queryParams.sort_by = $(this).val();
+                                                location.search = $.param(Haravan.queryParams);
+                                            })
+
+
+                                        // ajax pagination
+                                        $('.ajax-pagination li as').click(function (e) {
+
+                                        });
+
+
+                                        function scrollToShop(margin) {
+                                            var locate = parseInt($('#content').offset().top) + margin;
+                                            $('html, body').animate({
+                                                scrollTop: locate
+                                            }, 1000);
+                                            return false;
+                                        }
+                                        // end scroll
+
+                                        //$('.pagination li a').click(function() {scrollToShop(0)});
+
+
+                                        /** align single element ***/
+                                        $(document).ready(function () {
+                                            align_single_element();
+                                        });
+                                        var align_single_element = function () {
+                                            var num_pro = $('#shop .product').length;
+                                            if (num_pro % 2 == 1) {
+                                                $('#shop .product').last().addClass('product-last');
+                                            }
+                                        }
+
+                                    </script>
+                                    <!-- END: AJAX-FILTER -->
+
+                                </div>
+                                @*<script>
+                                               $(document).ready(function () {
+                                                   $.ajax({
+                                        url: '@Url.Action("ListProducts","Home",new { id=2})',
+                                        method: "GET"
+
+                                        , success: function (response) {
+                                            console.log(response)
+                                            $('#grid_pagination').html(response)
+                                        }
+                                    })
+                                               })
+                                            </script>*@
+
+                            </div>
+                        </div><!-- #shop end -->
+                    </div><!-- .postcontent end -->
+                    <!-- Sidebar
+                    ============================================= -->
+                    <div class="sidebar nobottommargin left-sidebar col-sm-3 hidden-xs hidden-sm">
+                        <div class="sidebar-widgets-wrap">
+                            @{Html.RenderAction("Categories", "Home");}
+                        </div>
+                    </div>
+
+                    <!-- .sidebar end -->
+                </div>
+            </div>
+        </div>
+    </section><!-- #content end -->
+    <script>
+        /** align single element ***/
+        $(document).ready(function () {
+            align_single_element();
+        });
+        var align_single_element = function () {
+            var num_pro = $('#shop .product').length;
+            if (num_pro % 2 == 1) {
+                $('#shop .product').last().addClass('product-last');
+            }
+        }
+    </script>
+
+</div>
+
+<!-- #content end -->

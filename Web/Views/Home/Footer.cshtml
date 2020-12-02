@@ -1,0 +1,173 @@
+﻿<div class="zom_grr">
+    <div class="spriteHerbe container">&nbsp;</div>
+    <footer id="footer" class='dark'>
+
+
+
+        <div class="container">
+
+            <!-- Footer Widgets
+            ============================================= -->
+            <div class="footer-widgets-wrap clearfix footer_wrap_2">
+                <div class="prefooter_one col-sm-3 col-xs-12">
+
+                    <div class="widget clearfix">
+
+                        <h4>Cửa hàng</h4>
+                        <div class="info_more">
+
+
+
+                            <p class="diachi_hot" style="padding-left: 15px;">
+                                <strong style="color:#555">Hà nội: </strong>Nhà vườn số 2,Khu 671 Hoàng Hoa Thám,Q.Ba Đình,Hà Nội
+                            </p>
+                            <p class="diachi_hot" style="padding-left: 15px;">
+                                <strong style="color:#555">HCM: </strong>7B/8-Nguyễn Thị Minh Khai ,P.Bến Nghé,Quận 1,HCM
+                            </p>
+
+
+                            <div class="hotline-ss">
+                                <strong style="color:#555" class="local_io">Hotline: </strong>
+                                <span>Hà Nội: 0975.380.816</span><br>
+                                <span style="padding-left: 63.5px;">Hồ Chí Minh: 0901.469.786</span>
+                            </div>
+                        </div>
+
+                        <div class="email-xl">
+                            <strong style="color:#555" class="local_io">Email: </strong>
+                            <span>contact@leafshop.vn</span>
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+                <div class="prefooter_one col-sm-3 col-xs-12">
+
+                    <div class="widget widget_links clearfix">
+
+                        <h4>Về chúng tôi</h4>
+
+                        <ul>
+
+                            <li><a href='@Url.Action("Introduce","Home")'>Giới thiệu về LEAFSHOP</a></li>
+
+                            <li>@Html.ActionLink("Điều khoản sử dụng", "DieuKhoanSuDung", "Home")</li>
+
+                            <li>@Html.ActionLink("Blog", "News", "Home")</li>
+
+                            @*<li><a href="/blogs/tuyen-dung">Tuyển dụng</a></li>*@
+
+
+                        </ul>
+
+                    </div>
+                    <div class='marginbottom hidden-lg hidden-md hidden-sm'>
+
+                    </div>
+                </div>
+
+                <div class="prefooter_one col-sm-3 col-xs-12">
+
+                    <!--<div class="widget widget_links clearfix">
+
+                        <h4>Tài khoản của bạn</h4>
+
+                        <ul>
+
+                            <li><a href="http://leafshop.myharavan.com/cart">Giỏ hàng</a></li>-->
+                    @*<li><a href="/pages/danh-sach-yeu-thich">Danh sách yêu thích</a></li>*@
+
+                    @*<li><a href="http://leafshop.myharavan.com/account/login">Đăng nhập - Đăng ký</a></li>*@
+
+                    <!--<li><a href="/pages/chinh-sach-bao-mat">Chính sách bảo mật</a></li>
+
+
+                        </ul>
+
+                    </div>-->
+
+                    <div class="widget widget_links clearfix" style="margin-top:10px;">
+
+                        <h4>Hỗ trợ khách hàng</h4>
+                        <ul>
+
+                            <li>@Html.ActionLink("Liên hệ hỗ trợ", "Feedback", "Home")</li>
+
+                            <li><a href="/pages/thanh-toan">Thanh toán</a></li>
+
+                            <li>
+                                @Html.ActionLink("Vận chuyển", "PhuongThucVanChuyen", "Home")
+                            </li>
+
+                            <li>@Html.ActionLink("Chính sách đổi trả", "ChinhSachDoiTra", "Home")</li>
+
+
+                        </ul>
+                    </div>
+                    <div class='marginbottom hidden-lg hidden-md hidden-sm'>
+
+                    </div>
+                </div>
+
+
+                <div class="prefooter_one col-sm-3 col-xs-12">
+                    <div class="widget widget_links clearfix">
+                        <h4>Đăng kí nhận tin</h4>
+                        <form accept-charset='UTF-8' action='/account/contact' class='contact-form' method='post'>
+                            <input name='form_type' type='hidden' value='customer'>
+                            <input name='utf8' type='hidden' value='✓'>
+
+
+                            <form id="contact" role="search">
+                                <div class="input-group" id="mail-box">
+                                    <input type="email" id="form-ft" class="form-control input-sm" name="contact[email]" placeholder="Nhập email của bạn">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default  btn-ok" type="submit">OK</button>
+                                    </span>
+                                </div>
+                            </form>
+
+                            <input id='fee62009614f4005826bf97c916ed0db' name='g-recaptcha-response' type='hidden'>
+                            <script src='https://www.google.com/recaptcha/api.js?render=6LdD18MUAAAAAHqKl3Avv8W-tREL6LangePxQLM-'></script>
+                            <script>grecaptcha.ready(function () { grecaptcha.execute('6LdD18MUAAAAAHqKl3Avv8W-tREL6LangePxQLM-', { action: 'submit' }).then(function (token) { document.getElementById('fee62009614f4005826bf97c916ed0db').value = token; }); });</script>
+                        </form>
+
+                        <h4>Kết nối với chúng tôi</h4>
+                        <div class="social-link">
+
+                            <a target="_blank" href="https://www.facebook.com/leafshop.vn/"><i class="fa fa-facebook icon-facebook"></i></a>
+
+
+                            <a target="_blank" href="//www.youtube.com/channel/UC_6LnRIenOoPq1TvsTviGJQ"><i class="fa fa-youtube icon-youtube"></i></a>
+
+
+                            <a target="_blank" href="//www.instagram.com/leafshop.vn/"><i class="fa fa-instagram icon-instagram"></i></a>
+
+
+
+
+                        </div>
+                        <br>
+
+                        <div class="logo-footer">
+                            <a href="http://online.gov.vn/CustomWebsiteDisplay.aspx?DocId=53001" target="_blank">
+                                <img src="//theme.hstatic.net/1000104489/1000257823/14/logo-bct.png?v=3503" alt="Bộ Công Thương">
+                            </a>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div><!-- .footer-widgets-wrap end -->
+
+            <p class="copyright">
+                Copyright 2017 Leafshop Vietnam. All rights reserved
+            </p>
+        </div>
+
+
+
+    </footer>
+</div>

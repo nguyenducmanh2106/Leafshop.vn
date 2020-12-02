@@ -1,0 +1,567 @@
+﻿@using Models.Models.DataModels
+
+@model Models.Models.DataModels.Product
+@{
+    ViewBag.Title = "Productsdetail";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+    var listProductAttr = ViewData["TypeAttr"] as List<TypeAndAttr>;
+    var Providers = ViewData["Providers"] as List<Provider>;
+}
+<!-- Content
+============================================= -->
+<div class="zom_grr">
+
+    <!-- Page Title
+    ============================================= -->
+    <section id="page-title">
+        <div class="container clearfix">
+
+            <ol class="breadcrumb col-md-6 col-sm-6">
+                <li><a href="/">Trang chủ</a></li>
+
+                <li class='active'>@Model.ProductName</li>
+
+            </ol>
+        </div>
+    </section>
+    <!-- #page-title end -->
+    <!-- Content
+    ============================================= -->
+    <section id="content">
+        <div class="content-wrap">
+            <div class="container clearfix">
+                <div class="post_content nobottommargin clearfix">
+                    <script>
+                        $(document).ready(function () {
+                            var current_product = { "available": true, "compare_at_price_max": 6400000.0, "compare_at_price_min": 6400000.0, "compare_at_price_varies": false, "compare_at_price": 6400000.0, "content": null, "description": null, "featured_image": "https://product.hstatic.net/1000104489/product/mi_spa_ban_lut_196f9793c75c460e81773e905cbf46f2.jpg", "handle": "thanh-ly-mi-spaghetti-ban-lut-huu-co-markal-500g", "id": 1029132317, "images": ["https://product.hstatic.net/1000104489/product/mi_spa_ban_lut_196f9793c75c460e81773e905cbf46f2.jpg"], "options": ["Tiêu đề"], "price": 3200000.0, "price_max": 3200000.0, "price_min": 3200000.0, "price_varies": false, "tags": [], "template_suffix": null, "title": "(Thanh lý lỗi bao bì ) Mì spaghetti bán lứt hữu cơ Markal 500g", "type": "Phở, mì, nui", "url": "/products/thanh-ly-mi-spaghetti-ban-lut-huu-co-markal-500g", "pagetitle": "(Thanh lý ) Mì spaghetti bán lứt hữu cơ Markal 500g", "metadescription": null, "variants": [{ "id": 1064651166, "barcode": "3329489312150", "available": true, "price": 3200000.0, "sku": "3329489312150", "option1": "Default Title", "option2": "", "option3": "", "options": ["Default Title"], "inventory_quantity": 47, "old_inventory_quantity": 47, "title": "Default Title", "weight": 0.0, "compare_at_price": 6400000.0, "inventory_management": "haravan", "inventory_policy": "deny", "selected": false, "url": null, "featured_image": null }], "vendor": "Markal", "published_at": "2018-04-03T18:18:03.732Z", "created_at": "2020-11-24T01:59:15.863Z", "not_allow_promotion": false };
+                            var strHTML = get_viewed_items_html(current_product);
+                            $('.widget .widget-last-view').html(strHTML);
+                            //console.log(current_product);
+                        });
+                    </script>
+                    <div class="sidebar nobottommargin left-sidebar col-sm-3 hidden-xs hidden-sm">
+                        <div class="sidebar-widgets-wrap">
+
+                            @{Html.RenderAction("Categories", "Home");}
+
+                            <div class="widget clearfix" style='overflow:hidden'>
+
+
+
+                                <div style="width: 100%;">
+                                    <!-- Page plugin's width will be 180px -->
+                                    <div class="fb-page" data-href="https://www.facebook.com/leafshop.vn/" data-width="320"></div>
+                                </div>
+
+
+
+                                <script>
+                                    (function (d, s, id) {
+                                        var js, fjs = d.getElementsByTagName(s)[0];
+                                        if (d.getElementById(id)) return;
+                                        js = d.createElement(s); js.id = id;
+                                        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=263266547210244&version=v2.0";
+                                        fjs.parentNode.insertBefore(js, fjs);
+                                    }(document, 'script', 'facebook-jssdk'));
+                                </script>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class='product-page col-md-9'>
+                        <div class="single-product">
+                            <!--<form method="post" id="ProductDetailsForm" action="/???" crossorigin="anonymous">-->
+                            <form method="post" id="ProductDetailsForm" action="/???" crossorigin="anonymous">
+                                <div class="product">
+                                    <div class='page_title'>
+                                        <h1>
+                                            @Model.ProductName
+                                        </h1>
+                                    </div>
+                                    <div style='margin-bottom: 25px;'>
+                                        <div class="col-sm-8 pd_img_wrap noleftpadding">
+
+                                            <!-- Product Single - Gallery
+                                            ============================================= -->
+                                            <div class="product-image product-main-image">
+                                                <div class="slider-wrap">
+
+                                                    <div class='pd_slide_thumb slick_thumb col-sm-2 noleftpadding hidden-xs'>
+
+                                                        <div class="slick-slide">
+                                                            <div class="img">
+                                                                <img data-lazy="//product.hstatic.net/1000104489/product/mi_spa_ban_lut_196f9793c75c460e81773e905cbf46f2_small.jpg">
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="pd_slide col-sm-10 nopadding">
+
+
+                                                        <div class="slick-slide">
+                                                            <div class="img">
+                                                                <img class="img-zoom" data-lazy="//product.hstatic.net/1000104489/product/mi_spa_ban_lut_196f9793c75c460e81773e905cbf46f2_master.jpg" data-zoom-image=https://product.hstatic.net/1000104489/product/mi_spa_ban_lut_196f9793c75c460e81773e905cbf46f2.jpg>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                    <script>
+                                                        $(document).ready(function () {
+                                                            $('.pd_slide').slick({
+                                                                prevArrow: '<button type="button" class="slick-prev"><i class="fa fa-angle-left"></i></button>',
+                                                                nextArrow: '<button type="button" class="slick-next"><i class="fa fa-angle-right"></i></button>',
+                                                                lazyLoad: 'progressive',
+                                                                asNavFor: '.pd_slide_thumb',
+                                                                responsive: [
+                                                                    {
+                                                                        breakpoint: 767,
+                                                                        settings: {
+                                                                            prevArrow: '<button type="button" class="slick-prev"><i class="fa fa-angle-left"></i></button>',
+                                                                            nextArrow: '<button type="button" class="slick-next"><i class="fa fa-angle-right"></i></button>',
+                                                                            asNavFor: null
+                                                                        }
+                                                                    }
+                                                                ]
+                                                            });
+                                                            if ($(window).width() > 767) {
+                                                                $('.pd_slide_thumb').slick({
+                                                                    slidesToShow: 5,
+                                                                    /*prevArrow: '<button type="button" class="slick-prev"><i class="fa fa-angle-up"></i></button>',
+                                                            nextArrow: '<button type="button" class="slick-next"><i class="fa fa-angle-down"></i></button>',*/
+                                                                    arrows: false,
+                                                                    lazyLoad: 'progressive',
+                                                                    asNavFor: '.pd_slide',
+                                                                    focusOnSelect: true,
+                                                                    vertical: true,
+                                                                });
+                                                            }
+                                                        });
+                                                    </script>
+
+                                                </div>
+
+
+
+                                            </div><!-- Product Single - Gallery End -->
+
+                                        </div>
+
+                                        <div class="col-sm-4 product-desc">
+                                            <div id="hrv-product-reviews" class="hrv-product-reviews" data-id="1029132317">
+                                                <div class="title-bl hidden">
+                                                    <h2>ĐÁNH GIÁ SẢN PHẨM</h2>
+                                                </div>
+                                                <div id="hrv-product-reviews-sub" style="width:100%">
+                                                    <div class="hrv-product-reviews-summary" id="hrv-product-reviews-summary" style="    width: auto;">
+
+                                                    </div>
+                                                    <div class="hrv-product-reviews-list" id="hrv-product-reviews-list">
+
+
+
+
+
+
+
+
+
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Product Single - Price
+                                            ============================================= -->
+
+                                            <div class='col-sm-12 col-md-12 product_info norightpadding'>
+
+                                                <span>
+                                                    <strong>Thương hiệu </strong>
+                                                    <a href="/collections/markal">
+                                                        @foreach (var item in Providers)
+                                                        {
+                                                            if (item.ProviderId == Model.ProviderId)
+                                                            {
+                                                                <span>@item.ProviderName</span>
+                                                            }
+                                                        }
+                                                    </a>
+                                                </span><br>
+
+
+                                                <span><strong>Mã sản phẩm </strong>@Model.ProductId</span>
+
+                                            </div>
+
+                                            <div class="product-price col-sm-12 col-md-12 noleftpadding">
+
+                                                @if (Model.Discount != null)
+                                                {
+                                                    <del class="sale-price">
+                                                        @{
+                                                            var vie = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+
+                                                        }
+                                                        @String.Format(vie, "{0:c00}", Model.PriceOut)
+                                                        ₫
+                                                    </del>
+                                                    <ins>
+                                                        @{
+
+                                                            var price = Model.Discount > 0 ? Model.PriceOut - Model.PriceOut * Model.Discount / 100 : Model.PriceOut;
+                                                        }
+                                                        @String.Format(vie, "{0:c00}", price)
+                                                    </ins>
+                                                    <div class="sale-flash">- @Model.Discount%</div>
+                                                }
+                                                else
+                                                {
+                                                    <ins>
+                                                        @{
+                                                            var vie = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+
+                                                        }
+                                                        @String.Format(vie, "{0:c00}", Model.PriceOut)
+
+                                                    </ins>
+                                                }
+
+
+                                            </div><!-- Product Single - Price End -->
+                                            <!-- Product Single - Rating
+                                            ============================================= -->
+
+
+                                            <div class="clear"></div>
+
+                                            <div class="line"></div>
+
+                                            <!-- Product Single - Quantity & Cart Button
+                                            ============================================= -->
+
+                                            <input type="hidden" class='unit_price_not_formated' value="3200000" />
+                                            <input type="hidden" class="product_url" value="/products/thanh-ly-mi-spaghetti-ban-lut-huu-co-markal-500g" />
+                                            <input type="hidden" class="product_title_hd" value="(Thanh lý lỗi bao bì ) Mì spaghetti bán lứt hữu cơ Markal 500g" />
+                                            <input type="hidden" class="product_img_small" value="//product.hstatic.net/1000104489/product/mi_spa_ban_lut_196f9793c75c460e81773e905cbf46f2_master.jpg" />
+
+                                            <div class="hidden" style="">
+                                                <select id="product-select" name="id">
+
+
+                                                    <option value="1064651166" class="">Default Title - 32,000₫</option>
+
+
+                                                </select>
+                                            </div>
+                                            <!-- variants -->
+                                            <div class="product-page-options  hidden ">
+                                                <div class="sizePicker" id='option-0'>
+                                                    <label class="control-label options-title">Tiêu đề:</label>
+                                                    <div class='options-selection'>
+                                                        <select class="form-control input-sm">
+                                                            <option data_size_code="defaulttitle" data_color_code="defaulttitle" class="" value="Default Title">
+                                                                Default Title
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <!-- end variant -->
+                                            <!-- <form class="cart nobottommargin clearfix" method="post" enctype='multipart/form-data'>-->
+                                            <div class="quantity product-quantity clearfix col-md-6 col-xs-12 noleftpadding">
+                                                <input type="button" value="-" class="minus">
+                                                <input type="text" id='product_quantity' readonly step="1" min="1" name="quantity" value="1" title="Qty" class="qty" size="4" />
+                                                <input type="button" value="+" class="plus">
+                                            </div>
+                                            <script>
+                                                var quantity = parseInt($('#ProductDetailsForm .product-quantity input.qty').val());
+
+                                                $('#ProductDetailsForm .minus').click(function () {
+                                                    if (quantity > 0) {
+                                                        if (quantity == 1) {
+                                                            $('#addtocart').attr('disabled', 'disabled');
+                                                        }
+                                                        quantity -= 1;
+                                                    }
+                                                    else {
+                                                        quantity = 0;
+                                                    }
+                                                    $('#ProductDetailsForm .product-quantity input.qty').val(quantity);
+                                                });
+                                                $('#ProductDetailsForm  .plus').click(function () {
+                                                    $('.add-to-cart').removeAttr('disabled');
+                                                    if (quantity < 100) {
+                                                        quantity += 1;
+                                                    }
+                                                    else {
+                                                        quantity = 100;
+                                                    }
+                                                    $('#ProductDetailsForm .product-quantity input.qty').val(quantity)
+                                                });
+
+                                            </script>
+
+
+                                            <button type="submit" id='' class="add-to-cart button nomargin col-xs-12 col-md-6 nopadding" style="height: 40px !important; width: 50% !important; padding: 0 !Important">Thêm vào giỏ</button>
+
+                                            <button type="submit" id='' class="button col-xs-12 nopadding buynow">Mua ngay</button>
+
+
+
+
+
+
+                                            <div class="clear"></div>
+                                            <div class="line"></div>
+
+
+
+                                            <!-- Product Single - Meta
+                                            ============================================= -->
+                                            <!-- Product Single - Meta End -->
+                                            <!-- Product Single - Share
+                                            ============================================= -->
+
+                                            <div class="si-share noborder clearfix">
+                                                <div class='socical-wrapper'>
+
+
+                                                    <ul class="social-icons">
+                                                        <!-- check null: == nill -->
+                                                        <div class="fb-send" data-href="/products/thanh-ly-mi-spaghetti-ban-lut-huu-co-markal-500g"></div>
+                                                        <div class="item">
+                                                            <div class="fb-like fix_top" data-href="/products/thanh-ly-mi-spaghetti-ban-lut-huu-co-markal-500g" data-layout="button" data-action="like" data-show-faces="true" data-share="true" style='margin-right: 5px;'></div>
+                                                        </div>
+
+                                                        <!-- old style: <li><a class="facebook" data-original-title="facebook" href="#"></a></li>   ...twitter,googleplus,evernote,tumblr -->
+
+                                                        <script>
+                                                            (function () {
+                                                                var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+                                                                po.src = '//apis.google.com/js/plusone.js';
+                                                                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+                                                            })();
+                                                        </script>
+
+                                                    </ul>
+                                                </div>
+                                            </div><!-- Product Single - Share End -->
+
+                                        </div>
+                                    </div>
+                                    <div class='clear' style='margin-bottom: 25px;'></div>
+                                    <div class="col_full nobottommargin">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        <div class="aetabs-tabs">
+                                            <ul class="tabs clearfix">
+
+
+                                                <li class="active"><a href="#tab1">Mô tả</a></li>
+
+
+                                                <li><a href="#tab2">Seventh Generation</a></li>
+
+
+                                                <li><a href="#tab3">Bình luận</a></li>
+
+                                            </ul>
+
+
+                                            <div class="tabs-content active" id="tab1">
+                                                @{
+                                                    var list = listProductAttr.Select(x => x.tenLoai).Distinct().ToList();
+                                                }
+                                                @if (listProductAttr != null)
+                                                {
+                                                    for (int i = 0; i < list.Count; i++)
+                                                    {
+                                                        <div>
+                                                            <strong>@list[i]</strong>
+                                                        </div>
+                                                        for (int j = 0; j < listProductAttr.Count; j++)
+                                                        {
+
+                                                            if (listProductAttr[j].tenLoai == list[i])
+                                                            {
+                                                                <span style="display:block">-@listProductAttr[j].tenThuocTinh</span>
+                                                            }
+
+                                                        }
+
+                                                    }
+                                                }
+                                            </div>
+
+
+                                            <div class="tabs-content " id="tab2">
+                                                Seventh Generation
+                                            </div>
+
+
+                                            <div class="tabs-content " id="tab3">
+                                                <div id="fb-root">&nbsp;</div>
+                                                <div class="fb-comments">&nbsp;</div>
+                                            </div>
+
+                                        </div>
+
+                                        <script>
+                                            var menu = $('.aetabs-tabs .tabs li');
+                                            var menuLinks = $('.aetabs-tabs .tabs li a');
+                                            var tabsContent = $('.aetabs-tabs .tabs-content');
+                                            menuLinks.click(function (e) {
+                                                e.preventDefault();
+                                                var targetBlock = $(this).attr('href');
+                                                menu.removeClass('active');
+                                                $(this).parent('li').addClass('active');
+                                                tabsContent.hide();
+                                                $(targetBlock).fadeIn(500);
+                                            });
+                                        </script>
+
+
+                                    </div>
+                                </div>
+                                <div class='col-md-8 col-sm-10 bottom_buy nopadding col-xs-12'>
+
+                                    <button type="submit" id='' class="add-to-cart button nomargin col-sm-6 col-xs-12 norightpadding">Thêm vào giỏ</button>
+
+                                    <button type="submit" id='' class="button col-xs-12 col-sm-6 nomargin nopadding buynow buttonz">Mua ngay</button>
+
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- related products -->
+                    <!-- end related products -->
+
+                </div>
+            </div>
+        </div>
+    </section><!-- #content end -->
+    <script>
+        $(document).ready(function () {
+            if ($('#product_quantity').val() == '0') {
+                $('.add-to-cart').attr('disabled', 'disabled');
+            }
+            else {
+                $('.add-to-cart').removeAttr('disabled');
+            }
+        });
+    </script>
+
+    <script>
+        var selectCallback = function (variant, selector) {
+            if (variant != null) {
+                var $tagPrice = '#ProductDetailsForm div.product-price ins';
+                var $tagPriceCompare = '#ProductDetailsForm div.product-price del';
+                var $tagProductSection = '#ProductDetailsForm';
+                update_variant(variant, $tagPrice, $tagPriceCompare, '#addtocart', $tagProductSection);
+                if (variant != null && variant.featured_image != null) {
+                    $(".pd_slide_thumb .slick-list img[src='" + Haravan.resizeImage(variant.featured_image.src, 'small') + "']").click();
+                };
+            }
+        };
+        jQuery(document).ready(function ($) {
+
+
+        });
+    </script>
+
+    <script>
+
+        $(function () {
+            setTimeout(function () {
+                if ($(".widget-last-view .entry-title h4 a").length > 0) {
+                    $(".widget-last-view .entry-title h4 a").each(function () {
+                        var path = $(this).attr("href");
+                        var title = $(this).text();
+                        var url = window.location.protocol + "//" + window.location.host + path + "?title=" + title;
+                        $.ajax({
+                            url: url,
+                            success: function (response) {
+                                var desText = $(response).find(".page_title h1").text().trim();
+                                Aecomapp.tranFromSource(".widget-last-view *", title, desText, 1);
+                            }
+                        });
+                    });
+                }
+            }, 5000);
+        });
+
+        $(".img-zoom").elevateZoom({
+            zoomWindowWidth: 350,
+            cursor: "crosshair"
+        });
+
+        $(".slick-slide").click(function () {
+            $(".slick-slide .img-zoom").removeAttr("data-zoom-image");
+            $.removeData($(".slick-slide .img-zoom"), 'elevateZoom');
+            $('.zoomContainer').remove();
+            var z = $(".slick-slide[data-slick-index=" + $(this).attr("data-slick-index") + "] .img-zoom");
+            z.attr("src", $(this).attr("src")).attr("data-zoom-image", $(this).attr("data-image"));
+            z.attr("data-zoom-image", $(this).attr("data-zoom-image"));
+            z.elevateZoom({
+                zoomWindowWidth: 400,
+                cursor: "crosshair"
+            });
+            $('.zoomWindowContainer div').stop().css("background-image", "url('" + $(this).attr("data-image") + "')");
+        });
+    </script>
+    <style>
+	.pd_slide button{
+	display: none !Important;
+	}
+	@*@media screen and (max-width: 480px){
+	.product-image img {
+	max-height: 1000px !Important;
+	height: auto !Important;
+
+	}
+	}*@
+
+	<!-- Google Code for Chuy&#7875;n &#273;&#7893;i kem ch&#7889;ng n&#7855;ng 03/04/2017 Conversion Page -->
+	<script type="text/javascript">
+		/* <![CDATA[ */
+var google_conversion_id = 856573560;
+var google_conversion_language = "en";
+var google_conversion_format = "3";
+var google_conversion_color = "ffffff";
+var google_conversion_label = "q0QzCKWai3AQ-Iy5mAM";
+var google_remarketing_only = false;
+/* ]]> */
+	</script>
+	<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+	</script>
+	<noscript>
+		<div style="display:inline;">
+			<img height="1" width="1" style="border-style:none;" alt="" src="//www.googleadservices.com/pagead/conversion/856573560/?label=q0QzCKWai3AQ-Iy5mAM&amp;guid=ON&amp;script=0"/>
+		</div>
+	</noscript>
+
+
+    </style>
+
+</div>
+
+<!-- #content end -->
