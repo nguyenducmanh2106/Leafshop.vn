@@ -188,6 +188,7 @@
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\UltityController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -4550,6 +4551,8 @@
     <Content Include="Views\Home\DieuKhoanSuDung.cshtml" />
     <Content Include="Views\Home\QuickAddCart.cshtml" />
     <Content Include="Views\Home\ListProducts.cshtml" />
+    <Content Include="Views\Ultity\CountProduct.cshtml" />
+    <Content Include="Views\Ultity\SelectFilter.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

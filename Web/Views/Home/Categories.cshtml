@@ -258,7 +258,8 @@
             <script>
                 var TH=$('#thuonghieu')
                 var listId = []
-                var idCategory = $('#idCategory').val();
+                var idCategory = $('#idCategory').val() != "unknown" ? $('#idCategory').val():-1;
+                
                 TH.find('input[data-type="checkAll"]').each(function () {
                     $(this).click(function () {
                         listId = []
@@ -269,14 +270,18 @@
                                 if (dataId != undefined) {
                                     listId.push(dataId);
                                     console.log(listId)
+                                  
                                     deleteAll()
+                                   
                                 }
                             }
                             else {
                                 var index = listId.indexOf(dataId);
                                 if (index > -1) {
                                     listId.splice(index, 1);
+                                  
                                     deleteAll()
+                                    
                                 }
                                 console.log(listId)
                             }
@@ -290,13 +295,17 @@
                             if ($(this).is(":checked")) {
                                 listId.push(dataId);
                                 console.log(listId)
+                                
                                 deleteAll()
+                                
                             }
                             else {
                                 var index = listId.indexOf(dataId);
                                 if (index > -1) {
                                     listId.splice(index, 1);
+                                    
                                     deleteAll()
+                                    
                                 }
                                 console.log(listId)
                             }
@@ -308,7 +317,7 @@
                     var data = listId.toString();
                     if (data.length != 0) {
                         $.ajax({
-                            url: `/Home/ListProducts/?id=${idCategory}&orderby=@Request.QueryString["orderby"]`,
+                            url: `/Home/ListProducts/?id=${idCategory}&Sale=@Request.QueryString["Sale"]&orderby=@Request.QueryString["orderby"]`,
                             method: "GET",
                             data: {
                                 listProviderID:
@@ -324,6 +333,7 @@
                         console.log("Bạn chưa chọn hiện vật để xóa")
                     }
                 }
+               
             </script>
 
             <!-- END: Vendor filter -->

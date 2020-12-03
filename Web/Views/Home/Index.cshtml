@@ -105,13 +105,13 @@
                                        
                                         <div class="product-desc">
 
-                                            @if (item.Discount != null)
+                                            @if (item.Discount >0)
                                             {
                                                 <div class="sale-flash">- @item.Discount%</div>
                                             }
 
                                             <div class="product-price">
-                                                @if (item.Discount != null)
+                                                @if (item.Discount > 0)
                                                 {
                                                     <del class="sale-price">
                                                         @{

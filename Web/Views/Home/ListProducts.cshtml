@@ -3,13 +3,18 @@
 @using Models.Models.DataModels;
 @model PagedList.IPagedList<Models.Models.DataModels.Product>
 @{
+    var countProducts = ViewData["countProducts"];
+    int NumberProducts = Int32.Parse(countProducts.ToString());
     Layout = null;
+    var listCheck = ViewData["listCheck"];
+    <input type="hidden" id="listCheck" value="@listCheck" />
+    <input type="hidden" id="NumberProducts" value="@NumberProducts" />
 }
 <div class='grid'>
-    @*@if (NumberProducts <= 0)
-        {
-            <span>Sản phẩm đang cập nhật...</span>
-        }*@
+    @if (NumberProducts <= 0)
+    {
+        <span>Sản phẩm đang cập nhật...</span>
+    }
     @foreach (var item in Model)
     {
         <div class='col-sm-4 col-xs-12 noleftpadding norightpadding product_single'>
@@ -28,12 +33,12 @@
                     <span>@item.ProductId</span>
                 </div>
                 <div class="product-desc">
-                    @if (item.Discount != null)
+                    @if (item.Discount > null)
                     {
                         <div class="sale-flash">- @item.Discount%</div>
                     }
                     <div class="product-price">
-                        @if (item.Discount != null)
+                        @if (item.Discount > null)
                         {
                             <del class="sale-price">
                                 @{
@@ -70,11 +75,11 @@
             </div>
         </div>
     }
-
+    
 
 </div>
 <div class='pagination_wrapper'>
-    @Html.PagedListPager(Model, page => Url.Action("Products", "Home", new {id= Request.QueryString["id"], orderby = Request.QueryString["orderby"], listProviderID= Request.QueryString["listProviderID"], page }))
+    @Html.PagedListPager(Model, page => Url.Action("Products", "Home", new { id = Request.QueryString["id"], Sale=Request.QueryString["Sale"],orderby = Request.QueryString["orderby"], listProviderID = Request.QueryString["listProviderID"], page }))
 
     <!-- BEGIN: AJAX-FILTER -->
     <script>
@@ -223,6 +228,21 @@
 
         /** align single element ***/
         $(document).ready(function () {
+
+             $.ajax({
+                 url: `/Ultity/CountProduct/?count=@NumberProducts`,
+                 method: "GET"
+                 , success: function (response) {
+                     $('#textT').html(response)
+                 }
+             })
+            $.ajax({
+                url: `/Ultity/SelectFilter/?id=@Request.QueryString["id"]&listCheck=@listCheck`,
+                      method: "GET"
+                      , success: function (response) {
+                          $('#SelectFilter').html(response)
+                      }
+                        })
             align_single_element();
         });
         var align_single_element = function () {

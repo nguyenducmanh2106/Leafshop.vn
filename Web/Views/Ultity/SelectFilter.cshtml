@@ -1,0 +1,16 @@
+﻿@{ 
+    Layout = null;
+    var listCheck = ViewData["listCheck"];
+    var id = ViewData["id"];
+    var Sale = Request.QueryString["Sale"];
+}
+<select id='sortControl' class="form-control input-sm"
+        onchange="window.location.href =this.options[this.selectedIndex].value">
+    <option value='@Url.Action("Products","Home",new {id=@id,Sale=Sale,orderby="price_asc",page=Request.QueryString["page"],listProviderID=@listCheck})'>Giá: Tăng dần</option>
+    <option value='@Url.Action("Products","Home",new {id=@id,Sale=Sale,orderby="price_desc",page=Request.QueryString["page"],listProviderID=@listCheck})'>Giá: Giảm dần</option>
+    <option value='@Url.Action("Products","Home",new {id=@id,Sale=Sale,orderby="name_asc",page=Request.QueryString["page"],listProviderID=@listCheck})' selected="selected">Tên: A-Z</option>
+    <option value='@Url.Action("Products","Home",new {id=@id,Sale=Sale,orderby="name_desc",page=Request.QueryString["page"],listProviderID=@listCheck})'>Tên: Z-A</option>
+    <option value='@Url.Action("Products","Home",new {id=@id,Sale=Sale,orderby="oldest_day",page=Request.QueryString["page"],listProviderID=@listCheck})'>Cũ nhất</option>
+    <option value='@Url.Action("Products","Home",new {id=@id,Sale=Sale,orderby="recent_day",page=Request.QueryString["page"],listProviderID=@listCheck})'>Mới nhất</option>
+    <option value='@Url.Action("Products","Home",new {id=@id,Sale=Sale,orderby="best_selling",page=Request.QueryString["page"],listProviderID=@listCheck})'>Bán chạy nhất</option>
+</select>
