@@ -1,7 +1,7 @@
 ﻿@using Models.Models.DataModels
 @model IEnumerable<Models.Models.DataModels.Provider>
 @{
-    
+
     ViewBag.Title = "Home Page";
     var listProductNew = ViewData["ProductsNew"] as List<Product>;
     var listProductQuickSale = ViewData["ProductSaleQuick"] as List<Product>;
@@ -102,10 +102,10 @@
                                             <h4><a href="@Url.Action("Productsdetail","Home",new { id=@item.ProductId})" title="@item.ProductName">@item.ProductName</a></h4>
                                             <span>@item.ProductId</span>
                                         </div>
-                                       
+
                                         <div class="product-desc">
 
-                                            @if (item.Discount >0)
+                                            @if (item.Discount > 0)
                                             {
                                                 <div class="sale-flash">- @item.Discount%</div>
                                             }
@@ -119,7 +119,7 @@
 
                                                         }
                                                         @String.Format(vie, "{0:c00}", item.PriceOut)
-                                                        ₫
+                                                        
                                                     </del>
                                                     <ins>
                                                         @{
@@ -183,33 +183,50 @@
                                             <a href='@Url.Action("Productsdetail","Home",new { id=@item.ProductId})'><img src="https://product.hstatic.net/1000104489/product/3_acb7596363ad47bf9eedccde5054d624.jpg" data-lazyload="https://product.hstatic.net/1000104489/product/3_acb7596363ad47bf9eedccde5054d624.jpg" alt="Nước tinh chất hoa hồng hữu cơ Gravier 200ml"></a>
                                             <div class="product-overlay">
                                                 <a href="/products/nuoc-tinh-chat-hoa-hong-huu-co-gravier-200ml" class="product_quick_add" data-toggle='tooltip' title='Thêm vào giỏ'><i class="fa fa-shopping-cart"></i><span class='hidden-md hidden-lg'> Thêm vào giỏ</span></a>
-                                                <a href="#product-pop-up" class="item-quick-view fancybox-fast-view hidden-sm hidden-xs" product_url="@Url.Action("Productsdetail","Home",new { id=@item.ProductId})" data-toggle='tooltip' title='Xem nhanh'><i class="fa fa-eye"></i><span class='hidden-md hidden-lg'> Xem nhanh</span></a>
+                                                <a href="#product-pop-up" onclick="Quick(@item.ProductId)" class="item-quick-view fancybox-fast-view hidden-sm hidden-xs"  data-toggle='tooltip' title='Xem nhanh'><i class="fa fa-eye"></i><span class='hidden-md hidden-lg'> Xem nhanh</span></a>
                                             </div>
                                         </div>
                                         <div class="product-title">
-                                            <h4><a href="/products/nuoc-tinh-chat-hoa-hong-huu-co-gravier-200ml" title="Nước tinh chất hoa hồng hữu cơ Gravier 200ml">@item.ProductName</a></h4>
+                                            <h4><a href="@Url.Action("Productsdetail","Home",new { id=@item.ProductId})" title="Nước tinh chất hoa hồng hữu cơ Gravier 200ml">@item.ProductName</a></h4>
                                             <span>@item.ProductId</span>
                                         </div>
-                                        <div class="product-desc">
-
-                                            <div class="sale-flash">- @item.Discount%</div>
+                                       
+                                        <div class="product-price">
+                                            @if (item.Discount > 0)
+                                            {
+                                                <div class="sale-flash">- @item.Discount%</div>
+                                            }
 
                                             <div class="product-price">
-                                                <del class="sale-price">
-                                                    @{
-                                                        var vie = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+                                                @if (item.Discount > 0)
+                                                {
+                                                    <del class="sale-price">
+                                                        @{
+                                                            var vie = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
 
-                                                    }
-                                                    @String.Format(vie, "{0:c00}", item.PriceOut)
-                                                    ₫
-                                                </del>
-                                                <ins>
-                                                    @{
+                                                        }
+                                                        @String.Format(vie, "{0:c00}", item.PriceOut)
+                                                        
+                                                    </del>
+                                                    <ins>
+                                                        @{
 
-                                                        var price = item.Discount > 0 ? item.PriceOut - item.PriceOut * @item.Discount / 100 : @item.PriceOut;
-                                                    }
-                                                    @String.Format(vie, "{0:c00}", price)
-                                                </ins>
+                                                            var price = item.Discount > 0 ? item.PriceOut - item.PriceOut * @item.Discount / 100 : @item.PriceOut;
+                                                        }
+                                                        @String.Format(vie, "{0:c00}", price)
+                                                    </ins>
+                                                }
+                                                else
+                                                {
+                                                    <ins>
+                                                        @{
+                                                            var vie = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+
+                                                        }
+                                                        @String.Format(vie, "{0:c00}", item.PriceOut)
+
+                                                    </ins>
+                                                }
                                             </div>
 
                                             <div class="buy_all">

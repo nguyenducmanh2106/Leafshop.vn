@@ -66,7 +66,7 @@ namespace Web.Controllers
         public ActionResult Categories()
         {
 
-            var products = db.Products.Where(x => x.Status == true).OrderByDescending(x => x.CreateDate).Take(3).ToList();
+            var products = db.Products.Where(x => x.Status == true).OrderByDescending(x => x.ProductSaleQuantity).Take(3).ToList();
             var Providers = db.Providers.Where(x => x.Status == 1).ToList();
             ViewBag.products = products;
             ViewBag.Providers = Providers;
@@ -74,20 +74,59 @@ namespace Web.Controllers
         }
         #region Product
         //GET: /Product by category
-        public async Task<ActionResult> Products(int id=-1,string Sale="default",string orderby = "default", string listProviderID = "-1", int page = 1, int pageSize = 4)
+        public async Task<ActionResult> Products(int id = -1, string Sale = "default", string orderby = "default", string listProviderID = "-1", string listPriceID = "-1", int page = 1, int pageSize = 2)
         {
-            List<Product> products;
-            
             var list = listProviderID.Split(',').Select(Int64.Parse).ToList();
+            List<Product> products;
             if (id == -1)
             {
+                ViewBag.listCheck = listProviderID;
+                ViewBag.FilterPrice = listPriceID;
+                var products1 = db.Products.Where(x => x.Status == true).ToList();
                 //return HttpNotFound();
-                products = db.Products.Where(x => x.Status == true).ToList();
+                products = new List<Product>();
+                if (list[0] == -1)
+                {
+                    products = products1.ToList();
+                }
+                else
+                {
+                    foreach (var item in products1)
+                    {
+                        foreach (var ProviderId in list)
+                        {
+                            if (item.ProviderId == ProviderId)
+                            {
+                                products.Add(item);
+                            }
+
+                        }
+                    }
+                }
+                switch (listPriceID)
+                {
+                    case "1":
+                        products = products.Where(p => (p.PriceOut - p.PriceOut * p.Discount / 100) < 100000).ToList();
+                        break;
+                    case "2":
+                        products = products.Where(p => ((p.PriceOut - p.PriceOut * p.Discount / 100) >= 100000) && ((p.PriceOut - p.PriceOut * p.Discount / 100) < 300000)).ToList();
+                        break;
+                    case "3":
+                        products = products.Where(p => ((p.PriceOut - p.PriceOut * p.Discount / 100) >= 300000) && ((p.PriceOut - p.PriceOut * p.Discount / 100) < 500000)).ToList();
+                        break;
+                    case "4":
+                        products = products.Where(p => (p.PriceOut - p.PriceOut * p.Discount / 100) > 500000).ToList();
+                        break;
+                    default:
+                        products = products.ToList();
+                        break;
+                }
             }
             else
             {
                 ViewBag.Category = db.Categories.Where(x => x.CategoryId == id).FirstOrDefault();
                 ViewBag.listCheck = listProviderID;
+                ViewBag.FilterPrice = listPriceID;
                 var productsAndCategories = (from c in db.Categories join p in db.Products on c.CategoryId equals p.CategoryId into table from p in table.DefaultIfEmpty() select new { p, c }).Where(x => (x.p.Status == true) && (x.p.CategoryId == id || x.c.ParentId == id)).OrderBy(x => x.p.CreateDate).ToList();
                 var products1 = productsAndCategories.Select(x => x.p);
                 products = new List<Product>();
@@ -112,111 +151,26 @@ namespace Web.Controllers
             }
             if (Sale == "flashsale")
             {
-                products = products.Where(x => x.Discount != 0).OrderBy(p => p.CreateDate).ToList();
+                products = products.Where(x => x.Discount != 0 && x.Status == true).OrderBy(p => p.CreateDate).ToList();
             }
-
-            switch (orderby)
+            switch (listPriceID)
             {
-                case "price_asc":
-                    ViewBag.price_asc = "selected";
-                    products = products.OrderBy(p => p.PriceOut - p.PriceOut * p.Discount / 100).ToList();
+                case "1":
+                    products = products.Where(p => (p.PriceOut - p.PriceOut * p.Discount / 100) < 100000).ToList();
                     break;
-                case "price_desc":
-                    ViewBag.price_desc = "selected";
-                    products = products.OrderByDescending(p => p.PriceOut - p.PriceOut * p.Discount / 100).ToList();
+                case "2":
+                    products = products.Where(p => ((p.PriceOut - p.PriceOut * p.Discount / 100) >= 100000) && ((p.PriceOut - p.PriceOut * p.Discount / 100) < 300000)).ToList();
                     break;
-                case "name_asc":
-                    ViewBag.price_asc = "selected";
-                    products = products.OrderBy(p => p.ProductName).ToList();
+                case "3":
+                    products = products.Where(p => ((p.PriceOut - p.PriceOut * p.Discount / 100) >= 300000) && ((p.PriceOut - p.PriceOut * p.Discount / 100) < 500000)).ToList();
                     break;
-                case "name_desc":
-                    ViewBag.price_desc = "selected";
-                    products = products.OrderByDescending(p => p.ProductName).ToList();
-                    break;
-                case "recent_day":
-                    ViewBag.date = "selected";
-                    products = products.OrderByDescending(p => p.CreateDate).ToList();
-                    break;
-               
-                case "oldest_day":
-                    ViewBag.date = "selected";
-                    products = products.OrderBy(p => p.CreateDate).ToList();
-                    break;
-                case "best_selling":
-                    ViewBag.popularity = "selected";
-                    products = products.OrderByDescending(p => p.ProductSaleQuantity).ToList();
-                    break;
-                case "default":
-                    ViewBag.defaults = "selected";
-                    products = products.OrderBy(p => p.ProductName).ToList();
+                case "4":
+                    products = products.Where(p => (p.PriceOut - p.PriceOut * p.Discount / 100) > 500000).ToList();
                     break;
                 default:
-                    products = products.OrderBy(p => p.CreateDate).Where(p => p.CategoryId == id).ToList();
+                    products = products.ToList();
                     break;
             }
-            ViewBag.countProducts = products.ToList().Count();
-            return View(products.ToPagedList(page, pageSize));
-        }
-
-        public async Task<ActionResult> ListProducts(int id=-1, string Sale = "default", string orderby = "default", string listProviderID = "-1", int page = 1, int pageSize = 4)
-        {
-            var list = listProviderID.Split(',').Select(Int64.Parse).ToList();
-            List<Product> products;
-            if (id == -1)
-            {
-               var products1 = db.Products.Where(x => x.Status == true).ToList();
-                //return HttpNotFound();
-                products = new List<Product>();
-                if (list[0] == -1)
-                {
-                    products = products1.ToList();
-                }
-                else
-                {
-                    foreach (var item in products1)
-                    {
-                        foreach (var ProviderId in list)
-                        {
-                            if (item.ProviderId == ProviderId)
-                            {
-                                products.Add(item);
-                            }
-
-                        }
-                    }
-                }
-            }
-            else
-            {
-                ViewBag.Category = db.Categories.Where(x => x.CategoryId == id).FirstOrDefault();
-                ViewBag.listCheck = listProviderID;
-                var productsAndCategories = (from c in db.Categories join p in db.Products on c.CategoryId equals p.CategoryId into table from p in table.DefaultIfEmpty() select new { p, c }).Where(x => (x.p.Status == true) && (x.p.CategoryId == id || x.c.ParentId == id)).OrderBy(x => x.p.CreateDate).ToList();
-                var products1 = productsAndCategories.Select(x => x.p);
-                products = new List<Product>();
-                if (list[0] == -1)
-                {
-                    products = products1.ToList();
-                }
-                else
-                {
-                    foreach (var item in products1)
-                    {
-                        foreach (var ProviderId in list)
-                        {
-                            if (item.ProviderId == ProviderId)
-                            {
-                                products.Add(item);
-                            }
-
-                        }
-                    }
-                }
-            }
-            if (Sale == "flashsale")
-            {
-                products = products.Where(x => x.Discount != 0).OrderBy(p => p.CreateDate).ToList();
-            }
-
 
             switch (orderby)
             {
@@ -244,6 +198,147 @@ namespace Web.Controllers
                     ViewBag.date = "selected";
                     products = products.OrderBy(p => p.CreateDate).ToList();
                     break;
+
+                case "best_selling":
+                    ViewBag.popularity = "selected";
+                    products = products.OrderByDescending(p => p.ProductSaleQuantity).ToList();
+                    break;
+                case "default":
+                    ViewBag.defaults = "selected";
+                    products = products.OrderBy(p => p.ProductName).ToList();
+                    break;
+                default:
+                    products = products.OrderBy(p => p.CreateDate).ToList();
+                    break;
+            }
+            ViewBag.countProducts = products.ToList().Count();
+            return View(products.ToPagedList(page, pageSize));
+        }
+
+        public async Task<ActionResult> ListProducts(int id=-1, string Sale = "default", string orderby = "default", string listProviderID = "-1", string listPriceID = "-1", int page = 1, int pageSize = 2)
+        {
+            var list = listProviderID.Split(',').Select(Int64.Parse).ToList();
+            List<Product> products;
+            if (id == -1)
+            {
+                ViewBag.listCheck = listProviderID;
+                ViewBag.FilterPrice = listPriceID;
+                var products1 = db.Products.Where(x => x.Status == true).ToList();
+                //return HttpNotFound();
+                products = new List<Product>();
+                if (list[0] == -1)
+                {
+                    products = products1.ToList();
+                }
+                else
+                {
+                    foreach (var item in products1)
+                    {
+                        foreach (var ProviderId in list)
+                        {
+                            if (item.ProviderId == ProviderId)
+                            {
+                                products.Add(item);
+                            }
+
+                        }
+                    }
+                }
+                switch (listPriceID)
+                {
+                    case "1":
+                        products = products.Where(p => (p.PriceOut - p.PriceOut * p.Discount / 100) < 100000).ToList();
+                        break;
+                    case "2":
+                        products = products.Where(p => ((p.PriceOut - p.PriceOut * p.Discount / 100) >= 100000) && ((p.PriceOut - p.PriceOut * p.Discount / 100) < 300000)).ToList();
+                        break;
+                    case "3":
+                        products = products.Where(p => ((p.PriceOut - p.PriceOut * p.Discount / 100) >= 300000) && ((p.PriceOut - p.PriceOut * p.Discount / 100) < 500000)).ToList();
+                        break;
+                    case "4":
+                        products = products.Where(p => (p.PriceOut - p.PriceOut * p.Discount / 100) > 500000).ToList();
+                        break;
+                    default:
+                        products = products.ToList();
+                        break;
+                }
+            }
+            else
+            {
+                ViewBag.Category = db.Categories.Where(x => x.CategoryId == id).FirstOrDefault();
+                ViewBag.listCheck = listProviderID;
+                ViewBag.FilterPrice = listPriceID;
+                var productsAndCategories = (from c in db.Categories join p in db.Products on c.CategoryId equals p.CategoryId into table from p in table.DefaultIfEmpty() select new { p, c }).Where(x => (x.p.Status == true) && (x.p.CategoryId == id || x.c.ParentId == id)).OrderBy(x => x.p.CreateDate).ToList();
+                var products1 = productsAndCategories.Select(x => x.p);
+                products = new List<Product>();
+                if (list[0] == -1)
+                {
+                    products = products1.ToList();
+                }
+                else
+                {
+                    foreach (var item in products1)
+                    {
+                        foreach (var ProviderId in list)
+                        {
+                            if (item.ProviderId == ProviderId)
+                            {
+                                products.Add(item);
+                            }
+
+                        }
+                    }
+                }
+            }
+            if (Sale == "flashsale")
+            {
+                products = products.Where(x => x.Discount != 0&&x.Status==true).OrderBy(p => p.CreateDate).ToList();
+            }
+            switch (listPriceID)
+            {
+                case "1":
+                    products = products.Where(p => (p.PriceOut - p.PriceOut * p.Discount / 100) < 100000).ToList();
+                    break;
+                case "2":
+                    products = products.Where(p => ((p.PriceOut - p.PriceOut * p.Discount / 100) >= 100000) && ((p.PriceOut - p.PriceOut * p.Discount / 100) < 300000)).ToList();
+                    break;
+                case "3":
+                    products = products.Where(p => ((p.PriceOut - p.PriceOut * p.Discount / 100) >= 300000) && ((p.PriceOut - p.PriceOut * p.Discount / 100) < 500000)).ToList();
+                    break;
+                case "4":
+                    products = products.Where(p => (p.PriceOut - p.PriceOut * p.Discount / 100) > 500000).ToList();
+                    break;
+                default:
+                    products = products.ToList();
+                    break;
+            }
+
+            switch (orderby)
+            {
+                case "price_asc":
+                    ViewBag.price_asc = "selected";
+                    products = products.OrderBy(p => p.PriceOut - p.PriceOut * p.Discount / 100).ToList();
+                    break;
+                case "price_desc":
+                    ViewBag.price_desc = "selected";
+                    products = products.OrderByDescending(p => p.PriceOut - p.PriceOut * p.Discount / 100).ToList();
+                    break;
+                case "name_asc":
+                    ViewBag.price_asc = "selected";
+                    products = products.OrderBy(p => p.ProductName).ToList();
+                    break;
+                case "name_desc":
+                    ViewBag.price_desc = "selected";
+                    products = products.OrderByDescending(p => p.ProductName).ToList();
+                    break;
+                case "recent_day":
+                    ViewBag.date = "selected";
+                    products = products.OrderByDescending(p => p.CreateDate).ToList();
+                    break;
+                case "oldest_day":
+                    ViewBag.date = "selected";
+                    products = products.OrderBy(p => p.CreateDate).ToList();
+                    break;
                
                 case "best_selling":
                     ViewBag.popularity = "selected";
@@ -260,6 +355,7 @@ namespace Web.Controllers
             ViewBag.countProducts = products.ToList().Count();
             return View(products.ToPagedList(page, pageSize));
         }
+        
         #endregion
 
         #region Provider
@@ -306,6 +402,18 @@ namespace Web.Controllers
             var product = db.Products.Where(x => x.Status == true && x.ProductId == id).FirstOrDefault();
             ViewBag.product = product;
             return PartialView("QuickAddCart");
+        }
+        public ActionResult CategoryProductDetail(int? idProductPresent)
+        {
+           
+            var idCategoryProductPresent = db.Products.Where(x => x.ProductId == idProductPresent).Select(x=>x.CategoryId).FirstOrDefault();
+            var ProductRelationship= db.Products.Where(x => (x.Status == true)&&(x.ProductId!= idProductPresent) &&(x.CategoryId== idCategoryProductPresent)).OrderByDescending(x => x.ProductSaleQuantity).Take(3).ToList();
+            var products = db.Products.Where(x => x.Status == true).OrderByDescending(x => x.ProductSaleQuantity).Take(3).ToList();
+            var ProductSale = db.Products.Where(x => x.Status == true&&x.Discount>0).OrderByDescending(x=>x.Discount).Take(3).ToList();
+            ViewBag.ProductSale = ProductSale;
+            ViewBag.ProductRelationship = ProductRelationship;
+            ViewBag.products = products;
+            return View();
         }
         #region Product detail, and AddToCart
         //GET: /Product detail

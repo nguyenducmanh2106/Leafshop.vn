@@ -14,8 +14,9 @@ namespace Web.Controllers
             ViewBag.count = count;
             return View();
         }
-        public ActionResult SelectFilter(int id,string listCheck)
+        public ActionResult SelectFilter(int id,string listCheck,string priceID)
         {
+            ViewBag.priceID = priceID;
             ViewBag.listCheck = listCheck;
             ViewBag.id = id;
             return View();

@@ -4553,6 +4553,7 @@
     <Content Include="Views\Home\ListProducts.cshtml" />
     <Content Include="Views\Ultity\CountProduct.cshtml" />
     <Content Include="Views\Ultity\SelectFilter.cshtml" />
+    <Content Include="Views\Home\CategoryProductDetail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

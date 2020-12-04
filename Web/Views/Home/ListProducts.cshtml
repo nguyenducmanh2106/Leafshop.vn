@@ -7,7 +7,9 @@
     int NumberProducts = Int32.Parse(countProducts.ToString());
     Layout = null;
     var listCheck = ViewData["listCheck"];
+    var priceID = ViewData["FilterPrice"];
     <input type="hidden" id="listCheck" value="@listCheck" />
+    <input type="hidden" id="listPrice" value="@priceID" />
     <input type="hidden" id="NumberProducts" value="@NumberProducts" />
 }
 <div class='grid'>
@@ -33,12 +35,12 @@
                     <span>@item.ProductId</span>
                 </div>
                 <div class="product-desc">
-                    @if (item.Discount > null)
+                    @if (item.Discount > 0)
                     {
                         <div class="sale-flash">- @item.Discount%</div>
                     }
                     <div class="product-price">
-                        @if (item.Discount > null)
+                        @if (item.Discount > 0)
                         {
                             <del class="sale-price">
                                 @{
@@ -75,11 +77,11 @@
             </div>
         </div>
     }
-    
+
 
 </div>
 <div class='pagination_wrapper'>
-    @Html.PagedListPager(Model, page => Url.Action("Products", "Home", new { id = Request.QueryString["id"], Sale=Request.QueryString["Sale"],orderby = Request.QueryString["orderby"], listProviderID = Request.QueryString["listProviderID"], page }))
+    @Html.PagedListPager(Model, page => Url.Action("Products", "Home", new { id = Request.QueryString["id"], Sale = Request.QueryString["Sale"], orderby = Request.QueryString["orderby"], listProviderID = Request.QueryString["listProviderID"], listPriceID = @priceID, page }))
 
     <!-- BEGIN: AJAX-FILTER -->
     <script>
@@ -237,7 +239,7 @@
                  }
              })
             $.ajax({
-                url: `/Ultity/SelectFilter/?id=@Request.QueryString["id"]&listCheck=@listCheck`,
+                url: `/Ultity/SelectFilter/?id=@Request.QueryString["id"]&listCheck=@listCheck&priceID=@priceID`,
                       method: "GET"
                       , success: function (response) {
                           $('#SelectFilter').html(response)
