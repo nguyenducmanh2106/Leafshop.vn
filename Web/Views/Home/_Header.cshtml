@@ -21,7 +21,7 @@
 
             <div id="logo" class='col-md-3 col-xs-6 col-xs-push-3 col-sm-push-0 nopadding'>
                 <a href="/" class="standard-logo" data-dark-logo="//theme.hstatic.net/1000104489/1000257823/14/logo.png?v=3503"><img src="//theme.hstatic.net/1000104489/1000257823/14/logo.png?v=3503" alt="Leafshop - Natural & Organic care"></a>
-                
+
             </div><!-- #logo end -->
             <!-- Top Search
             ============================================= -->
@@ -66,232 +66,232 @@
                 <script>
 
 
-                                $('.ultimate-search').submit(function (e) {
+                    $('.ultimate-search').submit(function (e) {
 
-                                    e.preventDefault();
+                        e.preventDefault();
 
-                                    var q = $(this).find('input[name=q]').val();
+                        var q = $(this).find('input[name=q]').val();
 
-                                    if (!q) {
-                                        window.location = '/search?type=product&q=**';
-                                        return;
+                        if (!q) {
+                            window.location = '/search?type=product&q=**';
+                            return;
+                        }
+                        else {
+                            window.location = '/search?type=product&q=' + q;
+                            return;
+                        }
+                    });
+
+                    function selectSuggest(act) {
+
+                        cur = $('.smart-search-wrapper > .select').index();
+
+                        length = $('.smart-search-wrapper > a').length;
+
+                        if (act == 38) {
+
+                            if (cur == -1 || cur == 0)
+
+                                cur = length - 1;
+
+                            else
+
+                                cur = cur - 1;
+
+                        }
+
+
+                        if (act == 40) {
+
+                            if (cur == -1 || cur == length - 1)
+
+                                cur = 0;
+
+                            else
+
+                                cur = cur + 1;
+                        }
+
+                        $('.smart-search-wrapper>a').removeClass('select');
+
+                        $('.smart-search-wrapper>a:nth-child(' + (cur + 1) + ')').addClass('select');
+
+
+                        $('.ultimate-search input[name=q]').val($('.smart-search-wrapper>.select').attr('data-title'));
+                        return false;
+                    }
+
+
+                    (function ($) {
+                        $.fn.smartSearch = function (_option) {
+                            var o, issending = false,
+
+                                timeout = null;
+
+                            var option = {
+                                smartoffset: true, //auto calc offset
+
+                                searchoperator: '**', //** contain, *= begin with, =* end with
+
+                                searchfield: "title",
+
+                                searchwhen: 'keyup', //0: after keydown, 1: after keypress, after space
+
+                                searchdelay: 500, //delay time before load data
+
+                            };
+
+                            if (typeof (_option) !== 'undefined') {
+
+                                $.each(_option, function (i, v) {
+
+                                    if (typeof (_option[i]) !== 'undefined') option[i] = _option[i];
+
+                                })
+                            }
+
+                            o = $(this);
+
+                            o.attr('autocomplete', 'off');
+
+                            this.bind(option.searchwhen, function (event) {
+
+                                if (event.keyCode == 38 || event.keyCode == 40) {
+
+                                    return selectSuggest(event.keyCode);
+
+                                } else {
+
+                                    $(".smart-search-wrapper." + option.wrapper).remove();
+
+                                    clearTimeout(timeout);
+
+                                    timeout = setTimeout(l, option.searchdelay, $(this).val());
+
+                                }
+
+                            });
+
+                            var l = function (t) {
+
+                                if (issending) return this;
+
+                                issending = true;
+
+                                coll = ''
+
+                                if (option.collection != null)
+
+                                    coll = $(option.collection).val() + "&&";
+
+
+                                $.ajax({
+
+                                    url: "/search?q=filter=" + "(" + coll + "(" + option.searchfield + ":product" + option.searchoperator + t + "))" + "&view=ultimate-search",
+
+                                    dataType: "JSON",
+
+                                    async: false,
+
+                                    success: function (data) {
+
+                                        if ($('.smart-search-wrapper.' + option.wrapper).length == 0) {
+
+                                            $('body').append("<div class='smart-search-wrapper " + option.wrapper + "'></div>");
+
+                                        }
+
+                                        p();
+                                        $.each(data, function (i, v) {
+                                            console.log(v);
+                                            $(".smart-search-wrapper." + option.wrapper).append("<a data-title='" + v.title + "'class='thumbs' href='" + v.url + "'> <img src='" + Haravan.resizeImage(v.featured_image, 'medium') + "'/></a><a data-title='" + v.title + "' href='" + v.url + "'>" + "<span class='title-search'>" + v.title + "</span>" + "<p class='desc-search'>" + v.description + "</p><span class='price-search'>" + Haravan.formatMoney(v.price, '') + "đ</span></a>");
+
+                                        });
+
+                                        issending = false;
+
+                                    },
+
+                                    error: function (xhr, ajaxOptions, thrownError) {
+
+                                        alert(xhr.status);
+
+                                        alert(thrownError);
+
                                     }
-                                    else {
-                                        window.location = '/search?type=product&q=' + q;
-                                        return;
-                                    }
+
                                 });
 
-                                function selectSuggest(act) {
 
-                                    cur = $('.smart-search-wrapper > .select').index();
+                            }
 
-                                    length = $('.smart-search-wrapper > a').length;
+                            $(window).resize(function () {
 
-                                    if (act == 38) {
+                                p();
 
-                                        if (cur == -1 || cur == 0)
+                            });
 
-                                            cur = length - 1;
+                            $(window).scroll(function () {
 
-                                        else
+                                p();
 
-                                            cur = cur - 1;
+                            });
 
-                                    }
+                            $(this).blur(function () {
 
+                                $('.smart-search-wrapper.' + option.wrapper).slideUp();
 
-                                    if (act == 40) {
+                            });
 
-                                        if (cur == -1 || cur == length - 1)
+                            var p = function () {
 
-                                            cur = 0;
+                                if (!o.offset()) {
 
-                                        else
+                                    return;
 
-                                            cur = cur + 1;
-                                    }
-
-                                    $('.smart-search-wrapper>a').removeClass('select');
-
-                                    $('.smart-search-wrapper>a:nth-child(' + (cur + 1) + ')').addClass('select');
-
-
-                                    $('.ultimate-search input[name=q]').val($('.smart-search-wrapper>.select').attr('data-title'));
-                                    return false;
                                 }
 
 
-                                (function ($) {
-                                    $.fn.smartSearch = function (_option) {
-                                        var o, issending = false,
+                                $(".smart-search-wrapper." + option.wrapper).css("width", o.outerWidth() + "px");
 
-                                            timeout = null;
+                                $(".smart-search-wrapper." + option.wrapper).css("left", o.offset().left + "px");
 
-                                        var option = {
-                                            smartoffset: true, //auto calc offset
+                                if (option.smartoffset) {
 
-                                            searchoperator: '**', //** contain, *= begin with, =* end with
 
-                                            searchfield: "title",
+                                    h = $(".smart-search-wrapper." + option.wrapper).height();
 
-                                            searchwhen: 'keyup', //0: after keydown, 1: after keypress, after space
+                                    if (h + o.offset().top - $(window).scrollTop() + o.outerHeight() > $(window).height()) {
 
-                                            searchdelay: 500, //delay time before load data
+                                        $(".smart-search-wrapper." + option.wrapper).css('top', '');
 
-                                        };
 
-                                        if (typeof (_option) !== 'undefined') {
+                                        $(".smart-search-wrapper." + option.wrapper).css('bottom', ($(window).scrollTop() + $(window).height() - o.offset().top) + "px");
 
-                                            $.each(_option, function (i, v) {
+                                    } else {
 
-                                                if (typeof (_option[i]) !== 'undefined') option[i] = _option[i];
+                                        $(".smart-search-wrapper." + option.wrapper).css('bottom', '');
 
-                                            })
-                                        }
+                                        $(".smart-search-wrapper." + option.wrapper).css('top', (o.offset().top - $(window).scrollTop() + o.outerHeight()) + "px");
 
-                                        o = $(this);
+                                    }
 
-                                        o.attr('autocomplete', 'off');
+                                } else {
 
-                                        this.bind(option.searchwhen, function (event) {
+                                    $(".smart-search-wrapper." + option.wrapper).css('top', (o.offset().top - $(window).scrollTop() + o.outerHeight()) + "px");
 
-                                            if (event.keyCode == 38 || event.keyCode == 40) {
+                                }
 
-                                                return selectSuggest(event.keyCode);
+                            }
 
-                                            } else {
+                            return this;
 
-                                                $(".smart-search-wrapper." + option.wrapper).remove();
+                        };
+                    }(jQuery));
 
-                                                clearTimeout(timeout);
 
-                                                timeout = setTimeout(l, option.searchdelay, $(this).val());
 
-                                            }
-
-                                        });
-
-                                        var l = function (t) {
-
-                                            if (issending) return this;
-
-                                            issending = true;
-
-                                            coll = ''
-
-                                            if (option.collection != null)
-
-                                                coll = $(option.collection).val() + "&&";
-
-
-                                            $.ajax({
-
-                                                url: "/search?q=filter=" + "(" + coll + "(" + option.searchfield + ":product" + option.searchoperator + t + "))" + "&view=ultimate-search",
-
-                                                dataType: "JSON",
-
-                                                async: false,
-
-                                                success: function (data) {
-
-                                                    if ($('.smart-search-wrapper.' + option.wrapper).length == 0) {
-
-                                                        $('body').append("<div class='smart-search-wrapper " + option.wrapper + "'></div>");
-
-                                                    }
-
-                                                    p();
-                                                    $.each(data, function (i, v) {
-                                                        console.log(v);
-                                                        $(".smart-search-wrapper." + option.wrapper).append("<a data-title='" + v.title + "'class='thumbs' href='" + v.url + "'> <img src='" + Haravan.resizeImage(v.featured_image, 'medium') + "'/></a><a data-title='" + v.title + "' href='" + v.url + "'>" + "<span class='title-search'>" + v.title + "</span>" + "<p class='desc-search'>" + v.description + "</p><span class='price-search'>" + Haravan.formatMoney(v.price, '') + "đ</span></a>");
-
-                                                    });
-
-                                                    issending = false;
-
-                                                },
-
-                                                error: function (xhr, ajaxOptions, thrownError) {
-
-                                                    alert(xhr.status);
-
-                                                    alert(thrownError);
-
-                                                }
-
-                                            });
-
-
-                                        }
-
-                                        $(window).resize(function () {
-
-                                            p();
-
-                                        });
-
-                                        $(window).scroll(function () {
-
-                                            p();
-
-                                        });
-
-                                        $(this).blur(function () {
-
-                                            $('.smart-search-wrapper.' + option.wrapper).slideUp();
-
-                                        });
-
-                                        var p = function () {
-
-                                            if (!o.offset()) {
-
-                                                return;
-
-                                            }
-
-
-                                            $(".smart-search-wrapper." + option.wrapper).css("width", o.outerWidth() + "px");
-
-                                            $(".smart-search-wrapper." + option.wrapper).css("left", o.offset().left + "px");
-
-                                            if (option.smartoffset) {
-
-
-                                                h = $(".smart-search-wrapper." + option.wrapper).height();
-
-                                                if (h + o.offset().top - $(window).scrollTop() + o.outerHeight() > $(window).height()) {
-
-                                                    $(".smart-search-wrapper." + option.wrapper).css('top', '');
-
-
-                                                    $(".smart-search-wrapper." + option.wrapper).css('bottom', ($(window).scrollTop() + $(window).height() - o.offset().top) + "px");
-
-                                                } else {
-
-                                                    $(".smart-search-wrapper." + option.wrapper).css('bottom', '');
-
-                                                    $(".smart-search-wrapper." + option.wrapper).css('top', (o.offset().top - $(window).scrollTop() + o.outerHeight()) + "px");
-
-                                                }
-
-                                            } else {
-
-                                                $(".smart-search-wrapper." + option.wrapper).css('top', (o.offset().top - $(window).scrollTop() + o.outerHeight()) + "px");
-
-                                            }
-
-                                        }
-
-                                        return this;
-
-                                    };
-                                }(jQuery));
-
-
-
-                                jQuery('.ultimate-search input[name=q]').smartSearch({ searchdelay: 400, wrapper: 'search-wrapper', collection: '.collection_id' });
+                    jQuery('.ultimate-search input[name=q]').smartSearch({ searchdelay: 400, wrapper: 'search-wrapper', collection: '.collection_id' });
 
 
                 </script>
@@ -412,40 +412,20 @@
 
                 <div id="top-cart" class='top-cart-block col-md-1 nopadding'>
                     <a href="/cart" id="top-cart-trigger">
-                        <img src='//theme.hstatic.net/1000104489/1000257823/14/cart-x.png?v=3503'><span class='top_cart_qty'>1</span>
+                        <img src='//theme.hstatic.net/1000104489/1000257823/14/cart-x.png?v=3503'>
+                        <span class='top_cart_qty' id="totalProducts">
+                            <!--Đổ số sản phẩm -->
+                        </span>
                     </a>
-                    <div class="top-cart-content">
-                        <div class="top-cart-title">
-                            <h4>Giỏ hàng</h4>
-                        </div>
-                        <div class="top-cart-items">
-
-                            <div class="top-cart-item clearfix">
-                                <input type="hidden" class="item_id" value="1009141172" />
-                                <input type="hidden" class="item_qty" value="1" />
-                                <input type="hidden" class="item_unit_price_not_formated" value="27900000" />
-                                <div class="top-cart-item-image">
-
-                                    <a href="/products/dau-goi-huu-co-cho-be-2-trong-1-alphanova-bebe-200ml"><img src="//product.hstatic.net/1000104489/product/alphanova_bebe_creme_shampooing_bio_200ml_2017_small.jpg" alt="Dầu gội hữu cơ cho bé 2 trong 1 Alphanova Bebe 200ml" /></a>
-                                </div>
-                                <div class="top-cart-item-desc">
-                                    <a href="/products/dau-goi-huu-co-cho-be-2-trong-1-alphanova-bebe-200ml">Dầu gội hữu cơ cho bé 2 trong 1 Alphanova Bebe 200ml</a>
-                                    <span class="top-cart-item-price">167,400₫</span>
-                                    <span class="top-cart-item-quantity">x 1</span>
-                                    <a class='top_cart_item_remove' onclick='deleteCart(1009141172);'>
-                                        <i class='fa fa-times-circle'></i>
-                                    </a>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="top-cart-action clearfix">
-                            <span class="fleft top-checkout-price">167,400₫</span>
-                            <input type="hidden" class="top_cart_total_price_not_format" value="16740000" />
-                            <button onclick='window.location.href="/cart"' class="button button-small nomargin fright">Xem giỏ hàng</button>
-                        </div>
+                    <div class="top-cart-content" id="viewCart">
+                        <!--gọi ajax Đổ dữ liệu-->
 
                     </div>
+                    <style>
+                        #viewCart {
+                            width: 280px !important
+                        }
+                    </style>
                 </div>
 
                 <a class='top_hotline col-sm-3 hidden-sm hidden-xs nopadding' href='tel:0975380816'><img src='//theme.hstatic.net/1000104489/1000257823/14/top_hotline.png?v=3503' /></a>
@@ -456,41 +436,44 @@
             <a href='#' id='top_link_trigger' class='hidden-lg hidden-md'><i class='fa fa-ellipsis-v'></i></a>
             <!-- end top link trigger --->
             <script>
-                            $("#sidebar-wrapper ul li a span").click(function (event) {
-                                event.preventDefault();
-                                var li = $(this).parents('li');
-                                li.children('ul').toggle('slow');
-                            });
+                $("#sidebar-wrapper ul li a span").click(function (event) {
+                    event.preventDefault();
+                    var li = $(this).parents('li');
+                    li.children('ul').toggle('slow');
+                });
             </script>
             <!-- #primary-menu end -->
         </div>
     </div>
 </header>
-@*<div class="header-bottom-fluid">
-        <div class="header-bottom">
-            <div class="logo-desktop">
-                <a href='@Url.Action("Index","Home")'><img src="~/Content/wp-content/themes/wp-six-to-theme/images/layout/logo.png" alt="wp6" /></a>
-            </div>
-            <div class="page-search">
-                <div id="search">
-                    <form role="search" autocomplete="off" id="searchform" action="">
-                        <input class="form-control" type="text" value="" name="s" id="s" placeholder="Nhập từ khóa cần tìm" />
-                        <input type="submit" class="search-submit" value='Tìm kiếm' />
-                        <input type="hidden" name="post_type" value="product" />
-                    </form>
-                </div>
-            </div>
-            <div class="cart-contents card_content_load">
-                <div class="card_content_load_pvagain">
-                    <span class="title-cart"> Giỏ Hàng</span>
-                    <div class="clear"></div>
-                    <a class="header-cart header-cart-reload" href="@Url.Action("Index","Cart")" title="Thanh Toán">
-                        @countCart Sản Phẩm - <span class="woocommerce-Price-amount amount">
-                            @String.Format(vie, "{0:c00}", totalPrice)
-                        </span>
-                    </a>
-                </div>
 
-            </div>
-        </div>
-    </div>*@
+<script>
+    $(document).ready(function () {
+        callAjaxTotalProduct()
+        callAjax()
+    })
+    function callAjax() {
+        $.ajax({
+            'url': '/Cart/ViewQuick',
+            'type': 'GET',
+            'success': function (data) {
+                //console.log(data);
+                $('#viewCart').html(data);
+            },
+
+        });
+    }
+    function callAjaxTotalProduct() {
+        $.ajax({
+            'url': '/Cart/TotalProduct',
+            'type': 'GET',
+            'success': function (data) {
+                console.log(data);
+                $('#totalProducts').html(data);
+            },
+
+        });
+
+    }
+</script>
+

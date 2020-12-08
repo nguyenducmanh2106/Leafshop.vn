@@ -23,6 +23,7 @@ namespace Web.Controllers
         public async Task<ActionResult> Index()
         {
             //TempData["ReturnUrl"] = Request.Url.AbsoluteUri;
+            ViewBag.products = await db.Products.Where(x => x.Status == true).ToListAsync();
             ViewBag.News = await db.News.Where(x => x.Status == 1).Take(3).OrderBy(x => x.Created).ToListAsync();
             ViewBag.ProductSaleQuick = await db.Products.Where(x => x.Status == true).Take(8).OrderBy(x => x.ProductSaleQuantity).ToListAsync();
             ViewBag.banner = await db.Banners.Where(x => x.Status == 1).Take(6).OrderBy(x => x.Orderby).ToListAsync();
@@ -215,7 +216,7 @@ namespace Web.Controllers
             return View(products.ToPagedList(page, pageSize));
         }
 
-        public async Task<ActionResult> ListProducts(int id=-1, string Sale = "default", string orderby = "default", string listProviderID = "-1", string listPriceID = "-1", int page = 1, int pageSize = 2)
+        public async Task<ActionResult> ListProducts(int id = -1, string Sale = "default", string orderby = "default", string listProviderID = "-1", string listPriceID = "-1", int page = 1, int pageSize = 2)
         {
             var list = listProviderID.Split(',').Select(Int64.Parse).ToList();
             List<Product> products;
@@ -292,7 +293,7 @@ namespace Web.Controllers
             }
             if (Sale == "flashsale")
             {
-                products = products.Where(x => x.Discount != 0&&x.Status==true).OrderBy(p => p.CreateDate).ToList();
+                products = products.Where(x => x.Discount != 0 && x.Status == true).OrderBy(p => p.CreateDate).ToList();
             }
             switch (listPriceID)
             {
@@ -339,7 +340,7 @@ namespace Web.Controllers
                     ViewBag.date = "selected";
                     products = products.OrderBy(p => p.CreateDate).ToList();
                     break;
-               
+
                 case "best_selling":
                     ViewBag.popularity = "selected";
                     products = products.OrderByDescending(p => p.ProductSaleQuantity).ToList();
@@ -355,7 +356,7 @@ namespace Web.Controllers
             ViewBag.countProducts = products.ToList().Count();
             return View(products.ToPagedList(page, pageSize));
         }
-        
+
         #endregion
 
         #region Provider
@@ -405,11 +406,11 @@ namespace Web.Controllers
         }
         public ActionResult CategoryProductDetail(int? idProductPresent)
         {
-           
-            var idCategoryProductPresent = db.Products.Where(x => x.ProductId == idProductPresent).Select(x=>x.CategoryId).FirstOrDefault();
-            var ProductRelationship= db.Products.Where(x => (x.Status == true)&&(x.ProductId!= idProductPresent) &&(x.CategoryId== idCategoryProductPresent)).OrderByDescending(x => x.ProductSaleQuantity).Take(3).ToList();
+
+            var idCategoryProductPresent = db.Products.Where(x => x.ProductId == idProductPresent).Select(x => x.CategoryId).FirstOrDefault();
+            var ProductRelationship = db.Products.Where(x => (x.Status == true) && (x.ProductId != idProductPresent) && (x.CategoryId == idCategoryProductPresent)).OrderByDescending(x => x.ProductSaleQuantity).Take(3).ToList();
             var products = db.Products.Where(x => x.Status == true).OrderByDescending(x => x.ProductSaleQuantity).Take(3).ToList();
-            var ProductSale = db.Products.Where(x => x.Status == true&&x.Discount>0).OrderByDescending(x=>x.Discount).Take(3).ToList();
+            var ProductSale = db.Products.Where(x => x.Status == true && x.Discount > 0).OrderByDescending(x => x.Discount).Take(3).ToList();
             ViewBag.ProductSale = ProductSale;
             ViewBag.ProductRelationship = ProductRelationship;
             ViewBag.products = products;
@@ -546,9 +547,21 @@ namespace Web.Controllers
 
         #region News, New detail
         [AllowAnonymous]
-        public ActionResult News(int page = 1, int pageSize = 9)
+        public ActionResult News(string key = "", int page = 1, int pageSize = 3)
         {
-            var news = db.News.Where(n => n.Status == 1).OrderByDescending(n => n.Created).ToList();
+            List<News> news = new List<News>();
+
+            if (key == "")
+            {
+                news = db.News.Where(n => n.Status == 1).OrderByDescending(n => n.Created).ToList();
+            }
+            else
+            {
+                news = db.News.Where(n => (n.Status == 1) && (n.NewsTitle.Contains(key))).OrderByDescending(n => n.Created).ToList();
+            }
+            var users = db.Users.Where(x => x.Status == 1).ToList();
+            ViewBag.users = users;
+
             return View(news.ToPagedList(page, pageSize));
         }
         [AllowAnonymous]
@@ -563,7 +576,28 @@ namespace Web.Controllers
             return View(news);
         }
         #endregion
+        public ActionResult Contact()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Contact(Contact contact)
+        {
 
+            if (ModelState.IsValid)
+            {
+                contact.Created = DateTime.Now;
+                contact.Updated = DateTime.Now;
+                db.Contacts.Add(contact);
+                db.SaveChanges();
+               
+                return View();
+            }
+            else
+            {
+                return Json(new { Mesage = "flase" });
+            }
+        }
         #region Feedback
         public ActionResult Feedback()
         {

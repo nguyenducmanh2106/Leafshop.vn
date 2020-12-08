@@ -14,6 +14,11 @@ namespace Models.ViewModels
     
     //Customer
     //Register and login Viewmodel Customer
+    public class Cart
+    {
+        public List<Product> products { get; set; }
+        public List<int> productsId { get; set; }
+    }
     public class CustomerViewModel
     {
         [Required(ErrorMessage = "Vui lòng nhập Họ Tên")]

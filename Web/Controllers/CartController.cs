@@ -1,5 +1,6 @@
 ﻿using Models;
 using Models.Models.DataModels;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -7,28 +8,97 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Web.Areas.Admin.Models;
-
+using Models.ViewModels;
 namespace Web.Controllers
 {
-    [CustomersAutherize]
+    //[CustomersAutherize]
     public class CartController : Controller
     {
+        public string cart_token = "cart_token";
         MobileShopContext db = new MobileShopContext();
+        public ActionResult AddToCart()
+        {
+            Cart cart = new Cart();
+            var CookieID = Response.Cookies[cart_token];
+            List<Product> listProduct = new List<Product>();
+            if (CookieID != null)
+            {
+               var productsID= CookieID.Value.Split('-').Select(x => Int32.Parse(x)).ToList();
+               foreach(var item in productsID)
+                {
+                    var prod = db.Products.Where(x => x.ProductId == item).FirstOrDefault();
+                    listProduct.Add(prod);
+                }
+                cart.products = listProduct;
+                cart.productsId = productsID;
+               
+            }
 
+
+            return RedirectToAction("Index");
+        }
+        public ActionResult ToastrProduct(string productId)
+        {
+            int id = Int32.Parse(productId);
+            var products = db.Products.Where(x => x.ProductId == id).FirstOrDefault();
+            return View(products);
+        }
+        public ActionResult TotalProduct()
+        {
+            var CookieID = Request.Cookies[cart_token];
+            int countProductInCart = 0;
+            if (CookieID != null)
+            {
+                var productsID = CookieID.Value.Split('-').Select(x => Int32.Parse(x)).ToList();
+                 countProductInCart = productsID.Distinct().Count();
+                
+            }
+            ViewBag.countProductInCart = countProductInCart;  
+            return View();
+        }
+        public ActionResult ViewQuick()
+        {
+
+            Cart cart = new Cart();
+            var CookieID = Request.Cookies[cart_token];
+            List<Product> listProduct = new List<Product>();
+            if (CookieID != null)
+            {
+                var productsID = CookieID.Value.Split('-').Select(x => Int32.Parse(x)).ToList();
+                var productsIdDistinct = productsID.Distinct();
+                foreach (var item in productsIdDistinct)
+                {
+                    var prod = db.Products.Where(x => x.ProductId == item).FirstOrDefault();
+                    listProduct.Add(prod);
+                }
+                cart.products = listProduct;
+                cart.productsId = productsID;
+            }
+                return View(cart);
+        }
         #region Carts
         // GET: Cart
         public ActionResult Index()
         {
-            //Lấy thông tin người dùng hiện tại 
-            HttpCookie cookie = Request.Cookies["InfoCustomer"];
-            var userId = cookie["id"];
-            var parseIntUser = int.Parse(userId);
-            var cart = db.AddToCarts.Where(x => x.CustomerId == parseIntUser).FirstOrDefault();
-            if (cart == null)
+
+            Cart cart = new Cart();
+            var CookieID = Request.Cookies[cart_token];
+            List<Product> listProduct = new List<Product>();
+            if (CookieID != null)
             {
-                ViewBag.cartnull = "Chưa có sản phẩm trong giỏ hàng";
+                var productsID = CookieID.Value.Split('-').Select(x => Int32.Parse(x)).ToList();
+                var productsIdDistinct = productsID.Distinct();
+                foreach (var item in productsIdDistinct)
+                {
+                    var prod = db.Products.Where(x => x.ProductId == item).FirstOrDefault();
+                    listProduct.Add(prod);
+                }
+                cart.products = listProduct;
+                cart.productsId = productsID;
+                
             }
-            return View();
+
+            return View(cart);
         }
         public PartialViewResult GetallCart()
         {

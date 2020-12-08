@@ -1,0 +1,47 @@
+﻿@model Models.Models.DataModels.Product
+@{
+    Layout = null;
+
+}
+
+    <div class="jGrowl-notification"></div>
+    <div class="jGrowl-notification ui-state-highlight ui-corner-all default" id="display" style="display: block;">
+
+        <div class="jGrowl-header"></div>
+        <div class="jGrowl-message">
+            <div class="row">
+                <div class="col-md-4">
+                    <a href="@Url.Action("Productsdetail","Home",new { Model.ProductId})">
+                        <img style="width:70px"
+                             src="//product.hstatic.net/1000104489/product/z2158787186102_692fbea566b9beec2fc55c42c6993544_dc3720e90d07473dbe11d8bc577f92b0_small.jpg"
+                             alt="@Model.ProductName">
+                    </a>
+                </div>
+                <div class="col-md-8">
+                    <div class="jGrowl-note">
+                        <a class="jGrowl-title" href="@Url.Action("Productsdetail","Home",new { Model.ProductId})">
+                            @Model.ProductName
+                        </a>
+                        <ins>
+
+                            @{
+                                var vie = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+
+                                var price = Model.Discount > 0 ? Model.PriceOut - Model.PriceOut * Model.Discount / 100 : Model.PriceOut;
+                            }
+                            @String.Format(vie, "{0:c00}", price)
+
+                        </ins>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    $(document).ready(function () {
+        setTimeout(function () {
+            $('#display').css('display','none')
+        }, 3000)
+    })
+</script>

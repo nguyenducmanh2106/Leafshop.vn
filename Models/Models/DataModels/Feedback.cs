@@ -28,8 +28,10 @@ namespace Models.Models.DataModels
         public string Description { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm tt}")]
+        
         public DateTime Created { get; set; }
         public int Status { get; set; }
-
+        [Column("Sdt")]
+        public string Sdt { get; set; }
     }
 }
