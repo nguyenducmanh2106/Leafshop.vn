@@ -16,27 +16,7 @@ namespace Web.Controllers
     {
         public string cart_token = "cart_token";
         MobileShopContext db = new MobileShopContext();
-        public ActionResult AddToCart()
-        {
-            Cart cart = new Cart();
-            var CookieID = Response.Cookies[cart_token];
-            List<Product> listProduct = new List<Product>();
-            if (CookieID != null)
-            {
-               var productsID= CookieID.Value.Split('-').Select(x => Int32.Parse(x)).ToList();
-               foreach(var item in productsID)
-                {
-                    var prod = db.Products.Where(x => x.ProductId == item).FirstOrDefault();
-                    listProduct.Add(prod);
-                }
-                cart.products = listProduct;
-                cart.productsId = productsID;
-               
-            }
-
-
-            return RedirectToAction("Index");
-        }
+      
         public ActionResult ToastrProduct(string productId)
         {
             int id = Int32.Parse(productId);
@@ -47,7 +27,7 @@ namespace Web.Controllers
         {
             var CookieID = Request.Cookies[cart_token];
             int countProductInCart = 0;
-            if (CookieID != null)
+            if (CookieID != null && CookieID.Value != "")
             {
                 var productsID = CookieID.Value.Split('-').Select(x => Int32.Parse(x)).ToList();
                  countProductInCart = productsID.Distinct().Count();
@@ -62,7 +42,7 @@ namespace Web.Controllers
             Cart cart = new Cart();
             var CookieID = Request.Cookies[cart_token];
             List<Product> listProduct = new List<Product>();
-            if (CookieID != null)
+            if (CookieID != null&& CookieID.Value!="")
             {
                 var productsID = CookieID.Value.Split('-').Select(x => Int32.Parse(x)).ToList();
                 var productsIdDistinct = productsID.Distinct();
@@ -84,7 +64,7 @@ namespace Web.Controllers
             Cart cart = new Cart();
             var CookieID = Request.Cookies[cart_token];
             List<Product> listProduct = new List<Product>();
-            if (CookieID != null)
+            if (CookieID != null && CookieID.Value != "")
             {
                 var productsID = CookieID.Value.Split('-').Select(x => Int32.Parse(x)).ToList();
                 var productsIdDistinct = productsID.Distinct();

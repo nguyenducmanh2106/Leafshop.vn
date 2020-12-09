@@ -20,7 +20,7 @@
 <section id="content">
     <div class="content-wrap">
         <div class="container clearfix">
-            @if (Model.productsId != null&&Model.products!=null)
+            @if (Model.productsId != null && Model.products != null)
             {
                 <form action="/cart" method="post" id="cartformpage">
                     <div class="cart">
@@ -62,7 +62,7 @@
                                             @{
                                                 var quantity = productsID.Where(x => x == item.ProductId).Count();
                                             }
-                                            <input type="number" name="updates[]" value="@quantity" class="qty" id='product-quantity2updates_1065040234' />
+                                            <input type="number" name="updates[]" min="1" data-id="@item.ProductId" value="@quantity" class="qty" id='product-quantity2updates_1065040234' />
                                         </div>
                                     </div>
 
@@ -77,7 +77,7 @@
                                     </div>
 
                                     <div class="td col-sm-1 cart-product-remove">
-                                        <a href="/cart/change?line=1&quantity=0" class="remove" title="Remove this item"><i class="fa fa-trash-o"></i></a>
+                                        <a href="javascript:void(0)" data-id="@item.ProductId" class="top_cart_item_remove" title="Remove this item"><i class="fa fa-trash-o"></i></a>
                                     </div>
 
                                 </div>
@@ -107,38 +107,91 @@
                             </div>
                         </div>
                         <div class="col-md-6 col-sm-6 col-xs-12 topmargin nopadding">
-                            <button name="update" class="cart_update_btn button button-3d nomargin fright">Cập nhật giỏ hàng</button>
+                            <button name="update" id="update" class="cart_update_btn button button-3d nomargin fright">Cập nhật giỏ hàng</button>
                             <button name='checkout' class="cart_checkout_btn button button-3d notopmargin fright">Thanh toán</button>
                         </div>
                     </div>
                 </form>
             }
-            <script type="text/javascript">
-                function minus_quantity(item_id) {
-                    var quantity = parseInt($('#product-quantity2updates_' + item_id).val());
-                    if (quantity > 0) {
-                        quantity -= 1;
-                    }
-                    else {
-                        quantity = 0;
-                    }
-                    $('#product-quantity2updates_' + item_id).val(quantity);
-                }
-                function plus_quantity(item_id) {
-                    var quantity = parseInt($('#product-quantity2updates_' + item_id).val());
-                    if (quantity < 100) {
-                        quantity += 1;
-                    }
-                    else {
-                        quantity = 100;
-                    }
-                    $('#product-quantity2updates_' + item_id).val(quantity);
-                }
-            </script>
+            else
+            {
+                <div class="table-responsive">
+                    <p>Không có sản phẩm nào trong giỏ hàng</p>
+                    <a href="/"><i class="fa fa-undo"></i> Tiếp tục mua hàng</a>
+                </div>
+            }
         </div>
 
     </div>
 </section>
-		</div>
+<script type="text/javascript">
+    var arr = $.cookie('cart_token') ? $.cookie('cart_token').split('-') : [];
+    $(document).ready(function () {
+        $('.qty').each(function () {
+            $(this).on('change', function () {
+                arr = []
+                $('.qty').each(function () {
+                    var id = $(this).attr('data-id')
+                    var value = $(this).val();
+                    for (var i = 0; i < value; i++) {
+                        arr.push(id)
+                    }
+                })
+                console.log(arr)
+                var strId = arr.join('-');
+                $.cookie('cart_token', strId, { path: '/', expires: 10 });
+                $.ajax({
+                    'url': '/Cart/ViewQuick',
+                    'type': 'GET',
+                    'success': function (data) {
+                        //console.log(data);
+                        $('#viewCart').html(data);
+                    },
+                });
+                $.ajax({
+                    'url': '/Cart/TotalProduct',
+                    'type': 'GET',
+                    'success': function (data) {
+                        //console.log(data);
+                        $('#totalProducts').html(data);
+                    },
+                });
+            })
+        })
+        //remove sp trong giỏ hàng trên thanh nav
+        $('.top_cart_item_remove').each(function () {
+            $(this).off('click').on('click', function () {
+                var productId = $(this).attr('data-id');
+                productsId = productsId.filter(item => {
+                    return item != productId
+                })
+                var strId = productsId.join('-');
+                $.cookie('cart_token', strId, { path: '/', expires: 10 });
+                console.log(productsId);
+                window.location.reload();
+                $.ajax({
+                    'url': '/Cart/ViewQuick',
+                    'type': 'GET',
+                    'success': function (data) {
+                        //console.log(data);
+                        $('#viewCart').html(data);
+                    },
+                });
+                $.ajax({
+                    'url': '/Cart/TotalProduct',
+                    'type': 'GET',
+                    'success': function (data) {
+                        //console.log(data);
+                        $('#totalProducts').html(data);
+                    },
+                });
 
+
+            })
+        })
+        $('#update').off('click').on('click', function () {
+            window.location.reload()
+        })
+    })
+</script>
 <!-- #content end -->
