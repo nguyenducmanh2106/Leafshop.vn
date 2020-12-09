@@ -686,7 +686,7 @@ var quickViewProduct = function (purl) {
 	// modal = $('#quick-view-modal'); modal.modal('show');
 	$.ajax({
 		url: purl + '.js',
-		async: false,   
+		async: false,
 		success: function (product) {
 
 			//console.log('quick view...asd01');
@@ -970,7 +970,7 @@ jQuery(document).ready(function() {
                     });
                 })
             })
-           
+
             //mua sản phẩm và chuyển đến trang giỏ hàng
             $('#muangay').off('click').on('click', function () {
                 var productId = $(this).attr('data-id');
@@ -978,7 +978,7 @@ jQuery(document).ready(function() {
                 var strId = productsId.join('-');
                 $.cookie('cart_token', strId, { path: '/', expires: 10 });
                 console.log(productsId)
-                $(location).attr('href',`/Cart/Index`)
+                $(location).attr('href', `/Cart/Index`)
             })
 
             function toastrClick(productId) {
@@ -1033,7 +1033,7 @@ jQuery(document).ready(function() {
             });
 
         })
-        
+
     </script>
 
     <!-- end quick add cart -->
@@ -1074,7 +1074,7 @@ jQuery(document).ready(function() {
 
 
 
-   
+
 
     <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
     <script>
@@ -1084,6 +1084,166 @@ jQuery(document).ready(function() {
                 appId: "4337ebf8-0b69-4e0c-abad-b59d1a265d44",
             });
         });
+    </script>
+    <script>
+        var tentinh = "";
+        var tenhuyen = "";
+        var tinhId = -1;
+        var huyenId=-1
+        $(document).ready(function () {
+            $('.repassword_warning').hide();
+            getHuyen(-1)
+            getTinhId()
+            $("#register-form-city").on('change', function () {
+                 tinhId = $(this).val();
+                getHuyen(tinhId)
+                getTenTinh(tinhId)
+
+            })
+            $("#register-form-district").off('click').on('click', function () {
+                huyenId = $(this).val();
+                getTenHuyen(tinhId, huyenId)
+
+            })
+            $('#register-form-submit').off('click').on('click', function () {
+                if ($('#first_name') == "" || $('#register-form-email') == "") {
+                    alert("Nhập đầy đủ các trường!");
+                    return false;
+                }
+                else {
+                    Register()
+                }
+            })
+        });
+        function getTenTinh(tinhId) {
+            var path = 'https://raw.githubusercontent.com/nguyenducmanh2106/DiaGioiVN/manh/tinh.json'
+
+            $.ajax({
+                url: path,
+                method: "GET"
+                , success: function (response) {
+                    var rs = JSON.parse(response)
+                    $.each(rs, function (i, itemMenu) {
+                        if (i >= 0 && itemMenu.id == tinhId) {
+                            tentinh = itemMenu.name
+                        }
+
+                    })
+                }
+            });
+        }
+        function getTenHuyen(tinhId,huyenId) {
+
+            if (tinhId > -1) {
+              
+                var pathH = 'https://raw.githubusercontent.com/nguyenducmanh2106/DiaGioiVN/manh/huyen.json'
+                $.ajax({
+                    url: pathH,
+                    method: "GET"
+                    , success: function (response) {
+                        var rs = JSON.parse(response)
+
+                        $.each(rs, function (i, itemMenu) {
+                            if (itemMenu.id == huyenId && itemMenu.tinh_id == tinhId) {
+                                tenhuyen = itemMenu.name
+                            }
+                        })
+                    }
+                });
+            }
+            else {
+
+                var cbHuyen = $("#register-form-district")
+                cbHuyen.html('<option value="-1">-- Chọn huyện --</option>');
+
+            }
+        }
+        function getHuyen(tinhId) {
+
+            if (tinhId > -1) {
+                var cbHuyen = $("#register-form-district")
+                cbHuyen.html('');
+                var pathH = 'https://raw.githubusercontent.com/nguyenducmanh2106/DiaGioiVN/manh/all.json'
+                $.ajax({
+                    url: pathH,
+                    method: "GET"
+                    , success: function (response) {
+                        var rs = JSON.parse(response)
+
+                        $.each(rs, function (i, itemMenu) {
+                            if (i >= 0 && itemMenu.id == tinhId) {
+                                cbHuyen.html('<option value="-1">-- Chọn huyện --</option>');
+                                $.each(itemMenu.huyen, function (index, itemHuyen) {
+
+                                    var newOption1 = new Option(itemHuyen.name, itemHuyen.id);
+                                    cbHuyen.append(newOption1);
+
+                                })
+
+                            }
+                        })
+                    }
+                });
+            }
+            else {
+
+                var cbHuyen = $("#register-form-district")
+                cbHuyen.html('<option value="-1">-- Chọn huyện --</option>');
+
+            }
+        }
+        function getTinhId() {
+            var path = 'https://raw.githubusercontent.com/nguyenducmanh2106/DiaGioiVN/manh/tinh.json'
+            var cbTinhId = $("#register-form-city")
+            $.ajax({
+                url: path,
+                method: "GET"
+                , success: function (response) {
+                    var rs = JSON.parse(response)
+                    $.each(rs, function (i, itemMenu) {
+                        if (i >= 0) {
+
+                            var newOption = new Option(itemMenu.name, itemMenu.id);
+                            cbTinhId.append(newOption);
+                        }
+                    })
+                }
+            });
+        }
+        function Register() {
+            var obj = {
+                "FullName": $('#first_name').val(),
+                "Password": $('#register-form-password').val(),
+                "Email": $('#register-form-email').val(),
+                "Gender": $('#register-form-gender').val(),
+                "DateofBirth": $('#register-form-date').val(),
+                "Tinh": tentinh,
+                "Huyen": tenhuyen,
+                "TinhId": tinhId,
+                "HuyenId": huyenId,
+                "Address": $('#register-form-address').val(),
+                "Password": $('#register-form-password').val()
+            }
+            $.ajax({
+                'url': '/Customer/Register',
+                'type': 'POST',
+                'data': obj,
+                'success': function (data) {
+                    console.log(data)
+                },
+            });
+        }
+        $('#register-form-password, #register-form-repassword').on('keyup', function () {
+            if (($('#register-form-password').val() !== '') && ($('#register-form-password').val() !== $('#register-form-repassword').val())) {
+                $('.repassword_warning').show();
+                $('#register-form-submit').prop('disabled', true);
+            }
+            else {
+                $('.repassword_warning').hide();
+                $('#register-form-submit').prop('disabled', false);
+            }
+        })
+
     </script>
     <!--Thông báo sản phẩm đã cho vào giỏ hàng-->
     <div id="jGrowl" class="top-right jGrowl"></div>

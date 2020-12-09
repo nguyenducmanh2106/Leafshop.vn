@@ -34,7 +34,8 @@ namespace Web.Controllers
         }
         public ActionResult TopMenu()
         {
-            return PartialView("_TopMenu");
+            var users = db.Customers.ToList();
+            return PartialView("_TopMenu",users);
         }
         //Parital: //get Categories
         public PartialViewResult MainMenu()

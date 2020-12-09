@@ -1,4 +1,14 @@
-﻿<div id="top-bar" class="">
+﻿@using Models.Models.DataModels
+@model List<Models.Models.DataModels.Customer>
+@{
+    var customer_token = Request.Cookies["customer_token"];
+    Customer user = null;
+    if (customer_token != null && customer_token.Value!="")
+    {
+        user = Model.Where(x => x.ActiveCode.ToString() == customer_token.Value).FirstOrDefault();
+    }
+}
+<div id="top-bar" class="">
     <div class="container clearfix">
 
         <div class="col_half col_last fright nobottommargin top_link_wrapper">
@@ -13,15 +23,28 @@
                     <li><a href="/">Khuyến mãi</a></li>
 
 
+                    @if (user != null)
+                    {
+                        <li>
+                            <a style="display:inline !important" href='@Url.Action("Profile","Customer")'>
+                                <i class="far fa-user" style="color:#ADB5BD"></i>
+                                @user.FullName
+                            </a>
+                        </li>
+                        <li>
+                            <a href='@Url.Action("Logout","Customer")' title="Đăng xuất">
+                                Đăng xuất
+                            </a>
+                           
+                        </li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Blog", "News", "Home")</li>
+                        <li><a href='@Url.Action("Index","Customer")'>Tài khoản</a></li>
+                        <li><a href='@Url.Action("Index","Customer")'>Đăng nhập / Đăng ký</a></li>
 
-                    <li>@Html.ActionLink("Blog", "News", "Home")</li>
-                    <li><a href='/account'>Tài khoản</a></li>
-                    @{Html.RenderAction("RightHeader", "Users");}
-
-
-
-                    @*<li><a href='/account/login'>Đăng nhập / Đăng ký</a></li>*@
-
+                    }
                     <li></li>
 
                 </ul>

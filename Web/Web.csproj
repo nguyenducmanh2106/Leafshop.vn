@@ -187,6 +187,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
+    <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UltityController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
@@ -4557,6 +4558,8 @@
     <Content Include="Views\Cart\ViewQuick.cshtml" />
     <Content Include="Views\Cart\TotalProduct.cshtml" />
     <Content Include="Views\Cart\ToastrProduct.cshtml" />
+    <Content Include="Views\Customer\Index.cshtml" />
+    <Content Include="Views\Customer\Profile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

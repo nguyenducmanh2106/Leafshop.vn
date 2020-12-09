@@ -1,0 +1,306 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+<!-- Page Title
+============================================= -->
+<section id="page-title">
+    <div class="container clearfix">
+
+        <ol class="breadcrumb col-md-6 col-sm-6">
+            <li><a href="/">Trang chủ</a></li>
+
+            <li><a href="/account">Tài khoản</a></li>
+
+            <li class='active'>Đăng nhâp - Đăng ký</li>
+
+
+
+        </ol>
+    </div>
+</section>
+<!-- #page-title end -->
+<section id="content">
+
+    <div class="content-wrap">
+
+        <div class="container clearfix">
+
+            <div class="accordion accordion-lg divcenter nobottommargin clearfix" style="max-width: 550px;">
+
+                <!-- login -->
+                <div id='login'>
+                    <div class="acctitle"><i class="acc-closed fa fa-lock"></i><i class="acc-open fa fa-unlock"></i>Đăng nhập</div>
+                    <div class="acc_content clearfix">
+
+                        @if (ViewBag.ms == "fail")
+                        {
+                            <div class="errors">
+                                <ul>
+                                    <li>thông tin đăng nhập không hợp lệ.</li>
+                                </ul>
+                            </div>
+                        }
+                        <form accept-charset='UTF-8' action='@Url.Action("Login","Customer")' id='customer_login' method='post'>
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true)
+                            <div class="col_full">
+                                <label for="login-form-username">Email:</label>
+                                <input type="email" id="login-form-username" name="Email" value="" class="form-control" />
+                            </div>
+
+                            <div class="col_full">
+                                <label for="login-form-password">Mật khẩu:</label>
+                                <input type="password" id="login-form-password" name="Password" value="" class="form-control" />
+                            </div>
+
+                            <div class="col_full nobottommargin">
+                                <button class="button button-3d button-black nomargin" id="login-form-submit" name="login-form-submit" type='submit' value="login">Đăng nhập</button>
+                                <a href="#" onclick="showRecoverPasswordForm();return false;" class="fright">Quên mật khẩu?</a>
+                            </div>
+                            <!--</form>-->
+
+                            <input id='1d0009ba56f547eaab93a23c96d520f5' name='g-recaptcha-response' type='hidden'>
+                            <script src='https://www.google.com/recaptcha/api.js?render=6LdD18MUAAAAAHqKl3Avv8W-tREL6LangePxQLM-'></script>
+                            <script>grecaptcha.ready(function () { grecaptcha.execute('6LdD18MUAAAAAHqKl3Avv8W-tREL6LangePxQLM-', { action: 'submit' }).then(function (token) { document.getElementById('1d0009ba56f547eaab93a23c96d520f5').value = token; }); });</script>
+                        </form>
+                    </div>
+                </div>
+                <!-- end login -->
+                <!-- register -->
+                <div id='register'>
+                    <div class="acctitle"><i class="acc-closed fa fa-user"></i><i class="acc-open fa fa-check-circle"></i>Người dùng mới? Đăng ký tài khoản</div>
+                    <div class="acc_content clearfix">
+
+                        <form accept-charset='UTF-8' id='create_customer' method="post">
+                            @Html.AntiForgeryToken()
+                            @*@Html.ValidationSummary(true)*@
+                            <div class="col_full">
+                                <label for="first_name">Họ tên:<span class="required require_symbol">*</span></label>
+                                <input required type="text" id="first_name" name="customer[first_name]" value="" class="form-control" />
+                            </div>
+                            <div class="col_full">
+                                <label for="register-form-email">Email:<span class="required require_symbol">*</span></label>
+                                <input required type="text" id="register-form-email" name="customer[email]" value="" class="form-control" />
+                            </div>
+                            <div class="col_full">
+                                <label for="register-form-gender">Giới tính:</label>
+                                <select class="form-control" id="register-form-gender">
+                                    <option value="1">Nam</option>
+                                    <option value="0">Nữ</option>
+                                </select>
+                            </div>
+                            <div class="col_full">
+                                <label for="register-form-date">Ngày sinh:</label>
+                                <input required type="date" id="register-form-date" name="customer[password]" value="" class="form-control" />
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="register-form-city">Tỉnh/Thành phố:</label>
+                                    <select class="form-control" id="register-form-city">
+                                        <option value="-1">--Chọn Tỉnh/Thành phố--</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="register-form-district">Quận/Huyện:</label>
+                                    <select class="form-control" id="register-form-district">
+                                        <option value="-1">--Chọn Huyện--</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col_full">
+                                <label for="register-form-address">Địa chỉ:</label>
+                                <input required type="text" id="register-form-address" name="customer[password]" value="" class="form-control" />
+                            </div>
+                            <div class="col_full">
+                                <label for="register-form-password">Mật khẩu:<span class="required require_symbol">*</span></label>
+                                <input required type="password" id="register-form-password" name="customer[password]" value="" class="form-control" />
+                            </div>
+
+                            <div class="col_full">
+                                <label for="register-form-repassword">Nhập lại mật khẩu:<span class="required require_symbol">*</span></label>
+                                <span class='require_symbol repassword_warning'> Mật khẩu nhập lại không đúng</span>
+                                <input required type="password" id="register-form-repassword" name="customer[password]" value="" class="form-control" />
+                            </div>
+
+                            <div class="col_full nobottommargin">
+                                <button class="button button-3d button-black nomargin" id="register-form-submit" name="register-form-submit" type='button'>Đăng ký</button>
+                            </div>
+
+                            <input id='b7ad78aa07434ecbbee77eff400c720a' name='g-recaptcha-response' type='hidden'>
+                            <script src='https://www.google.com/recaptcha/api.js?render=6LdD18MUAAAAAHqKl3Avv8W-tREL6LangePxQLM-'></script>
+                            <script>grecaptcha.ready(function () { grecaptcha.execute('6LdD18MUAAAAAHqKl3Avv8W-tREL6LangePxQLM-', { action: 'submit' }).then(function (token) { document.getElementById('b7ad78aa07434ecbbee77eff400c720a').value = token; }); });</script>
+                        </form>
+
+                    </div>
+                </div>
+                <!-- end register -->
+                <!-- forgot password -->
+                <div id="recover-password" style="display:none;" class="userbox">
+                    <div class="acctitle"><i class="fa fa-refresh"></i>Quên mật khẩu</div>
+                    <div class="">
+                        <form accept-charset="UTF-8" action="/account/recover" class="form-horizontal form-without-legend nobottommargin" method="post" _lpchecked="1" role="form">
+                            <input name="form_type" type="hidden" value="recover_customer_password">
+                            <input name="utf8" type="hidden" value="✓">
+                            <div class="col_full">
+                                <label for="recover-email">Email:</label>
+                                <input type="text" id="recover-email" name="email" value="" class="form-control" />
+                            </div>
+
+                            <div class="col_full nobottommargin">
+                                <button class="button button-3d button-black nomargin" type="submit">Gửi</button>
+                                <button class="button button-3d button-red nomargin" onclick="hideRecoverPasswordForm(); return false;" name="">Hủy</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- end forgot password -->
+            </div>
+            <script type="text/javascript">
+                function showRecoverPasswordForm() {
+                    document.getElementById('recover-password').style.display = 'block';
+                    document.getElementById('login').style.display = 'none';
+                    document.getElementById('register').style.display = 'none';
+                }
+
+                function hideRecoverPasswordForm() {
+                    document.getElementById('recover-password').style.display = 'none';
+                    document.getElementById('login').style.display = 'block';
+                    document.getElementById('register').style.display = 'block';
+                }
+                if (window.location.hash == '#recover') { showRecoverPasswordForm() }
+            </script>
+
+            <!-- check password confirm -->
+            @*<script>
+            var tentinh = "";
+            var tenhuyen = "";
+            $(document).ready(function () {
+                $('.repassword_warning').hide();
+                getHuyen(-1)
+                getTinhId()
+                $("#register-form-city").on('change', function () {
+                    var tinhId = $(this).val();
+                    getHuyen(tinhId)
+                    getTenTinh(tinhId)
+
+                })
+                $("#register-form-district").off('click').on('click', function () {
+                    tenhuyen = $(this).val();
+
+                })
+                $('#register-form-submit').off('click').on('click', function () {
+                    if ($('#first_name') == ""  || $('#register-form-email') == "") {
+                        alert("Nhập đầy đủ các trường!");
+                        return false;
+                    }
+                    else {
+                        Register()
+                    }
+                })
+            });
+            function getTenTinh(tinhId) {
+                var path = 'https://raw.githubusercontent.com/nguyenducmanh2106/DiaGioiVN/manh/tinh.json'
+
+                $.ajax({
+                    url: path,
+                    method: "GET"
+                    , success: function (response) {
+                        var rs = JSON.parse(response)
+                        $.each(rs, function (i, itemMenu) {
+                            if (i >= 0 && itemMenu.id == tinhId) {
+                                tentinh = itemMenu.name
+                            }
+
+                        })
+                    }
+                });
+            }
+            function getHuyen(tinhId) {
+
+                if (tinhId > -1) {
+                    var cbHuyen = $("#register-form-district")
+                    cbHuyen.html('');
+                    var pathH = 'https://raw.githubusercontent.com/nguyenducmanh2106/DiaGioiVN/manh/all.json'
+                    $.ajax({
+                        url: pathH,
+                        method: "GET"
+                        , success: function (response) {
+                            var rs = JSON.parse(response)
+
+                            $.each(rs, function (i, itemMenu) {
+                                if (i >= 0 && itemMenu.id == tinhId) {
+                                    cbHuyen.html('<option value="-1">-- Chọn huyện --</option>');
+                                    $.each(itemMenu.huyen, function (index, itemHuyen) {
+
+                                        var newOption1 = new Option(itemHuyen.name, itemHuyen.name);
+                                        cbHuyen.append(newOption1);
+
+                                    })
+
+                                }
+                            })
+                        }
+                    });
+                }
+                else {
+
+                    var cbHuyen = $("#register-form-district")
+                    cbHuyen.html('<option value="-1">-- Chọn huyện --</option>');
+
+                }
+            }
+            function getTinhId() {
+                var path = 'https://raw.githubusercontent.com/nguyenducmanh2106/DiaGioiVN/manh/tinh.json'
+                var cbTinhId = $("#register-form-city")
+                $.ajax({
+                    url: path,
+                    method: "GET"
+                    , success: function (response) {
+                        var rs = JSON.parse(response)
+                        $.each(rs, function (i, itemMenu) {
+                            if (i >= 0) {
+
+                                var newOption = new Option(itemMenu.name, itemMenu.id);
+                                cbTinhId.append(newOption);
+                            }
+                        })
+                    }
+                });
+            }
+            function Register() {
+                var obj = {
+                    "FullName": $('#first_name').val(),
+                    "Password": $('#register-form-password').val(),
+                    "Email": $('#register-form-email').val(),
+                    "Gender": $('#register-form-gender').val(),
+                    "DateofBirth":$('#register-form-date').val(),
+                    "Address": $('#register-form-address').val(),
+                
+                    "Password": $('#register-form-password').val()
+                }
+                $.ajax({
+                    'url': '/Customer/Register',
+                    'type': 'POST',
+                    'data': obj,
+                    'success': function (data) {
+                        console.log(data)
+                    },
+                });
+            }
+            $('#register-form-password, #register-form-repassword').on('keyup', function () {
+                if (($('#register-form-password').val() !== '') && ($('#register-form-password').val() !== $('#register-form-repassword').val())) {
+                    $('.repassword_warning').show();
+                    $('#register-form-submit').prop('disabled', true);
+                }
+                else {
+                    $('.repassword_warning').hide();
+                    $('#register-form-submit').prop('disabled', false);
+                }
+            })
+
+        </script>*@
+            <!-- end check password confirm -->
+        </div>
+
+    </div>
+</section>
