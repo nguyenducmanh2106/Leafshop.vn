@@ -77,7 +77,7 @@
                                     </div>
 
                                     <div class="td col-sm-1 cart-product-remove">
-                                        <a href="javascript:void(0)" data-id="@item.ProductId" class="top_cart_item_remove" title="Remove this item"><i class="fa fa-trash-o"></i></a>
+                                        <a href="javascript:void(0)" data-id="@item.ProductId" class="remove" title="Remove this item"><i class="fa fa-trash-o"></i></a>
                                     </div>
 
                                 </div>
@@ -159,8 +159,9 @@
             })
         })
         //remove sp trong giỏ hàng trên thanh nav
-        $('.top_cart_item_remove').each(function () {
+        $('.remove').each(function () {
             $(this).off('click').on('click', function () {
+               
                 var productId = $(this).attr('data-id');
                 productsId = productsId.filter(item => {
                     return item != productId
@@ -168,7 +169,7 @@
                 var strId = productsId.join('-');
                 $.cookie('cart_token', strId, { path: '/', expires: 10 });
                 console.log(productsId);
-                window.location.reload();
+              
                 $.ajax({
                     'url': '/Cart/ViewQuick',
                     'type': 'GET',
@@ -185,7 +186,7 @@
                         $('#totalProducts').html(data);
                     },
                 });
-
+                window.location.reload();
 
             })
         })
