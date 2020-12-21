@@ -42,6 +42,11 @@ namespace Web.Controllers
         //[ValidateAntiForgeryToken]
         public ActionResult Register(Customer customer)
         {
+            var user = db.Customers.Where(x => x.Email == customer.Email).FirstOrDefault();
+            if (user != null)
+            {
+                return Json(new { result = false,message="Email đã tồn tại" });
+            }
             customer.Password = GetMD5(customer.Password);
             customer.CreateDate = DateTime.Now;
            
