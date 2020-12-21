@@ -80,7 +80,7 @@
                             </div>
                             <div class="col_full">
                                 <label for="register-form-email">Email:<span class="required require_symbol">*</span></label>
-                                <input required type="text" id="register-form-email" name="customer[email]" value="" class="form-control" />
+                                <input required type="email" id="register-form-email" name="customer[email]" value="" class="form-control" />
                             </div>
                             <div class="col_full">
                                 <label for="register-form-gender">Giới tính:</label>
@@ -118,7 +118,7 @@
 
                             <div class="col_full">
                                 <label for="register-form-repassword">Nhập lại mật khẩu:<span class="required require_symbol">*</span></label>
-                                <span class='require_symbol repassword_warning'> Mật khẩu nhập lại không đúng</span>
+                                <span class='require_symbol repassword_warning' id="warning-no-valid"> Mật khẩu nhập lại không đúng</span>
                                 <input required type="password" id="register-form-repassword" name="customer[password]" value="" class="form-control" />
                             </div>
 
@@ -168,137 +168,10 @@
                     document.getElementById('register').style.display = 'block';
                 }
                 if (window.location.hash == '#recover') { showRecoverPasswordForm() }
+               
             </script>
 
             <!-- check password confirm -->
-            @*<script>
-            var tentinh = "";
-            var tenhuyen = "";
-            $(document).ready(function () {
-                $('.repassword_warning').hide();
-                getHuyen(-1)
-                getTinhId()
-                $("#register-form-city").on('change', function () {
-                    var tinhId = $(this).val();
-                    getHuyen(tinhId)
-                    getTenTinh(tinhId)
-
-                })
-                $("#register-form-district").off('click').on('click', function () {
-                    tenhuyen = $(this).val();
-
-                })
-                $('#register-form-submit').off('click').on('click', function () {
-                    if ($('#first_name') == ""  || $('#register-form-email') == "") {
-                        alert("Nhập đầy đủ các trường!");
-                        return false;
-                    }
-                    else {
-                        Register()
-                    }
-                })
-            });
-            function getTenTinh(tinhId) {
-                var path = 'https://raw.githubusercontent.com/nguyenducmanh2106/DiaGioiVN/manh/tinh.json'
-
-                $.ajax({
-                    url: path,
-                    method: "GET"
-                    , success: function (response) {
-                        var rs = JSON.parse(response)
-                        $.each(rs, function (i, itemMenu) {
-                            if (i >= 0 && itemMenu.id == tinhId) {
-                                tentinh = itemMenu.name
-                            }
-
-                        })
-                    }
-                });
-            }
-            function getHuyen(tinhId) {
-
-                if (tinhId > -1) {
-                    var cbHuyen = $("#register-form-district")
-                    cbHuyen.html('');
-                    var pathH = 'https://raw.githubusercontent.com/nguyenducmanh2106/DiaGioiVN/manh/all.json'
-                    $.ajax({
-                        url: pathH,
-                        method: "GET"
-                        , success: function (response) {
-                            var rs = JSON.parse(response)
-
-                            $.each(rs, function (i, itemMenu) {
-                                if (i >= 0 && itemMenu.id == tinhId) {
-                                    cbHuyen.html('<option value="-1">-- Chọn huyện --</option>');
-                                    $.each(itemMenu.huyen, function (index, itemHuyen) {
-
-                                        var newOption1 = new Option(itemHuyen.name, itemHuyen.name);
-                                        cbHuyen.append(newOption1);
-
-                                    })
-
-                                }
-                            })
-                        }
-                    });
-                }
-                else {
-
-                    var cbHuyen = $("#register-form-district")
-                    cbHuyen.html('<option value="-1">-- Chọn huyện --</option>');
-
-                }
-            }
-            function getTinhId() {
-                var path = 'https://raw.githubusercontent.com/nguyenducmanh2106/DiaGioiVN/manh/tinh.json'
-                var cbTinhId = $("#register-form-city")
-                $.ajax({
-                    url: path,
-                    method: "GET"
-                    , success: function (response) {
-                        var rs = JSON.parse(response)
-                        $.each(rs, function (i, itemMenu) {
-                            if (i >= 0) {
-
-                                var newOption = new Option(itemMenu.name, itemMenu.id);
-                                cbTinhId.append(newOption);
-                            }
-                        })
-                    }
-                });
-            }
-            function Register() {
-                var obj = {
-                    "FullName": $('#first_name').val(),
-                    "Password": $('#register-form-password').val(),
-                    "Email": $('#register-form-email').val(),
-                    "Gender": $('#register-form-gender').val(),
-                    "DateofBirth":$('#register-form-date').val(),
-                    "Address": $('#register-form-address').val(),
-                
-                    "Password": $('#register-form-password').val()
-                }
-                $.ajax({
-                    'url': '/Customer/Register',
-                    'type': 'POST',
-                    'data': obj,
-                    'success': function (data) {
-                        console.log(data)
-                    },
-                });
-            }
-            $('#register-form-password, #register-form-repassword').on('keyup', function () {
-                if (($('#register-form-password').val() !== '') && ($('#register-form-password').val() !== $('#register-form-repassword').val())) {
-                    $('.repassword_warning').show();
-                    $('#register-form-submit').prop('disabled', true);
-                }
-                else {
-                    $('.repassword_warning').hide();
-                    $('#register-form-submit').prop('disabled', false);
-                }
-            })
-
-        </script>*@
             <!-- end check password confirm -->
         </div>
 

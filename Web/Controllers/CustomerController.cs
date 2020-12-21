@@ -15,6 +15,11 @@ namespace Web.Controllers
         // GET: Customer
         public ActionResult Index()
         {
+            var cookie = Request.Cookies["customer_token"];
+            if (cookie != null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
         public static string GetMD5(string chuoi)
@@ -80,6 +85,16 @@ namespace Web.Controllers
                 user = db.Customers.Where(x => x.ActiveCode.ToString() == customer_token.Value).FirstOrDefault();
             }
             return View(user);
+        }
+        [HttpPost]
+        public ActionResult ChangeProfile(Customer customer)
+        {
+            var user = db.Customers.Where(x => x.Email == customer.Email).FirstOrDefault();
+            if (user != null)
+            {
+
+            }
+            return View();
         }
     }
 }

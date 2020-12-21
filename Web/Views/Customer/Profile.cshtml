@@ -1,6 +1,10 @@
 ﻿@model Models.Models.DataModels.Customer
 @{
     Layout = "~/Views/Shared/_Layout1.cshtml";
+    <input type="hidden" id="TinhId" value="@Model.TinhId"/>
+    <input type="hidden" id="HuyenId" value="@Model.HuyenId"/>
+    <input type="hidden" id="Tinh" value="@Model.Tinh"/>
+    <input type="hidden" id="Huyen" value="@Model.Huyen"/>
 }
 <!-- Page Title
 ============================================= -->
@@ -46,9 +50,17 @@
                             </div>
                             <div class="col_full">
                                 <label for="register-form-gender">Giới tính:</label>
-                                <select class="form-control" id="register-form-gender" value="@Model.Gender">
-                                    <option value="1">Nam</option>
-                                    <option value="0">Nữ</option>
+                                <select class="form-control" id="register-form-gender">
+                                    @if (Model.Gender == 1)
+                                    {
+                                        <option selected value="1">Nam</option>
+                                        <option value="0">Nữ</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="1">Nam</option>
+                                        <option selected value="0">Nữ</option>
+                                    }
                                 </select>
                             </div>
                             <div class="col_full">
@@ -58,13 +70,13 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <label for="register-form-city">Tỉnh/Thành phố:</label>
-                                    <select class="form-control" id="register-form-city" value="@Model.TinhId">
+                                    <select class="form-control" id="register-form-city" >
                                         <option value="-1">--Chọn Tỉnh/Thành phố--</option>
                                     </select>
                                 </div>
                                 <div class="col-md-6">
                                     <label for="register-form-district">Quận/Huyện:</label>
-                                    <select class="form-control" id="register-form-district" value="@Model.HuyenId">
+                                    <select class="form-control" id="register-form-district">
                                         <option value="-1">--Chọn Huyện--</option>
                                     </select>
                                 </div>
@@ -73,9 +85,9 @@
                                 <label for="register-form-address">Địa chỉ:</label>
                                 <input required type="text" id="register-form-address" name="customer[password]" value="@Model.Address" class="form-control" />
                             </div>
-                           
+
                             <div class="col_full nobottommargin">
-                                <button class="button button-3d button-black nomargin" id="register-form-submit" name="register-form-submit" type='button'>Đăng ký</button>
+                                <button class="button button-3d button-black nomargin" id="register-form-save" name="register-form-save" type='button'>Lưu</button>
                             </div>
 
                             <input id='b7ad78aa07434ecbbee77eff400c720a' name='g-recaptcha-response' type='hidden'>
@@ -86,12 +98,11 @@
                     </div>
                 </div>
                 <!-- end register -->
-               
+
             </div>
-           
+
 
             <!-- check password confirm -->
-          
             <!-- end check password confirm -->
         </div>
 

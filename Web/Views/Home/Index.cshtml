@@ -139,7 +139,14 @@
                                         <div class="product-image">
                                             <a href='@Url.Action("Productsdetail","Home",new { id=@item.ProductId})'><img src="https://product.hstatic.net/1000104489/product/z2158787192620_d8bf412273c37facc66cfe7e60266411_54cfe19e36b24d0a8ffa305da1463bcc.jpg" data-lazyload="https://product.hstatic.net/1000104489/product/z2158787192620_d8bf412273c37facc66cfe7e60266411_54cfe19e36b24d0a8ffa305da1463bcc.jpg" alt="@item.ProductName"></a>
                                             <div class="product-overlay">
-                                                <a href="javascript:void(0)" data-id="@item.ProductId" class="product_quick_add" data-toggle='tooltip' title='Thêm vào giỏ'><i class="fa fa-shopping-cart"></i><span class='hidden-md hidden-lg'> Thêm vào giỏ</span></a>
+                                                @if (item.Quantity > 0)
+                                                {
+                                                    <a href="javascript:void(0)" data-id="@item.ProductId" class="product_quick_add" data-toggle='tooltip' title='Thêm vào giỏ'><i class="fa fa-shopping-cart"></i><span class='hidden-md hidden-lg'> Thêm vào giỏ</span></a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="javascript:void(0)"  data-toggle='tooltip' title='Hết hàng'><i class="fa fa-shopping-cart"></i><span class='hidden-md hidden-lg'> Thêm vào giỏ</span></a>
+                                                }
                                                 <a href="#product-pop-up" onclick="Quick(@item.ProductId)" class="item-quick-view fancybox-fast-view hidden-sm hidden-xs" data-toggle='tooltip' title='Xem nhanh'><i class="fa fa-eye"></i><span class='hidden-md hidden-lg'> Xem nhanh</span></a>
                                             </div>
                                         </div>
@@ -235,7 +242,14 @@
                                             </div>
                                             <a href='@Url.Action("Productsdetail","Home",new { id=@item.ProductId})'><img src="https://product.hstatic.net/1000104489/product/3_acb7596363ad47bf9eedccde5054d624.jpg" data-lazyload="https://product.hstatic.net/1000104489/product/3_acb7596363ad47bf9eedccde5054d624.jpg" alt="Nước tinh chất hoa hồng hữu cơ Gravier 200ml"></a>
                                             <div class="product-overlay">
-                                                <a href="javascript:void(0)" data-id="@item.ProductId" class="product_quick_add" data-toggle='tooltip' title='Thêm vào giỏ'><i class="fa fa-shopping-cart"></i><span class='hidden-md hidden-lg'> Thêm vào giỏ</span></a>
+                                                @if (item.Quantity > 0)
+                                                {
+                                                    <a href="javascript:void(0)" data-id="@item.ProductId" class="product_quick_add" data-toggle='tooltip' title='Thêm vào giỏ'><i class="fa fa-shopping-cart"></i><span class='hidden-md hidden-lg'> Thêm vào giỏ</span></a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="javascript:void(0)" data-toggle='tooltip' title='Hết hàng'><i class="fa fa-shopping-cart"></i><span class='hidden-md hidden-lg'> Thêm vào giỏ</span></a>
+                                                }
                                                 <a href="#product-pop-up" onclick="Quick(@item.ProductId)" class="item-quick-view fancybox-fast-view hidden-sm hidden-xs" data-toggle='tooltip' title='Xem nhanh'><i class="fa fa-eye"></i><span class='hidden-md hidden-lg'> Xem nhanh</span></a>
                                             </div>
                                         </div>
@@ -315,8 +329,8 @@
                     @foreach (var item in listNews)
                     {
                         <div class="col-xs-12 col-md-4 arc-item">
-                            <a href="/blogs/kien-thuc-chung/kem-chong-nang-co-hai-nhu-the-nao-den-moi-truong-bien"><img src="//file.hstatic.net/1000104489/article/anh_4.700_10404819b0e241db9debdf4bef302a96_55751c2d28e94f4da32dc8c4e9174480.jpg" alt=""></a>
-                            <a href="/blogs/kien-thuc-chung/kem-chong-nang-co-hai-nhu-the-nao-den-moi-truong-bien" title="Kem chống nắng có hại như thế nào đến môi trường biển?" class="title_blogss ">@item.NewsTitle</a>
+                            <a href="@Url.Action("NewsDetail","Home", new { id = item.NewsId })"><img src="//file.hstatic.net/1000104489/article/anh_4.700_10404819b0e241db9debdf4bef302a96_55751c2d28e94f4da32dc8c4e9174480.jpg" alt=""></a>
+                            <a href="@Url.Action("NewsDetail","Home", new { id = item.NewsId })" title="Kem chống nắng có hại như thế nào đến môi trường biển?" class="title_blogss ">@item.NewsTitle</a>
                             <p class="des-blogs">
                                 @item.ShortDescription
                             </p>
