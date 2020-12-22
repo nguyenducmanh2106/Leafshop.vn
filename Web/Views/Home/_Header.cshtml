@@ -30,17 +30,16 @@
             <div class='top_search col-md-9 col-xs-12'>
 
 
-                <form id="searchauto" action="/search" class="searchform-categoris ultimate-search col-sm-8 form-inline nopadding nomargin">
+                <form id="searchauto"
+                      action="/home/products/?Sale=@Request.QueryString["Sale"]&orderby=@Request.QueryString["orderby"]&listProviderID=@Request.QueryString["listProviderID"]&listPriceID=@Request.QueryString["listPriceID"]&key=@Request.QueryString["key"]"
+                      class="searchform-categoris ultimate-search col-sm-8 form-inline nopadding nomargin">
 
                     <div class="wpo-search">
 
                         <div class="wpo-search-inner">
 
                             <div class="input-group" style="margin: 2px 0px 5px; width: 100%">
-
-                                <input type="hidden" name="type" value="product" />
-
-                                <input id="searchtext" name="q" id="s" maxlength="40" class="form-control input-search" type="text" size="20" placeholder="Tìm kiếm...">
+                                <input id="searchtext" name="key" maxlength="40" class="form-control input-search" type="text" size="20" placeholder="Tìm kiếm...">
 
                                 <span class="input-group-auto">
 
@@ -66,21 +65,7 @@
                 <script>
 
 
-                    $('.ultimate-search').submit(function (e) {
-
-                        e.preventDefault();
-
-                        var q = $(this).find('input[name=q]').val();
-
-                        if (!q) {
-                            window.location = '/search?type=product&q=**';
-                            return;
-                        }
-                        else {
-                            window.location = '/search?type=product&q=' + q;
-                            return;
-                        }
-                    });
+                 
 
                     function selectSuggest(act) {
 
@@ -185,44 +170,6 @@
                                     coll = $(option.collection).val() + "&&";
 
 
-                                $.ajax({
-
-                                    url: "/search?q=filter=" + "(" + coll + "(" + option.searchfield + ":product" + option.searchoperator + t + "))" + "&view=ultimate-search",
-
-                                    dataType: "JSON",
-
-                                    async: false,
-
-                                    success: function (data) {
-
-                                        if ($('.smart-search-wrapper.' + option.wrapper).length == 0) {
-
-                                            $('body').append("<div class='smart-search-wrapper " + option.wrapper + "'></div>");
-
-                                        }
-
-                                        p();
-                                        $.each(data, function (i, v) {
-                                            console.log(v);
-                                            $(".smart-search-wrapper." + option.wrapper).append("<a data-title='" + v.title + "'class='thumbs' href='" + v.url + "'> <img src='" + Haravan.resizeImage(v.featured_image, 'medium') + "'/></a><a data-title='" + v.title + "' href='" + v.url + "'>" + "<span class='title-search'>" + v.title + "</span>" + "<p class='desc-search'>" + v.description + "</p><span class='price-search'>" + Haravan.formatMoney(v.price, '') + "đ</span></a>");
-
-                                        });
-
-                                        issending = false;
-
-                                    },
-
-                                    error: function (xhr, ajaxOptions, thrownError) {
-
-                                        alert(xhr.status);
-
-                                        alert(thrownError);
-
-                                    }
-
-                                });
-
-
                             }
 
                             $(window).resize(function () {
@@ -290,8 +237,6 @@
                     }(jQuery));
 
 
-
-                    jQuery('.ultimate-search input[name=q]').smartSearch({ searchdelay: 400, wrapper: 'search-wrapper', collection: '.collection_id' });
 
 
                 </script>

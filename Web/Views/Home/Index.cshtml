@@ -48,51 +48,8 @@
 
             <script>
 
-                //var productsId = $.cookie('cart_token') ? $.cookie('cart_token').split('-') : [];
+
                 $(document).ready(function () {
-                    //$('.product_quick_add').each(function () {
-                    //    $(this).off('click').on('click', function () {
-                    //        var productId = $(this).attr('data-id');
-                    //        productsId.push(productId);
-                    //        var strId = productsId.join('-');
-                    //        $.cookie('cart_token', strId, { path: '/', expires: 10 });
-                    //        console.log(productsId)
-                    //        //Toastr để thông báo mua sản phẩm
-                    //        toastrClick(productId)
-                    //        $.ajax({
-                    //            'url': '/Cart/ViewQuick',
-                    //            'type': 'GET',
-                    //            'success': function (data) {
-                    //                //console.log(data);
-                    //                $('#viewCart').html(data);
-                    //            },
-                    //        });
-                    //        $.ajax({
-                    //            'url': '/Cart/TotalProduct',
-                    //            'type': 'GET',
-                    //            'success': function (data) {
-                    //                //console.log(data);
-                    //                $('#totalProducts').html(data);
-                    //            },
-                    //        });
-                    //    })
-                    //})
-
-                    //function toastrClick(productId) {
-                    //    var obj = {
-                    //        productId: productId
-                    //    }
-                    //    $.ajax({
-                    //        'url': '/Cart/ToastrProduct',
-                    //        'type': 'GET',
-                    //        'data': obj,
-                    //        'success': function (data) {
-                    //            console.log(data);
-                    //            $('#jGrowl').html(data)
-                    //        },
-                    //    });
-                    //}
-
                     $('#popular_brand').slick({
                         prevArrow: '<button type="button" class="slick-prev small_nav"><i class="fa fa-chevron-circle-left"></i></button>',
                         nextArrow: '<button type="button" class="slick-next small_nav"><i class="fa fa-chevron-circle-right"></i></button>',
@@ -137,7 +94,7 @@
                                         <div class="haravan-product-reviews-badge" data-id="@item.ProductId">
                                         </div>
                                         <div class="product-image">
-                                            <a href='@Url.Action("Productsdetail","Home",new { id=@item.ProductId})'><img src="https://product.hstatic.net/1000104489/product/z2158787192620_d8bf412273c37facc66cfe7e60266411_54cfe19e36b24d0a8ffa305da1463bcc.jpg" data-lazyload="https://product.hstatic.net/1000104489/product/z2158787192620_d8bf412273c37facc66cfe7e60266411_54cfe19e36b24d0a8ffa305da1463bcc.jpg" alt="@item.ProductName"></a>
+                                            <a href='@Url.Action("Productsdetail","Home",new { id=@item.ProductId})'><img src="@item.Images" data-lazyload="@item.Images" alt="@item.ProductName"></a>
                                             <div class="product-overlay">
                                                 @if (item.Quantity > 0)
                                                 {
@@ -145,7 +102,7 @@
                                                 }
                                                 else
                                                 {
-                                                    <a href="javascript:void(0)"  data-toggle='tooltip' title='Hết hàng'><i class="fa fa-shopping-cart"></i><span class='hidden-md hidden-lg'> Thêm vào giỏ</span></a>
+                                                    <a href="javascript:void(0)" data-toggle='tooltip' title='Hết hàng'><i class="fa fa-shopping-cart"></i><span class='hidden-md hidden-lg'> Thêm vào giỏ</span></a>
                                                 }
                                                 <a href="#product-pop-up" onclick="Quick(@item.ProductId)" class="item-quick-view fancybox-fast-view hidden-sm hidden-xs" data-toggle='tooltip' title='Xem nhanh'><i class="fa fa-eye"></i><span class='hidden-md hidden-lg'> Xem nhanh</span></a>
                                             </div>
@@ -213,12 +170,7 @@
                                 </div>
                             </div>
                         }
-
-
-
                     </div>
-
-
                 </div>
             </div>
 
@@ -240,7 +192,7 @@
                                             <div class="selling">
                                                 <span>Bán chạy</span>
                                             </div>
-                                            <a href='@Url.Action("Productsdetail","Home",new { id=@item.ProductId})'><img src="https://product.hstatic.net/1000104489/product/3_acb7596363ad47bf9eedccde5054d624.jpg" data-lazyload="https://product.hstatic.net/1000104489/product/3_acb7596363ad47bf9eedccde5054d624.jpg" alt="Nước tinh chất hoa hồng hữu cơ Gravier 200ml"></a>
+                                            <a href='@Url.Action("Productsdetail","Home",new { id=@item.ProductId})'><img src="@item.Images" data-lazyload="@item.Images" alt="@item.ProductName"></a>
                                             <div class="product-overlay">
                                                 @if (item.Quantity > 0)
                                                 {

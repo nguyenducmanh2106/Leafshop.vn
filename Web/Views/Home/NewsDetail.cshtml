@@ -1,30 +1,390 @@
 ﻿@model Models.Models.DataModels.News
+@using Models.Models.DataModels
 @{
     ViewBag.Title = "NewsDetail";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+    var NewsRecent = ViewBag.NewsRecent as List<News>;
+    var users = ViewBag.users as List<User>;
 }
 
-<div class="main-css-fluid">
-    <section class="main-css padding-config">
-        <div class="main-container">
-            <!--START MAIN RIGHT -->
-            <div class="main-right woo-control-right fr">
-                <div class="single-control-right">
-                    <div class="single-fluid">
-                        <h1>@Model.NewsTitle</h1>
-                        <div class="img-responsive">
-                            <img src="@Model.FeatureImage" />
-                            <p>@Html.Raw(Model.Description)</p>
+<!-- Page Title
+============================================= -->
+<section id="page-title">
+    <div class="container clearfix">
+
+        <ol class="breadcrumb col-md-6 col-sm-6">
+            <li><a href="/">Trang chủ</a></li>
+
+            <li><a href="/home/news">blogs</a></li>
+            <li class='active'>@Model.NewsTitle</li>
+
+        </ol>
+    </div>
+</section>
+<!-- #page-title end -->
+<section id="content">
+    <div class="content-wrap">
+        <div class="container clearfix">
+            <!-- Post Content
+            ============================================= -->
+            <div class="postcontent nobottommargin clearfix col-sm-9">
+
+                <div class="single-post nobottommargin">
+
+                    <!-- Single Post
+                    ============================================= -->
+                    <div class="entry clearfix">
+
+                        <!-- Entry Title
+                        ============================================= -->
+                        <div class="entry-title">
+                            <h2>@Model.NewsTitle</h2>
+                        </div><!-- .entry-title end -->
+
+                        <div class="si-share noborder clearfix">
+                            <div class='socical-wrapper'>
+                                <ul class="social-icons-top-art">
+                                    <!-- check null: == nill -->
+
+                                    <li class="item">
+                                        <div id="fb-share-button">
+                                            <svg viewBox="0 0 12 12" preserveAspectRatio="xMidYMid meet">
+                                                <path class="svg-icon-path" d="M9.1,0.1V2H8C7.6,2,7.3,2.1,7.1,2.3C7,2.4,6.9,2.7,6.9,3v1.4H9L8.8,6.5H6.9V12H4.7V6.5H2.9V4.4h1.8V2.8 c0-0.9,0.3-1.6,0.7-2.1C6,0.2,6.6,0,7.5,0C8.2,0,8.7,0,9.1,0.1z"></path>
+                                            </svg>
+                                        </div>
+                                    </li>
+
+
+
+                                    <li class="item ">
+                                        <a href="//twitter.com/share" class="twitter-share-button" data-url="" data-count="none" data-via="">
+                                            <i class="fa fa-twitter"></i>
+                                        </a>
+                                        <script src="//platform.twitter.com/widgets.js"></script>
+                                    </li>
+
+                                    <script>
+                                        (function () {
+                                            var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+                                            po.src = '//apis.google.com/js/plusone.js';
+                                            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+                                        })();
+                                    </script>
+                                </ul>
+                            </div>
+                        </div>
+
+
+
+                        <!-- Entry Meta
+                        ============================================= -->
+                        <ul class="entry-meta clearfix">
+                            <li><i class="fa fa-calendar"></i>@Model.Created</li>
+                            @foreach (var user in users)
+                            {
+                                if (Model.UserId == user.UserId)
+                                {
+                                    <li><i class="fa fa-user"></i> @user.UserName</li>
+                                }
+                            }
+
+                            <li><a href="#comments"><i class="fa fa-comments"></i> @Model.CountView Xem</a></li>
+
+                        </ul><!-- .entry-meta end -->
+                        <!-- Entry Content
+                        ============================================= -->
+                        <div class="entry-content notopmargin">
+
+
+                            <p>
+                                <em>
+                                    <strong>
+                                        @Model.ShortDescription.
+                                    </strong>
+                                </em>
+                            </p>
+                            <p>
+                                @Model.Description.
+                            </p>
+                           
+                           
+                            <div class="clear"></div>
+
+                            <!-- Post Single - Share
+                            ============================================= -->
+                            <div class="si-share noborder clearfix">
+                                <span>Chia sẻ:</span>
+                                <div class='socical-wrapper'>
+                                    <ul class="social-icons">
+                                        <!-- check null: == nill -->
+
+                                        <div class="item">
+                                            <div class="fb-like fix_top" data-href="" data-layout="button" data-action="like" data-show-faces="true" data-share="true"></div>
+                                        </div>
+
+
+
+                                        <div class="item ">
+                                            <g:plusone size="medium" annotation="none"></g:plusone>
+                                        </div>
+
+
+
+                                        <div class="item ">
+                                            <a href="//twitter.com/share" class="twitter-share-button" data-url="" data-count="none" data-via="">Tweet it!</a>
+                                            <script src="//platform.twitter.com/widgets.js"></script>
+                                        </div>
+
+
+
+                                        <div class="item ">
+                                            <a href="//pinterest.com/pin/create/button/?url=&media=//hstatic.net/0/0/global/noDefaultImage6_large.gif" class="pin-it-button" count-layout="horizontal">Pin it!</a>
+                                            <script src="//assets.pinterest.com/js/pinit.js"></script>
+                                        </div>
+
+
+
+                                        <div class="item ">
+                                            <a class="evernote fix_top" target="_blank" href="http://www.evernote.com/clip.action?url=https://leafshop.vn&title" count-layout="horizontal">Note it!</a>
+                                        </div>
+
+
+
+                                        <div class="item ">
+                                            <a class="tumblr-share-button" href="https://www.tumblr.com/share"></a>
+                                            <script id="tumblr-js" async src="https://assets.tumblr.com/share-button.js"></script>
+                                        </div>
+
+
+                                        <!-- old style: <li><a class="facebook" data-original-title="facebook" href="#"></a></li>   ...twitter,googleplus,evernote,tumblr -->
+
+                                        <script>
+                                            (function () {
+                                                var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+                                                po.src = '//apis.google.com/js/plusone.js';
+                                                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+                                            })();
+                                        </script>
+                                    </ul>
+                                </div>
+                            </div><!-- Post Single - Share End -->
+
+                        </div>
+                        <!-- related post -->
+
+                        <div class="widget clearfix">
+
+                            <div class="related-product clearfix">
+
+                            </div>
+                        </div>
+
+
+
+                        <!-- end related post -->
+
+                    </div><!-- .entry end -->
+                    <!-- Comments
+                    ============================================= -->
+
+                    <div id="comments" class="clearfix">
+                        <div class="tabs clearfix" id="tab-1">
+                            <ul class="tab-nav clearfix">
+                                <li><a href="#tabs-1"><span style='color: #fff'>0</span> Bình luận</a></li>
+                                <li><a href="#tabs-2">Facebook</a></li>
+                            </ul>
+                            <!-- Comments List
+                            ============================================= -->
+                            <div class="tab-container">
+                                <div class="tab-content clearfix" id="tabs-1">
+
+                                    <div class="clear"></div>
+
+
+                                    <!-- Comment Form
+                                    ============================================= -->
+                                    <div id="respond" class="clearfix">
+
+                                        <h3>Viết <span>Bình luận</span></h3>
+
+                                        <form accept-charset='UTF-8' action='/blogs/thuc-pham/quoc-gia-dau-tien-cam-kem-chong-nang-de-bao-ve-san-ho/comments' class='comment-form' id='article--comment-form' method='post'>
+                                            <input name='form_type' type='hidden' value='new_comment'>
+                                            <input name='utf8' type='hidden' value='✓'>
+
+                                            <!--<form class="clearfix" action="#" method="post" id="commentform">-->
+
+
+
+
+                                            <div class="col_one_half">
+                                                <label for="author">Tên của bạn</label>
+                                                <input type="text" name="comment[author]" id="author" value="" size="22" tabindex="1" class="sm-form-control" />
+                                            </div>
+
+                                            <div class="col_one_half">
+                                                <label for="email">Email</label>
+                                                <input type="text" name="comment[email]" id="email" value="" size="22" tabindex="2" class="sm-form-control" />
+                                            </div>
+
+                                            <div class="clear"></div>
+
+                                            <div class="col_full">
+                                                <label for="comment">Viết bình luận</label>
+
+                                                <textarea name="comment[body]" cols="58" rows="7" tabindex="4" class="sm-form-control"></textarea>
+                                            </div>
+
+                                            <div class="col_full nobottommargin">
+                                                <button name="submit" type="submit" id="submit-button" tabindex="5" value="Submit" class="button button-3d nomargin">Gửi bình luận</button>
+                                            </div>
+
+                                            <!--</form>-->
+
+                                            <input id='e5b646d467ac4dd7b0b5ec9d5baa0a90' name='g-recaptcha-response' type='hidden'>
+                                            <script src='https://www.google.com/recaptcha/api.js?render=6LdD18MUAAAAAHqKl3Avv8W-tREL6LangePxQLM-'></script>
+                                            <script>grecaptcha.ready(function () { grecaptcha.execute('6LdD18MUAAAAAHqKl3Avv8W-tREL6LangePxQLM-', { action: 'submit' }).then(function (token) { document.getElementById('e5b646d467ac4dd7b0b5ec9d5baa0a90').value = token; }); });</script>
+                                        </form>
+
+                                    </div><!-- #respond end -->
+                                </div>
+                                <div class="tab-content clearfix" id="tabs-2">
+                                    <div class="fb-comments" data-href="https://leafshop.vn/blogs/thuc-pham/quoc-gia-dau-tien-cam-kem-chong-nang-de-bao-ve-san-ho" data-numposts="5" width="100%" data-colorscheme="light">
+                                    </div>
+                                    <!-- script comment fb -->
+                                    <script type="text/javascript">
+                                        // fb SDK v2.0
+                                        (function (d, s, id) {
+                                            var js, fjs = d.getElementsByTagName(s)[0];
+                                            if (d.getElementById(id)) return;
+                                            js = d.createElement(s); js.id = id;
+                                            js.src = "//connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v2.0";
+                                            fjs.parentNode.insertBefore(js, fjs);
+                                        }(document, 'script', 'facebook-jssdk'));
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- .commentlist end -->
+                    </div>
+
+                    <!-- #comments end -->
+                </div>
+            </div><!-- .postcontent end -->
+            <!-- Sidebar
+            ============================================= -->
+            <div class="sidebar nobottommargin col_last clearfix hidden-xs col-sm-3">
+                <div class="sidebar-widgets-wrap">
+                    <div class='widget widget_links clearfix'>
+                        <h4>
+                            Tìm kiếm bài viết
+                        </h4>
+                        <div class='input--search sidebar_menu'>
+                            <form action="/home/news" style='margin-bottom: 0px'>
+                                <input required id="searchtext" name="q" maxlength="40" class="form-control input-search" type="text" size="20" placeholder="Từ khóa tìm kiếm...">
+                                <button class="gid-btn" type='submit'>Tìm</button>
+                            </form>
                         </div>
                     </div>
-                </div>
-            </div>
-            <!--END MAIN RIGHT -->
-            <!--START MAIN LEFT -->
-            @{ Html.RenderAction("Mainleft", "Home");}
-            <!--END MAIN LEFT -->
-        </div>
-        <!--END MAIN CONTAINER -->
-    </section>
-</div>
 
+                    <!-- end categories -->
+                    <!-- recent article -->
+
+                    <div class="widget clearfix">
+                        <h4 style=''><a href=''>Bài viết mới nhất</a></h4>
+
+                        <div class="tab-container sidebar_menu">
+
+                            <!--<div class="tab-content clearfix" id="tabs-1">-->
+                            @foreach (var item in NewsRecent)
+                            {
+
+                                <div class="spost clearfix">
+                                    <div class="entry-image">
+                                        <a href="/home/newsdetail/@item.NewsId" class="nobg a-circle"><img class="img-circle-custom" src="@item.FeatureImage" alt="@item.NewsTitle"></a>
+                                    </div>
+                                    <div class="entry-c">
+                                        <div class="entry-title">
+                                            <h4><a href="/home/newsdetail/@item.NewsId">@item.NewsTitle</a></h4>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+
+                            }
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="widget clearfix" style='overflow:hidden;'>
+
+
+
+                        <div style="width: 100%;">
+                            <!-- Page plugin's width will be 180px -->
+                            <div class="fb-page" data-href="https://www.facebook.com/leafshop.vn/" data-width="320"></div>
+                        </div>
+
+
+
+                        <script>
+                            (function (d, s, id) {
+                                var js, fjs = d.getElementsByTagName(s)[0];
+                                if (d.getElementById(id)) return;
+                                js = d.createElement(s); js.id = id;
+                                js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=263266547210244&version=v2.0";
+                                fjs.parentNode.insertBefore(js, fjs);
+                            }(document, 'script', 'facebook-jssdk'));
+                        </script>
+                    </div>
+                </div>
+                <style>
+                    .gid-btn {
+                        background: none;
+                        border: solid 1px #eee;
+                        margin-top: 10px;
+                        padding: 8px 15px;
+                        background-color: #499644;
+                        color: #fff;
+                    }
+                </style>
+            </div>
+            <!-- .sidebar end -->
+
+        </div>
+
+    </div>
+
+</section>
+<script>
+    //$(document).ready(function () {
+    //    var handle = "quoc-gia-dau-tien-cam-kem-chong-nang-de-bao-ve-san-ho";
+    //    console.log(handle);
+    //    q = "filter=(tag:product**" + handle + ")";
+    //    $.ajax({
+    //        url: "/search?q=" + q + "&view=view-product",
+    //        success: function (data) {
+    //            $('.related-product').html(data);
+    //        }
+    //    })
+
+    //})
+
+
+    //var fbButton = document.getElementById('fb-share-button');
+    //var url = window.location.href;
+
+    //fbButton.addEventListener('click', function () {
+    //    window.open('https://www.facebook.com/sharer/sharer.php?u=' + url,
+    //        'facebook-share-dialog',
+    //        'width=800,height=600'
+    //    );
+    //    console.log('1');
+    //    return false;
+    //});
+</script>
+
+	
+
+<!-- #content end -->

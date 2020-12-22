@@ -35,7 +35,7 @@ namespace Web.Controllers
         public ActionResult TopMenu()
         {
             var users = db.Customers.ToList();
-            return PartialView("_TopMenu",users);
+            return PartialView("_TopMenu", users);
         }
         //Parital: //get Categories
         public PartialViewResult MainMenu()
@@ -76,7 +76,7 @@ namespace Web.Controllers
         }
         #region Product
         //GET: /Product by category
-        public async Task<ActionResult> Products(int id = -1, string Sale = "default", string orderby = "default", string listProviderID = "-1", string listPriceID = "-1", int page = 1, int pageSize = 2)
+        public async Task<ActionResult> Products(int id = -1, string Sale = "default", string orderby = "default", string listProviderID = "-1", string listPriceID = "-1",string key="",int page = 1, int pageSize = 2)
         {
             var list = listProviderID.Split(',').Select(Int64.Parse).ToList();
             List<Product> products;
@@ -153,6 +153,7 @@ namespace Web.Controllers
             }
             if (Sale == "flashsale")
             {
+                ViewBag.Sale = "Sale";
                 products = products.Where(x => x.Discount != 0 && x.Status == true).OrderBy(p => p.CreateDate).ToList();
             }
             switch (listPriceID)
@@ -213,11 +214,13 @@ namespace Web.Controllers
                     products = products.OrderBy(p => p.CreateDate).ToList();
                     break;
             }
+            //tìm kiếm với key
+            products = products.Where(x => (String.IsNullOrEmpty(key))||x.ProductName.ToLower().Contains(key.ToLower())).ToList();
             ViewBag.countProducts = products.ToList().Count();
             return View(products.ToPagedList(page, pageSize));
         }
 
-        public async Task<ActionResult> ListProducts(int id = -1, string Sale = "default", string orderby = "default", string listProviderID = "-1", string listPriceID = "-1", int page = 1, int pageSize = 2)
+        public async Task<ActionResult> ListProducts(int id = -1, string Sale = "default", string orderby = "default", string listProviderID = "-1", string listPriceID = "-1",string key="",int page = 1, int pageSize = 2)
         {
             var list = listProviderID.Split(',').Select(Int64.Parse).ToList();
             List<Product> products;
@@ -354,6 +357,7 @@ namespace Web.Controllers
                     products = products.OrderBy(p => p.CreateDate).ToList();
                     break;
             }
+            products = products.Where(x => (String.IsNullOrEmpty(key)) || x.ProductName.ToLower().Contains(key.ToLower())).ToList();
             ViewBag.countProducts = products.ToList().Count();
             return View(products.ToPagedList(page, pageSize));
         }
@@ -449,116 +453,24 @@ namespace Web.Controllers
             return View(product);
 
         }
-        //POST: /Product detail -> add product to card
-        [HttpPost]
-        [CustomersAutherize]
-        [ValidateAntiForgeryToken]
-        public ActionResult Productsdetail(int? id, int quantity)
-        {
-            if (id == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            //Tìm sản phẩm cần mua
-            var product = db.Products.Include(x => x.Categories).Include(x => x.ProductAttrs).Where(x => x.Status == true).FirstOrDefault(x => x.ProductId == id);
-            if (product == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            //Lấy typeattr của sản phẩm
-            var typesAttr = (from p in product.ProductAttrs
-                             join a in db.Attributes
-                             on p.AttrId equals a.AttrId
-                             join t in db.TypeAttrs on a.TypeId
-                             equals t.TypeId
-                             select t
-                                ).Distinct();
-            string attrId = "";
-            //Lấy các thuộc tính
-            foreach (var item in typesAttr)
-            {
-                attrId = attrId + Request["attribute_" + item.TypeId].ToString() + ";";
-            }
-            //Lấy thông tin người dùng hiện tại 
-            HttpCookie cookie = Request.Cookies["InfoCustomer"];
-            var userId = cookie["id"];
-            var parseIntUser = int.Parse(userId);
-            var checkCustomer = db.Customers.Where(x => x.CustomerId == parseIntUser && x.Status != 10).SingleOrDefault();
-            if (checkCustomer == null)
-            {
-                Response.Cookies["InfoCustomer"].Expires = DateTime.Now.AddDays(-2);
-                Response.Cookies["Avatar"].Expires = DateTime.Now.AddDays(-2);
-                return RedirectToAction("Login", "Users");
-            }
-            //Thêm mới sản phẩm sao giỏ hàng
-            AddToCart atc = new AddToCart();
-            atc.product = product;
-            var getAttr = !String.IsNullOrEmpty(attrId) ?
-                attrId = attrId.Substring(0, attrId.Length - 1) : "";
-            atc.AttrId = getAttr;
-            //convert String attrId to int 
-            if (getAttr.Length > 0)
-            {
-                int intAttrId = int.Parse(getAttr);
-                var findAttrId = db.Attributes.Where(x => x.Status == 1 && x.AttrId == intAttrId).FirstOrDefault();
-                var attrName = findAttrId != null ? findAttrId.AttrName : "";
-                atc.AttrName = attrName;
-            }
-            //getattrName from attrId
-            //tính giá sản phẩm
-            var priceOut = atc.product.PriceOut;
-            var price = priceOut - priceOut * atc.product.Discount / 100;
-            var discount = atc.product.Discount > 0 ? price : priceOut;
-            atc.Price = (double)discount;
-            atc.Quantity = quantity;
-            atc.CustomerId = int.Parse(userId);
-            //Kiểm trả giỏ hàng của người dùng hiện tại đã có sản phẩm hay chưa
-            var cart = db.AddToCarts.Any();
-            if (cart)
-            {
-                //Lấy tất cả sản phẩm hiện tại của customer hiện tại
-                var listCart = db.AddToCarts.Where(x => x.CustomerId == parseIntUser).ToList();
-                bool check = false;
-                foreach (var item in listCart)
-                {
-                    //Kiểm tra sản phẩm hiện tại đã có trong giỏ hàng hay chưa.
-                    if (item.product.ProductId == id && item.AttrId == attrId)
-                    {
-                        check = true;
-                        //Cập nhập số lượng
-                        item.Quantity += atc.Quantity;
-                        db.SaveChanges();
-                    }
-                }
-                //Nếu không sản phẩm hiện tại không trùng
-                if (!check)
-                {
-                    db.AddToCarts.Add(atc);
-                    db.SaveChanges();
-                }
-            }
-            else
-            {
-                db.AddToCarts.Add(atc);
-                db.SaveChanges();
-            }
-            return RedirectToAction("Index", "Cart");
-        }
+       
         #endregion
 
         #region News, New detail
         [AllowAnonymous]
-        public ActionResult News(string key = "", int page = 1, int pageSize = 3)
+        public ActionResult News(string q = "", int page = 1, int pageSize = 3)
         {
+            var keysearch = q;
+            keysearch = keysearch.Replace('+',' ');
             List<News> news = new List<News>();
 
-            if (key == "")
+            if (keysearch == "")
             {
                 news = db.News.Where(n => n.Status == 1).OrderByDescending(n => n.Created).ToList();
             }
             else
             {
-                news = db.News.Where(n => (n.Status == 1) && (n.NewsTitle.Contains(key))).OrderByDescending(n => n.Created).ToList();
+                news = db.News.Where(n => (n.Status == 1) && (n.NewsTitle.ToLower().Contains(keysearch.ToLower()))).OrderByDescending(n => n.Created).ToList();
             }
             var users = db.Users.Where(x => x.Status == 1).ToList();
             ViewBag.users = users;
@@ -573,7 +485,10 @@ namespace Web.Controllers
             {
                 return RedirectToAction("News", "Home");
             }
-            News news = db.News.Where(n => n.NewsId == id).FirstOrDefault();
+            var news = db.News.Where(n => (n.Status == 1) && n.NewsId == id).SingleOrDefault();
+            ViewBag.NewsRecent = db.News.Where(n => (n.Status == 1)&&n.NewsId!=id).OrderByDescending(x => x.Created).Take(3).ToList();
+            var users = db.Users.Where(x => x.Status == 1).ToList();
+            ViewBag.users = users;
             return View(news);
         }
         #endregion
@@ -591,7 +506,7 @@ namespace Web.Controllers
                 contact.Updated = DateTime.Now;
                 db.Contacts.Add(contact);
                 db.SaveChanges();
-               
+
                 return View();
             }
             else

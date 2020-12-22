@@ -19,8 +19,6 @@ namespace Models.Models.DataModels
         public double totalPrice { get; set; }
         public string City { get; set; }//thành phố
         public string District { get; set; }// quận huyện
-        public string Commune { get; set; }//phường xã
-        public string HouseNumber { get; set; }//số nhà
         public string Address { get; set; } // save all as Address
         public string Description { get; set; } //Ghi chú đơn hàng
 

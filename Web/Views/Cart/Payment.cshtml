@@ -1,148 +1,707 @@
-﻿@model Models.Models.DataModels.Customer
+﻿@using Models.Models.DataModels
+@using Models.ViewModels
 @{
-    ViewBag.Title = "Payment";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    double totalPrice = 0;
+    Layout = null;
+    var cart = ViewBag.cart as Cart;
+    var user = ViewBag.currentUser as Customer;
+    var CookieID = Request.Cookies["cart_token"];
+    if (CookieID != null && CookieID.Value != "")
+    {
+        <input type="hidden" id="listIdProduct" value='@CookieID.Value' />
+    }
+    else
+    {
+        <input type="hidden" id="listIdProduct" value='-1' />
+    }
 }
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" class="flexbox">
+<head>
+    <link rel="shortcut icon" href="//theme.hstatic.net/1000104489/1000257823/14/favicon.png?v=3505" type="image/png">
+    <title>
+        Leafshop - Natural &amp; Organic care - Thanh toán đơn hàng
+    </title>
 
-<div class="main-css-fluid">
-    <section class="main-css padding-config">
-        <div class="main-container" style="background-color:#fff;border:1px solid #8888;box-shadow:4px 4px 4px #8888">
-            <!--START MAIN RIGHT -->
-            <div class="page-control-right">
-                <div class="page-woo-css page-checkout-woo">
-                    <p class="text-success" style="font-size:27px;padding-left:21px;">Thanh toán đơn hàng</p>
-                    <div class="img-responsive">
-                        <div class="woocommerce">
-                            @*<div class="woocommerce-info">Bạn đã có tài khoản? <a href="#" class="showlogin">Ấn vào đây để đăng nhập</a></div>*@
-                            <form name="checkout" method="post" class="checkout woocommerce-checkout" action="/Cart/Payment" enctype="multipart/form-data">
-                                <input type="hidden" name="CustomerId" value="@Model.CustomerId" />
-                                <div class="col2-set" id="customer_details">
-                                    <div class="col-1">
-                                        <div class="woocommerce-billing-fields">
-                                            <h3>Thông tin thanh toán</h3>
-                                            <div class="clear"></div>
-                                            <p class="form-row form-row form-row-wide" id="billing_company_field">
-                                                <label for="billing_company" class="">
-                                                    Họ & tên<abbr class="required" title="bắt buộc">*</abbr>
-                                                </label>
-                                                <input type="text" class="input-text " name="FullName" id="FullName" placeholder="" autocomplete="organization" value="@Model.FullName">
-                                            </p>
-                                            <p class="form-row form-row form-row-first validate-required validate-email" id="billing_email_field">
-                                                <label for="Email" class="">
-                                                    Địa chỉ email <abbr class="required" title="bắt buộc">*</abbr>
-                                                </label>
-                                                <input type="email" class="input-text " name="Email" id="Email" placeholder="" autocomplete="email" value="@Model.Email">
-                                            </p>
-                                            <p class="form-row form-row form-row-last validate-required validate-phone" id="billing_phone_field">
-                                                <label for="billing_phone" class="">
-                                                    Số điện thoại <abbr class="required" title="bắt buộc">*</abbr>
-                                                </label>
-                                                <input type="tel" class="input-text " name="Phone" id="Phone" placeholder="" autocomplete="tel" value="@Model.Phone">
-                                            </p>
-                                            <div class="clear"></div>
-                                            <p class="form-row form-row form-row-wide address-field validate-required" id="billing_address_1_field">
-                                                <label for="City" class="">
-                                                    Tỉnh/Thành phố <abbr class="required" title="bắt buộc">*</abbr>
-                                                </label>
-                                                <input type="text" class="input-text " name="City" id="City" placeholder="" autocomplete="address-line1" value="">
-                                            </p>
-                                            <p class="form-row form-row address-field validate-postcode form-row-first" id="billing_postcode_field" data-o_class="form-row form-row form-row-last address-field validate-postcode">
-                                                <label for="District" class="">
-                                                    Quận/Huyện<abbr class="required" title="bắt buộc">*</abbr>
-                                                </label>
-                                                <input type="text" class="input-text " name="District" id="District" placeholder="" autocomplete="District" value="">
-                                            </p>
-                                            <p class="form-row form-row address-field validate-required form-row-last" id="billing_city_field" data-o_class="form-row form-row form-row-wide address-field validate-required">
-                                                <label for="Commune" class="">
-                                                    Phường/ Xã
-                                                    <abbr class="required" title="bắt buộc">*</abbr>
-                                                </label>
-                                                <input type="text" class="input-text " name="Commune" id="Commune" placeholder="" autocomplete="Commune" value="">
-                                            </p>
-                                            <p class="form-row form-row form-row-wide address-field validate-required" id="billing_city_field" data-o_class="form-row form-row form-row-wide address-field validate-required">
-                                                <label for="HouseNumber" class="">
-                                                    Số nhà/ Số đường
-                                                    <abbr class="required" title="bắt buộc">*</abbr>
-                                                </label>
-                                                <input type="text" class="input-text " name="HouseNumber" id="HouseNumber" placeholder="" autocomplete="HouseNumber" value="">
-                                            </p>
-                                            <div class="clear"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-2">
-                                        <div class="woocommerce-shipping-fields">
-                                            <h3>Thông tin thêm</h3>
-                                            <p class="form-row form-row notes" id="Description">
-                                                <label for="Description" class="">Ghi chú đơn hàng</label>
-                                                <textarea name="Description" class="input-text " id="Description" placeholder="Ghi chú về đơn hàng, ví dụ: lưu ý khi giao hàng." rows="2" cols="5"></textarea>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="order_review" class="woocommerce-checkout-review-order">
-                                    <div id="payment" class="woocommerce-checkout-payment">
-                                        <ul class="wc_payment_methods payment_methods methods">
-                                            <li class="wc_payment_method payment_method_cheque">
-                                                <table class="shop_table woocommerce-checkout-review-order-table">
-                                                    <tbody>
-                                                        @foreach (var item in ViewBag.listCart)
-                                                        {
-                                                            totalPrice += item.Price * item.Quantity;
-                                                            <tr class="cart_item">
-                                                                <td class="product-name">
-                                                                    @item.product.ProductName
-                                                                    <strong class="product-quantity">× @item.Quantity</strong>
-                                                                    <dl class="variation">
-                                                                        @{
-                                                                            foreach (var a in item.product.ProductAttrs)
-                                                                            {
-                                                                                var attrId = item.AttrId.Split(';');
-                                                                                foreach (var id in attrId)
-                                                                                {
-                                                                                    if (int.Parse(id) == a.AttrId)
-                                                                                    {
-                                                                                        <dt class="variation-Chtliu">@a.Attributes.AttrName</dt>
-                                                                                        <dd class="variation-Chtliu">
-                                                                                            <p></p>
-                                                                                        </dd>
-                                                                                    }
-                                                                                }
-                                                                            }
-                                                                        }
-                                                                    </dl>
-                                                                </td>
 
-                                                                <td class="product-total">
-                                                                    <span class="woocommerce-Price-amount amount">@String.Format("{0:#,##}", item.Price) ₫</span>
-                                                                </td>
-                                                            </tr>
-                                                        }
-                                                    </tbody>
-                                                    <tfoot>
-                                                        <tr></tr>
-                                                        <tr class="order-total">
-                                                            <th>Tổng cộng</th>
-                                                            <td><strong><span class="woocommerce-Price-amount amount">@String.Format("{0:#,##}", totalPrice) ₫</span></strong> </td>
-                                                        </tr>
-                                                    </tfoot>
-                                                </table>
-                                            </li>
-                                        </ul>
-                                        <div class="form-row place-order">
-                                            <input type="submit" class="button alt" name="woocommerce_checkout_place_order" id="place_order" value="Đặt hàng" data-value="Đặt hàng">
+    <meta name="description" content="Leafshop - Natural &amp; Organic care - Thanh toán đơn hàng">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="~/Content/plugins/loading-modal/css/jquery.loadingModal.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Content/plugins/toastr/toastr.min.css">
+    <link href="//hstatic.net/0/0/global/checkouts.css?v=1.1" rel="stylesheet" type="text/css" media="all">
+    <link href="//theme.hstatic.net/1000104489/1000257823/14/check_out.css?v=3505" rel="stylesheet" type="text/css" media="all">
+    <script type="text/javascript" async="" src="https://www.googleadservices.com/pagead/conversion_async.js"></script>
+    <script src="https://connect.facebook.net/signals/config/1039978772693349?v=2.9.30&amp;r=stable" async=""></script>
+    <script src="https://connect.facebook.net/signals/plugins/identity.js?v=2.9.30" async=""></script>
+    <script async="" src="//connect.facebook.net/en_US/fbevents.js"></script>
+    <script async="" src="//www.google-analytics.com/analytics.js"></script>
+    <script type="text/javascript" async="" src="https://stats.hstatic.net/analyticsv3.min.js"></script>
+    <script src="//hstatic.net/0/0/global/jquery.min.js" type="text/javascript"></script>
+    <!-- overlayScrollbars -->
+
+    <script src="//hstatic.net/0/0/global/jquery.validate.js" type="text/javascript"></script>
+    <!--Add file js-->
+    <script src="~/Content/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <script src="~/Content/plugins/loading-modal/js/jquery.loadingModal.min.js"></script>
+    <script src="~/Content/plugins/toastr/toastr.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script src="~/Content/js/site.js" type="text/javascript"></script>
+    <style>
+
+
+        form#form_update_shipping_method {
+            position: relative;
+        }
+
+        .order-checkout__loading {
+            position: static;
+        }
+
+        .order-checkout__loading--box {
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: -1;
+            width: 100%;
+            height: 100%;
+            display: -webkit-flex;
+            display: flex;
+            opacity: 0;
+            visibility: hidden;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+        }
+
+            .order-checkout__loading--box.show {
+                z-index: 2;
+                visibility: visible;
+                opacity: 1;
+            }
+
+        .order-checkout__loading--circle {
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #5cabe0;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            margin: 0;
+            -webkit-transform-origin: 50%;
+            -o-transform-origin: 50%;
+            -ms-transform-origin: 50%;
+            transform-origin: 50%;
+            -moz-animation: spin 700ms infinite linear;
+            -ms-animation: spin 1.5s infinite linear;
+            -webkit-animation: spin 700ms infinite linear;
+            -o-animation: spin 700ms infinite linear;
+            animation: spin 700ms infinite linear;
+            z-index: 1;
+        }
+
+        .order-checkout__loading--box.show:after {
+            content: "";
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            z-index: 3;
+        }
+
+
+        .step-sections {
+            position: relative;
+            z-index: 3;
+        }
+
+
+
+        .redeem-login {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .redeem-login-title {
+            position: relative;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+            .redeem-login-title h2 {
+                color: #333;
+                margin-right: 5px;
+            }
+
+        .redeem-login-btn a {
+            display: inline-block;
+            border-radius: 4px;
+            font-weight: 500;
+            padding: 13px 10px;
+            background: #338dbc;
+            color: #fff;
+            width: 82px;
+            text-align: center;
+        }
+
+        .redeem-form-used {
+            padding-top: 10px;
+        }
+
+        .btn-redeem-loading .btn-redeem-spinner {
+            -webkit-animation: rotate 0.5s linear infinite;
+            animation: rotate 0.5s linear infinite;
+            opacity: 1;
+            -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=" 100 ")";
+            filter: alpha(opacity=100);
+        }
+
+        .icon-redeem-button-spinner {
+            position: absolute;
+            top: 0;
+            opacity: 0;
+            right: -25px;
+            width: 12px;
+            height: 12px;
+            border: 2px solid #999999;
+            border-bottom-color: transparent;
+            border-radius: 100%;
+        }
+
+        .total-line-table-footer {
+            white-space: nowrap;
+        }
+
+        .row-align-top {
+            vertical-align: top;
+        }
+    </style>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2, user-scalable=no">
+
+
+    <script type="text/javascript">
+        //<![CDATA[
+        if ((typeof Haravan) === 'undefined') {
+            Haravan = {};
+        }
+        Haravan.culture = 'vi-VN';
+        Haravan.shop = 'leafshop.myharavan.com';
+        Haravan.theme = { "name": "Haravan Update 6/2017", "id": 1000257823, "role": "main" };
+        Haravan.domain = 'leafshop.vn';
+        //]]>
+    </script>
+    <!-- Global site tag (gtag.js) - Google Ads: 767364388 -->
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=AW-767364388"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'AW-767364388');
+    </script>
+    <meta name="google-site-verification" content="XW2b4mPOxp6F6qoGvz2yzH4SQzSwEp4GF9tXstwLpfo">
+     <style>
+        .grecaptcha-badge {
+            visibility: hidden;
+        }
+    </style>
+    <script>
+        //<![CDATA[
+        window.HaravanAnalytics.ga = "UA-123510904-2";
+        window.HaravanAnalytics.enhancedEcommerce = true;
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+        ga('create', window.HaravanAnalytics.ga, { cookieDomain: 'auto', siteSpeedSampleRate: '10', sampleRate: 100, allowLinker: true });
+        ga('send', 'pageview'); ga('require', 'linker'); ga('require', 'linker');
+        //]]>
+    </script>
+    <script>
+        window.HaravanAnalytics.fb = "1039978772693349";
+        //<![CDATA[
+        !function (f, b, e, v, n, t, s) {
+            if (f.fbq) return; n = f.fbq = function () {
+                n.callMethod ?
+                    n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            }; if (!f._fbq) f._fbq = n;
+            n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0;
+            t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s)
+        }(window,
+            document, 'script', '//connect.facebook.net/en_US/fbevents.js');
+        // Insert Your Facebook Pixel ID below.
+        fbq('init', window.HaravanAnalytics.fb, {}, { 'agent': 'plharavan' });
+        fbq('track', 'PageView');
+        //]]>
+    </script>
+    <noscript><img height='1' width='1' style='display:none' src='https://www.facebook.com/tr?id=1039978772693349&amp;ev=PageView&amp;noscript=1' /></noscript><!-- Event snippet for PAGE_VIEW-0-08/24/2020 04:42:17 conversion page -->
+    <script>
+        gtag('event', 'conversion', { 'send_to': 'AW-767364388/KrUSCIzmwNwBEKSa9O0C' });
+    </script>
+
+    <script src="https://googleads.g.doubleclick.net/pagead/viewthroughconversion/767364388/?random=1608542032919&amp;cv=9&amp;fst=1608542032919&amp;num=1&amp;bg=ffffff&amp;guid=ON&amp;resp=GooglemKTybQhCsO&amp;u_h=768&amp;u_w=1366&amp;u_ah=728&amp;u_aw=1366&amp;u_cd=24&amp;u_his=6&amp;u_tz=420&amp;u_java=false&amp;u_nplug=3&amp;u_nmime=4&amp;gtm=2oabu0&amp;sendb=1&amp;ig=1&amp;data=event%3Dgtag.config&amp;frm=0&amp;url=https%3A%2F%2Fleafshop.vn%2Fcheckouts%2F8435736b3ef94caeb534e0af813603c1&amp;ref=https%3A%2F%2Fleafshop.vn%2Fcart&amp;tiba=Leafshop%20-%20Natural%20%26%20Organic%20care%20-%20Thanh%20to%C3%A1n%20%C4%91%C6%A1n%20h%C3%A0ng&amp;tc=x&amp;hn=www.googleadservices.com&amp;async=1&amp;rfmt=3&amp;fmt=4"></script>
+    <meta http-equiv="origin-trial" content="A0kLJQ0EdHeF98R8bup/3ZtM4vmv/qTDf1T2qVOOrjHUMWqhDXGGrxHTI+nR/ynTxnFDdRTJBjlhgfvosygLLAoAAACOeyJvcmlnaW4iOiJodHRwczovL3d3dy5nb29nbGVhZHNlcnZpY2VzLmNvbTo0NDMiLCJmZWF0dXJlIjoiQ29udmVyc2lvbk1lYXN1cmVtZW50IiwiZXhwaXJ5IjoxNjEwNjczMzQzLCJpc1N1YmRvbWFpbiI6dHJ1ZSwiaXNUaGlyZFBhcnR5Ijp0cnVlfQ==">
+    <script src="https://www.googleadservices.com/pagead/conversion/767364388/?random=1608542032921&amp;cv=9&amp;fst=1608542032921&amp;num=1&amp;label=KrUSCIzmwNwBEKSa9O0C&amp;bg=ffffff&amp;guid=ON&amp;resp=GooglemKTybQhCsO&amp;u_h=768&amp;u_w=1366&amp;u_ah=728&amp;u_aw=1366&amp;u_cd=24&amp;u_his=6&amp;u_tz=420&amp;u_java=false&amp;u_nplug=3&amp;u_nmime=4&amp;gtm=2oabu0&amp;sendb=1&amp;ig=1&amp;data=event%3Dconversion&amp;frm=0&amp;url=https%3A%2F%2Fleafshop.vn%2Fcheckouts%2F8435736b3ef94caeb534e0af813603c1&amp;ref=https%3A%2F%2Fleafshop.vn%2Fcart&amp;tiba=Leafshop%20-%20Natural%20%26%20Organic%20care%20-%20Thanh%20to%C3%A1n%20%C4%91%C6%A1n%20h%C3%A0ng&amp;tc=x&amp;hn=www.googleadservices.com&amp;async=1&amp;rfmt=3&amp;fmt=4"></script>
+</head>
+<body style="">
+    <div class="content">
+        <div class="wrap">
+            <div class="sidebar">
+                <div class="sidebar-content">
+                    <div class="order-summary order-summary-is-collapsed">
+                        <h2 class="visually-hidden">Thông tin đơn hàng</h2>
+                        <div class="order-summary-sections">
+                            <div class="order-summary-section order-summary-section-product-list" data-order-summary-section="line-items">
+                                <table class="product-table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col"><span class="visually-hidden">Hình ảnh</span></th>
+                                            <th scope="col"><span class="visually-hidden">Mô tả</span></th>
+                                            <th scope="col"><span class="visually-hidden">Số lượng</span></th>
+                                            <th scope="col"><span class="visually-hidden">Giá</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        @foreach (var item in cart.products)
+                                        {
+                                            <tr class="product" data-product-id="1030311640" data-variant-id="1066388525">
+                                                <td class="product-image">
+                                                    <div class="product-thumbnail">
+                                                        <div class="product-thumbnail-wrapper">
+                                                            <img class="product-thumbnail-image" alt="@item.ProductName" src="@item.Images">
+                                                        </div>
+                                                        <span class="product-thumbnail-quantity" aria-hidden="true">
+                                                            @{
+                                                                var qty = cart.productsId.Where(x => x == item.ProductId).Count();
+                                                            }
+                                                            @qty
+                                                        </span>
+                                                    </div>
+                                                </td>
+                                                <td class="product-description">
+                                                    <span class="product-description-name order-summary-emphasis">@item.ProductName</span>
+                                                </td>
+                                                <td class="product-price">
+                                                    @{
+                                                        var vie = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+                                                        var price = item.PriceOut - item.PriceOut * @item.Discount / 100;
+                                                        var total = qty * price;
+                                                    }
+
+                                                    <span class="order-summary-emphasis">
+                                                        @String.Format(vie, "{0:c00}", total)
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            @*<div class="order-summary-section order-summary-section-discount" data-order-summary-section="discount">
+                                    <form id="form_discount_add" accept-charset="UTF-8" method="post">
+                                        <input name="utf8" type="hidden" value="✓">
+                                        <div class="fieldset">
+                                            <div class="field  ">
+                                                <div class="field-input-btn-wrapper">
+                                                    <div class="field-input-wrapper">
+                                                        <label class="field-label" for="discount.code">Mã giảm giá</label>
+                                                        <input placeholder="Mã giảm giá" class="field-input" data-discount-field="true" autocomplete="off" autocapitalize="off" spellcheck="false" size="30" type="text" id="discount.code" name="discount.code" value="">
+                                                    </div>
+                                                    <button type="submit" class="field-input-btn btn btn-default btn-disabled">
+                                                        <span class="btn-content">Sử dụng</span>
+                                                        <i class="btn-spinner icon icon-button-spinner"></i>
+                                                    </button>
+                                                </div>
+
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </form>
+                                    </form>
+                                </div>*@
+                            <div class="order-summary-section order-summary-section-total-lines payment-lines" data-order-summary-section="payment-lines">
+                                <table class="total-line-table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col"><span class="visually-hidden">Mô tả</span></th>
+                                            <th scope="col"><span class="visually-hidden">Giá</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="total-line total-line-subtotal">
+                                            <td class="total-line-name">Tạm tính</td>
+                                            <td class="total-line-price">
+
+                                                <span class="order-summary-emphasis" data-checkout-subtotal-price-target="17500000">
+                                                    @{
+                                                        var vie1 = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+                                                        var total1 = cart.products.Sum(item => (item.PriceOut - item.PriceOut * item.Discount / 100) * cart.productsId.Where(productId => productId == item.ProductId).Count());
+                                                    }
+                                                    @String.Format(vie1, "{0:c00}", total1)
+                                                </span>
+                                            </td>
+                                        </tr>
+
+                                        <tr class="total-line total-line-shipping">
+                                            <td class="total-line-name">Phí vận chuyển</td>
+                                            <td class="total-line-price">
+                                                <span class="order-summary-emphasis" data-checkout-total-shipping-target="0">
+
+                                                    —
+
+                                                </span>
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                    <tfoot class="total-line-table-footer">
+                                        <tr class="total-line">
+                                            <td class="total-line-name payment-due-label">
+                                                <span class="payment-due-label-total">Tổng cộng</span>
+                                            </td>
+                                            <td class="total-line-name payment-due">
+                                                <span class="payment-due-currency">VND</span>
+                                                <span class="payment-due-price" id="totalPrice" data-checkout-payment-due-target="@total1">
+                                                    @String.Format(vie1, "{0:c00}", total1)
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!--END MAIN RIGHT -->
-            <!--START MAIN LEFT -->
-            <!--END MAIN LEFT -->
+            <div class="main">
+                <div class="main-header">
+                    <a href="/" class="logo">
+                        <h1 class="logo-text">Leafshop - Natural &amp; Organic care</h1>
+                    </a>
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="/cart">Giỏ hàng</a>
+                        </li>
+
+                        <li class="breadcrumb-item breadcrumb-item-current">
+                            Thông tin giao hàng
+                        </li>
+                    </ul>
+                </div>
+                <div class="main-content" id="form_update_location">
+                    <div class="step">
+                        <div class="step-sections steps-onepage" step="1">
+                            <div class="section">
+                                <div class="section-header">
+                                    <h2 class="section-title">Thông tin giao hàng</h2>
+                                </div>
+                                @{
+                                    var Tentinh = user != null ? user.Tinh : "";
+                                    var TenHuyen = user != null ? user.Huyen : "";
+                                    var tinhId = user != null ? user.TinhId : -1;
+                                    var huyenId = user != null ? user.HuyenId : -1;
+                                }
+                                <input type="hidden" id="TinhId" value="@tinhId" />
+                                <input type="hidden" id="HuyenId" value="@huyenId" />
+                                <input type="hidden" id="Tinh" value="@Tentinh" />
+                                <input type="hidden" id="Huyen" value="@TenHuyen" />
+                                <div class="section-content section-customer-information no-mb">
+                                    @if (user == null)
+                                    {
+                                        <p class="section-content-text">
+                                            Bạn đã có tài khoản?
+                                            <a href="/customer/index">Đăng nhập</a>
+                                        </p>
+                                    }
+                                    @{
+                                        var tinhID = user != null ? user.FullName : "";
+                                    }
+                                    <div class="fieldset">
+                                        <div class="field">
+                                            <div class="field-input-wrapper">
+                                                <label class="field-label" for="billing_address_full_name">Họ và tên</label>
+                                                @{
+                                                    var ten = user != null ? user.FullName : "";
+                                                }
+                                                <input placeholder="Họ và tên" required autocapitalize="off" spellcheck="false" class="field-input" size="30" type="text" id="billing_address_full_name" name="billing_address[full_name]" value="@ten">
+                                            </div>
+                                        </div>
+                                        <div class="field  field-two-thirds  ">
+                                            <div class="field-input-wrapper">
+                                                <label class="field-label" for="checkout_user_email">Email</label>
+                                                @{
+                                                    var email = user != null ? user.Email : "";
+                                                }
+                                                <input placeholder="Email" required autocapitalize="off" spellcheck="false" class="field-input" size="30" type="email" id="checkout_user_email" name="checkout_user[email]" value="@email">
+                                            </div>
+
+                                        </div>
+                                        <div class="field field-required field-third  ">
+                                            <div class="field-input-wrapper">
+                                                <label class="field-label" for="billing_address_phone">Số điện thoại</label>
+                                                @{
+                                                    var sdt = user != null ? user.Phone : "";
+                                                }
+                                                <input placeholder="Số điện thoại" required autocapitalize="off" spellcheck="false" class="field-input" size="30" maxlength="11" type="tel" id="billing_address_phone" name="billing_address[phone]" value="@sdt">
+                                            </div>
+
+                                        </div>
+                                        <div class="field">
+                                            <div class="field-input-wrapper">
+                                                <label class="field-label" for="billing_address_address1">Địa chỉ</label>
+                                                @{
+                                                    var address = user != null ? user.Address : "";
+                                                }
+                                                <input placeholder="Địa chỉ" required autocapitalize="off" spellcheck="false" class="field-input" size="30" type="text" id="billing_address_address1" name="billing_address[address1]" value="@address">
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="section-content">
+                                    <div class="fieldset">
+
+                                        <form class="clearfix order-checkout__loading" accept-charset="UTF-8" method="post">
+                                            <input name="selected_customer_shipping_province" type="hidden" value="">
+                                            <input name="selected_customer_shipping_district" type="hidden" value="">
+                                            <input name="selected_customer_shipping_ward" type="hidden" value="">
+                                            <input name="utf8" type="hidden" value="✓">
+                                            <div class="order-checkout__loading--box">
+                                                <div class="order-checkout__loading--circle"></div>
+                                            </div>
+
+                                            <div class="field field-show-floating-label  field-half ">
+                                                <div class="field-input-wrapper field-input-wrapper-select">
+                                                    <label class="field-label" for="customer_shipping_province"> Tỉnh / thành  </label>
+                                                    <select class="field-input" id="customer_shipping_province" name="customer_shipping_province" required>
+                                                        <option data-code="null" value="null" selected="">  Chọn tỉnh / thành </option>
+
+                                                    </select>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="field field-show-floating-label  field-half ">
+                                                <div class="field-input-wrapper field-input-wrapper-select">
+                                                    <label class="field-label" for="customer_shipping_district">Quận / huyện</label>
+                                                    <select class="field-input" id="customer_shipping_district" name="customer_shipping_district" required>
+                                                        <option data-code="null" value="null" selected="">Chọn quận / huyện</option>
+
+                                                    </select>
+                                                </div>
+
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step-footer">
+
+                            <form id="form_next_step" accept-charset="UTF-8" method="post">
+                                <input name="utf8" type="hidden" value="✓">
+                                <button type="submit" class="step-footer-continue-btn btn" id="order">
+                                    <span class="btn-content">Hoàn tất đơn hàng</span>
+                                    <i class="btn-spinner icon icon-button-spinner"></i>
+                                </button>
+                            </form>
+                            <a class="step-footer-previous-link" href="/cart">
+                                <svg class="previous-link-icon icon-chevron icon" xmlns="http://www.w3.org/2000/svg" width="6.7" height="11.3" viewBox="0 0 6.7 11.3"><path d="M6.7 1.1l-1-1.1-4.6 4.6-1.1 1.1 1.1 1 4.6 4.6 1-1-4.6-4.6z"></path></svg>
+                                Giỏ hàng
+                            </a>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="main-footer">
+
+                </div>
+            </div>
         </div>
-        <!--END MAIN CONTAINER -->
-    </section>
-</div>
+    </div>
+    <script>
+        var frmOrder = $('#form_update_location');
+
+        var tentinh = $('#Tinh') ? $('#Tinh').val() : "";
+        var tenhuyen = $('#Huyen') ? $('#Huyen').val() : "";
+        var tinhId = $('#TinhId') ? $('#TinhId').val() : -1;
+        var huyenId = $('#HuyenId') ? $('#HuyenId').val() : -1;
+        $(document).ready(function () {
+            addRequired(frmOrder);
+           
+            getHuyen(tinhId)
+            getTinhId()
+            $("#customer_shipping_province").on('change', function () {
+                tinhId = $(this).val();
+                getHuyen(tinhId)
+                getTenTinh(tinhId)
+            })
+            $("#customer_shipping_district").off('click').on('click', function () {
+                huyenId = $(this).val();
+                getTenHuyen(tinhId, huyenId)
+            })
+
+            $('#order').off('click').on('click', function (e) {
+                e.preventDefault()
+                console.log("payment")
+                Save()
+            })
+        });
+        function getTenTinh(tinhId) {
+            var path = 'https://raw.githubusercontent.com/nguyenducmanh2106/DiaGioiVN/manh/tinh.json'
+            $.ajax({
+                url: path,
+                method: "GET"
+                , success: function (response) {
+                    var rs = JSON.parse(response)
+                    $.each(rs, function (i, itemMenu) {
+                        if (i >= 0 && itemMenu.id == tinhId) {
+                            tentinh = itemMenu.name
+                        }
+
+                    })
+                }
+            });
+        }
+        function getTenHuyen(tinhId, huyenId) {
+            if (tinhId > -1) {
+                var pathH = 'https://raw.githubusercontent.com/nguyenducmanh2106/DiaGioiVN/manh/huyen.json'
+                $.ajax({
+                    url: pathH,
+                    method: "GET"
+                    , success: function (response) {
+                        var rs = JSON.parse(response)
+                        $.each(rs, function (i, itemMenu) {
+                            if (itemMenu.id == huyenId && itemMenu.tinh_id == tinhId) {
+                                tenhuyen = itemMenu.name
+                            }
+                        })
+                    }
+                });
+            }
+            else {
+                var cbHuyen = $("#customer_shipping_district")
+                cbHuyen.html('<option value="-1">-- Chọn huyện --</option>');
+            }
+        }
+        function getHuyen(tinhId) {
+            if (tinhId > -1) {
+                var cbHuyen = $("#customer_shipping_district")
+                cbHuyen.html('');
+                var pathH = 'https://raw.githubusercontent.com/nguyenducmanh2106/DiaGioiVN/manh/all.json'
+                $.ajax({
+                    url: pathH,
+                    method: "GET"
+                    , success: function (response) {
+                        var rs = JSON.parse(response)
+
+                        $.each(rs, function (i, itemMenu) {
+                            if (i >= 0 && itemMenu.id == tinhId) {
+                                cbHuyen.html('<option value="-1">-- Chọn huyện --</option>');
+                                $.each(itemMenu.huyen, function (index, itemHuyen) {
+                                    console.log(itemHuyen)
+                                    if (index > 0 && itemHuyen.id == huyenId) {
+
+                                        var newOption1 = new Option(itemHuyen.name, itemHuyen.id, false, true);
+                                        cbHuyen.append(newOption1);
+                                    }
+                                    else {
+                                        var newOption1 = new Option(itemHuyen.name, itemHuyen.id);
+                                        cbHuyen.append(newOption1);
+                                    }
+
+                                    //var newOption1 = new Option(itemHuyen.name, itemHuyen.id);
+                                    //cbHuyen.append(newOption1);
+
+                                })
+
+                            }
+                        })
+                    }
+                });
+            }
+            else {
+
+                var cbHuyen = $("#customer_shipping_district")
+                cbHuyen.html('<option value="-1">-- Chọn huyện --</option>');
+
+            }
+        }
+        function getTinhId() {
+            var path = 'https://raw.githubusercontent.com/nguyenducmanh2106/DiaGioiVN/manh/tinh.json'
+            var cbTinhId = $("#customer_shipping_province")
+            $.ajax({
+                url: path,
+                method: "GET"
+                , success: function (response) {
+                    var rs = JSON.parse(response)
+
+                    $.each(rs, function (i, itemMenu) {
+                        if (i >= 0) {
+                            if (itemMenu.id == tinhId) {
+
+                                var newOption = new Option(itemMenu.name, itemMenu.id, false, true);
+                                cbTinhId.append(newOption);
+                            }
+                            else {
+                                //cbTinhId.html('<option value="-1">-- Chọn tỉnh --</option>');
+                                var newOption = new Option(itemMenu.name, itemMenu.id);
+                                cbTinhId.append(newOption);
+                            }
+                        }
+                        //if (i >= 0) {
+
+                        //    var newOption = new Option(itemMenu.name, itemMenu.id);
+                        //    cbTinhId.append(newOption);
+                        //}
+                    })
+                }
+            });
+        }
+
+        function Save() {
+            if (ValidateForm(frmOrder)) {
+                return;
+            }
+            var obj = {
+                "Fullname": $('#billing_address_full_name').val(),
+                "Email": $('#checkout_user_email').val(),
+                "Phone": $('#billing_address_phone').val(),
+                "totalPrice": $('#totalPrice').attr('data-checkout-payment-due-target'),
+                "City": tentinh,
+                "District": tenhuyen,
+                "Address": $('#billing_address_address1').val(),
+            }
+            var formData = new FormData();
+            formData.append("orderObj", JSON.stringify(obj));
+            formData.append("cart", $('#listIdProduct').val());
+            showLoading()
+            $.ajax({
+                url: '/cart/payment',
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    hideLoading()
+                    if (data.result) {
+                        showAlert("Đặt hàng thành công", 2)
+                        $.cookie('cart_token', "", { path: '/', expires: -100 });
+                        setTimeout(function () {
+                            $(location).attr('href','/home/index')
+                        }, 3000)
+                    }
+                    else {
+                        showAlert("Đặt hàng thất bại", 1)
+                    }
+                },
+            });
+        }
+
+
+    </script>
+</body>
+</html>

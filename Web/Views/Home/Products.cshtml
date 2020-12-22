@@ -23,9 +23,16 @@
             <ol class="breadcrumb col-md-6 col-sm-6">
                 <li><a href="/">Trang chủ</a></li>
 
+                @if (Request.QueryString["key"] == null)
+                {
 
-                <li class='active'>Tất cả sản phẩm</li>
+                    <li class='active'>Tất cả sản phẩm</li>
 
+                }
+                else
+                {
+                    <li class='active'>Tìm kiếm</li>
+                }
 
             </ol>
         </div>
@@ -56,18 +63,29 @@
 
                     </div>
                     <div class="post_content pull-right col-sm-12 col-xs-12 col-md-9" style="margin-bottom: 15px !important;">
-                        @if (Category != null)
+                        @if (@Request.QueryString["key"] != null)
                         {
                             <span>
-                                @Category.CategoryName
+                                <strong>"@Request.QueryString["key"]"</strong>
                             </span>
                         }
                         else
                         {
-                            <span>
-                                Sale
-                            </span>
+                            if (Category != null)
+                            {
+                                <span>
+                                    @Category.CategoryName
+                                </span>
+                            }
+                            else
+                            {
+                                <span>
+                                    Sale
+                                </span>
+                            }
                         }
+
+
 
                         <input type="hidden" id="idCategory" value="@if (Category != null) {
                         @String.Format(Category.CategoryId.ToString());
@@ -107,199 +125,199 @@
                                                 {
 
                                                     case "price_asc":
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="oldest_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="oldest_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Cũ nhất
                                                         </option>
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="recent_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="recent_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Mới nhất
                                                         </option>
-                                                        <option selected value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option selected value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Giá: Tăng dần
                                                         </option>
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Giá: Giảm dần
                                                         </option>
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Tên: A-Z
                                                         </option>
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Tên: Z-A
                                                         </option>
 
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="best_selling",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="best_selling",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Bán chạy nhất
                                                         </option>
                                                         break;
                                                     case "price_desc":
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="oldest_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="oldest_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Cũ nhất
                                                         </option>
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="recent_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="recent_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Mới nhất
                                                         </option>
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Giá: Tăng dần
                                                         </option>
-                                                        <option selected value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option selected value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Giá: Giảm dần
                                                         </option>
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Tên: A-Z
                                                         </option>
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Tên: Z-A
                                                         </option>
 
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="best_selling",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="best_selling",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Bán chạy nhất
                                                         </option>
                                                         break;
                                                     case "name_asc":
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="oldest_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="oldest_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Cũ nhất
                                                         </option>
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="recent_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="recent_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Mới nhất
                                                         </option>
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Giá: Tăng dần
                                                         </option>
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Giá: Giảm dần
                                                         </option>
-                                                        <option selected value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option selected value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Tên: A-Z
                                                         </option>
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Tên: Z-A
                                                         </option>
 
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="best_selling",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="best_selling",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Bán chạy nhất
                                                         </option>
                                                         break;
                                                     case "name_desc":
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="oldest_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="oldest_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Cũ nhất
                                                         </option>
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="recent_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="recent_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Mới nhất
                                                         </option>
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Giá: Tăng dần
                                                         </option>
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Giá: Giảm dần
                                                         </option>
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Tên: A-Z
                                                         </option>
-                                                        <option selected value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option selected value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Tên: Z-A
                                                         </option>
 
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="best_selling",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="best_selling",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Bán chạy nhất
                                                         </option>
                                                         break;
                                                     case "oldest_day":
-                                                        <option selected value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="oldest_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option selected value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="oldest_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Cũ nhất
                                                         </option>
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="recent_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="recent_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Mới nhất
                                                         </option>
 
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Giá: Tăng dần
                                                         </option>
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Giá: Giảm dần
                                                         </option>
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Tên: A-Z
                                                         </option>
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Tên: Z-A
                                                         </option>
 
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="best_selling",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="best_selling",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Bán chạy nhất
                                                         </option>
                                                         break;
                                                     case "recent_day":
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="oldest_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="oldest_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Cũ nhất
                                                         </option>
-                                                        <option selected value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="recent_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option selected value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="recent_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Mới nhất
                                                         </option>
 
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Giá: Tăng dần
                                                         </option>
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Giá: Giảm dần
                                                         </option>
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Tên: A-Z
                                                         </option>
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Tên: Z-A
                                                         </option>
 
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="best_selling",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="best_selling",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Bán chạy nhất
                                                         </option>
                                                         break;
                                                     case "best_selling":
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="oldest_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="oldest_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Cũ nhất
                                                         </option>
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="recent_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="recent_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Mới nhất
                                                         </option>
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="best_selling",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="best_selling",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Bán chạy nhất
                                                         </option>
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Giá: Tăng dần
                                                         </option>
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Giá: Giảm dần
                                                         </option>
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Tên: A-Z
                                                         </option>
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Tên: Z-A
                                                         </option>
 
-                                                        <option selected value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="best_selling",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option selected value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="best_selling",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Bán chạy nhất
                                                         </option>
                                                         break;
                                                     default:
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="oldest_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="oldest_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Cũ nhất
                                                         </option>
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="recent_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="recent_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Mới nhất
                                                         </option>
-                                                        <option selected value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option selected value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Giá: Tăng dần
                                                         </option>
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Giá: Giảm dần
                                                         </option>
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Tên: A-Z
                                                         </option>
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Tên: Z-A
                                                         </option>
 
-                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="best_selling",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="best_selling",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID,key=Request.QueryString["key"]})'>
                                                             Bán chạy nhất
                                                         </option>
                                                         break;
@@ -337,13 +355,13 @@
                                     {
                                         <div class='col-sm-4 col-xs-12 noleftpadding norightpadding product_single'>
                                             <div class="product clearfix">
-                                                <div class="haravan-product-reviews-badge" >
+                                                <div class="haravan-product-reviews-badge">
                                                 </div>
                                                 <div class="product-image">
-                                                    <a href="@Url.Action("Productsdetail","Home",new { id=@item.ProductId})"><img src="https://product.hstatic.net/1000104489/product/mi_spa_ban_lut_196f9793c75c460e81773e905cbf46f2.jpg" data-lazyload="https://product.hstatic.net/1000104489/product/mi_spa_ban_lut_196f9793c75c460e81773e905cbf46f2.jpg" alt="@item.ProductName"></a>
+                                                    <a href="@Url.Action("Productsdetail","Home",new { id=@item.ProductId})"><img src="@item.Images" data-lazyload="@item.Images" alt="@item.ProductName"></a>
                                                     <div class="product-overlay">
                                                         <a href="javascript:void(0)" data-id="@item.ProductId" class="product_quick_add" data-toggle='tooltip' title='Thêm vào giỏ'><i class="fa fa-shopping-cart"></i><span class='hidden-md hidden-lg'> Thêm vào giỏ</span></a>
-                                                        <a href="#product-pop-up" onclick="Quick(@item.ProductId)" class="item-quick-view fancybox-fast-view hidden-sm hidden-xs"  data-toggle='tooltip' title='Xem nhanh'><i class="fa fa-eye"></i><span class='hidden-md hidden-lg'> Xem nhanh</span></a>
+                                                        <a href="#product-pop-up" onclick="Quick(@item.ProductId)" class="item-quick-view fancybox-fast-view hidden-sm hidden-xs" data-toggle='tooltip' title='Xem nhanh'><i class="fa fa-eye"></i><span class='hidden-md hidden-lg'> Xem nhanh</span></a>
                                                     </div>
                                                 </div>
                                                 <div class="product-title">

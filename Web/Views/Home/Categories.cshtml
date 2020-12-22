@@ -618,7 +618,7 @@
             <script>
                    function Filter() {
                      $.ajax({
-                        url: `/Home/ListProducts/?id=${idCategory}&Sale=@Request.QueryString["Sale"]&orderby=@Request.QueryString["orderby"]`,
+                        url: `/Home/ListProducts/?id=${idCategory}&Sale=@Request.QueryString["Sale"]&orderby=@Request.QueryString["orderby"]&key=@Request.QueryString["key"]`,
                             method: "GET",
                          data: {
                             listProviderID: listId.toString().length != 0 ? listId.toString() : "-1",
@@ -627,7 +627,6 @@
 
                             }
                             , success: function (response) {
-
                                 $('#grid_pagination').html(response)
                             }
                         })

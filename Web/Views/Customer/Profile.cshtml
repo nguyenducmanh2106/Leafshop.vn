@@ -37,7 +37,7 @@
                     <div class="acctitle"><i class="acc-closed fa fa-user"></i><i class="acc-open fa fa-check-circle"></i>Thông tin khách hàng</div>
                     <div class="acc_content clearfix">
 
-                        <form accept-charset='UTF-8' id='create_customer' method="post">
+                        <form accept-charset='UTF-8' id='Save_customer' method="post">
                             @*@Html.AntiForgeryToken()*@
                             @*@Html.ValidationSummary(true)*@
                             <div class="col_full">
@@ -49,8 +49,15 @@
                                 <input required type="text" id="register-form-email" disabled name="customer[email]" value="@Model.Email" class="form-control" />
                             </div>
                             <div class="col_full">
-                                <label for="register-form-gender">Giới tính:</label>
-                                <select class="form-control" id="register-form-gender">
+                                <label for="register-form-email">Số điện thoại:<span class="required require_symbol">*</span></label>
+                                @{ 
+                                    var phone = Model.Phone != null ? Model.Phone : "";
+                                }
+                                <input required type="text" id="register-form-phone" name="customer[email]" value="@phone" class="form-control" />
+                            </div>
+                            <div class="col_full">
+                                <label for="register-form-gender">Giới tính:<span class="required require_symbol">*</span></label>
+                                <select class="form-control" id="register-form-gender" required>
                                     @if (Model.Gender == 1)
                                     {
                                         <option selected value="1">Nam</option>
@@ -64,25 +71,25 @@
                                 </select>
                             </div>
                             <div class="col_full">
-                                <label for="register-form-date">Ngày sinh:</label>
+                                <label for="register-form-date">Ngày sinh:<span class="required require_symbol">*</span></label>
                                 <input required type="date" id="register-form-date" name="customer[password]" value="@Model.DateofBirth.ToString("yyyy-MM-dd")" class="form-control" />
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <label for="register-form-city">Tỉnh/Thành phố:</label>
-                                    <select class="form-control" id="register-form-city" >
+                                    <label for="register-form-city">Tỉnh/Thành phố:<span class="required require_symbol">*</span></label>
+                                    <select class="form-control" id="register-form-city" required>
                                         <option value="-1">--Chọn Tỉnh/Thành phố--</option>
                                     </select>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="register-form-district">Quận/Huyện:</label>
-                                    <select class="form-control" id="register-form-district">
+                                    <label for="register-form-district">Quận/Huyện:<span class="required require_symbol">*</span></label>
+                                    <select class="form-control" id="register-form-district" required>
                                         <option value="-1">--Chọn Huyện--</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col_full">
-                                <label for="register-form-address">Địa chỉ:</label>
+                                <label for="register-form-address">Địa chỉ: <span class="required require_symbol">*</span></label>
                                 <input required type="text" id="register-form-address" name="customer[password]" value="@Model.Address" class="form-control" />
                             </div>
 

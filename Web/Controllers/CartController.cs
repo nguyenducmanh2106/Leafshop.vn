@@ -16,7 +16,7 @@ namespace Web.Controllers
     {
         public string cart_token = "cart_token";
         MobileShopContext db = new MobileShopContext();
-      
+
         public ActionResult ToastrProduct(string productId)
         {
             int id = Int32.Parse(productId);
@@ -30,10 +30,10 @@ namespace Web.Controllers
             if (CookieID != null && CookieID.Value != "")
             {
                 var productsID = CookieID.Value.Split('-').Select(x => Int32.Parse(x)).ToList();
-                 countProductInCart = productsID.Distinct().Count();
-                
+                countProductInCart = productsID.Distinct().Count();
+
             }
-            ViewBag.countProductInCart = countProductInCart;  
+            ViewBag.countProductInCart = countProductInCart;
             return View();
         }
         public ActionResult ViewQuick()
@@ -42,7 +42,7 @@ namespace Web.Controllers
             Cart cart = new Cart();
             var CookieID = Request.Cookies[cart_token];
             List<Product> listProduct = new List<Product>();
-            if (CookieID != null&& CookieID.Value!="")
+            if (CookieID != null && CookieID.Value != "")
             {
                 var productsID = CookieID.Value.Split('-').Select(x => Int32.Parse(x)).ToList();
                 var productsIdDistinct = productsID.Distinct();
@@ -54,7 +54,7 @@ namespace Web.Controllers
                 cart.products = listProduct;
                 cart.productsId = productsID;
             }
-                return View(cart);
+            return View(cart);
         }
         #region Carts
         // GET: Cart
@@ -75,171 +75,109 @@ namespace Web.Controllers
                 }
                 cart.products = listProduct;
                 cart.productsId = productsID;
-                
+
             }
 
             return View(cart);
         }
-        public PartialViewResult GetallCart()
-        {
-            //Lấy thông tin người dùng hiện tại 
-            HttpCookie cookie = Request.Cookies["InfoCustomer"];
-            var userId = cookie["id"];
-            var parseIntUser = int.Parse(userId);
-            var cart = db.AddToCarts.Where(x => x.CustomerId == parseIntUser).FirstOrDefault();
-            if (cart == null)
-            {
-                ViewBag.cartnull = "Chưa có sản phẩm trong giỏ hàng";
-            }
-            var list = db.AddToCarts.Where(x => x.CustomerId == parseIntUser).ToList();
-            return PartialView("_GetallCart", list);
-        }
+
         #endregion
 
-        #region Update Quantity
-        //POST: Delete cart
-        [HttpPost]
-        public ActionResult UpdateQuantity(int? id, int quantity)
-        {
-            if (id == null)
-            {
-                return Json(new { error = "Sản phẩm không tồn tại !!" }, JsonRequestBehavior.AllowGet);
-            }
-            try
-            {
-                var result = db.AddToCarts.Where(x => x.CartId == id).FirstOrDefault();
-                if (result != null)
-                {
-                    if (quantity >= 0)
-                    {
-                        if (quantity == 0)
-                        {
-                            db.AddToCarts.Remove(result);
-                            db.SaveChanges();
-                            return Json(new { success = "Đã xoá sản phẩm" }, JsonRequestBehavior.AllowGet);
-                        }
-                        result.Quantity = quantity;
-                        db.SaveChanges();
-                        return Json(new { success = "Cập nhập thành công" }, JsonRequestBehavior.AllowGet);
-                    }
-                    return Json(new { error = "Vui lòng chọn số lượng !!" }, JsonRequestBehavior.AllowGet);
-                }
-            }
-            catch (Exception)
-            {
-                return Json(new { error = "Có gì đó không đúng !!" }, JsonRequestBehavior.AllowGet);
-            }
-            return Json(new { error = "Có gì đó không đúng !!" }, JsonRequestBehavior.AllowGet);
-        }
-        #endregion
-
-        #region Delete product Carts
-        //POST: Delete cart
-        [HttpPost]
-        public JsonResult Delete(int id)
-        {
-            AddToCart addToCart = db.AddToCarts.Where(x => x.CartId == id).FirstOrDefault();
-            if (addToCart != null)
-            {
-                db.AddToCarts.Remove(addToCart);
-                db.SaveChanges();
-                return Json(new { success = "Đã xoá sản phẩm !!" });
-            }
-            else
-            {
-                return Json(new { error = "Có gì đó không đúng !!" }, JsonRequestBehavior.AllowGet);
-            }
-        }
-        #endregion
 
         #region Payment
         //POST: Payment
         public ActionResult Payment()
         {
             //get id current User
-            HttpCookie cookie = Request.Cookies["InfoCustomer"];
-            var id = cookie["id"];
-            var userid = int.Parse(id);
+            HttpCookie cookie = Request.Cookies["customer_token"];
             //get info current User
-            var currentUser = db.Customers.Where(x => x.CustomerId == userid).SingleOrDefault();
-            if (currentUser == null)
+            Customer currentUser = null;
+            if (cookie != null && cookie.Value != null)
             {
-                return HttpNotFound();
+                currentUser = db.Customers.Where(x => x.ActiveCode.ToString() == cookie.Value).SingleOrDefault();
             }
+
             //check cart is empty
-            var cart = db.AddToCarts.Where(x => x.CustomerId == userid).FirstOrDefault();
-            if (cart == null)
+            Cart cart = new Cart();
+            var CookieID = Request.Cookies[cart_token];
+            List<Product> listProduct = new List<Product>();
+            if (CookieID != null && CookieID.Value != "")
             {
-                return RedirectToAction("Index");
+                var productsID = CookieID.Value.Split('-').Select(x => Int32.Parse(x)).ToList();
+                var productsIdDistinct = productsID.Distinct();
+                foreach (var item in productsIdDistinct)
+                {
+                    var prod = db.Products.Where(x => x.ProductId == item).FirstOrDefault();
+                    listProduct.Add(prod);
+                }
+                cart.products = listProduct;
+                cart.productsId = productsID;
             }
-            ViewBag.listCart = db.AddToCarts.Where(x => x.CustomerId == userid).ToList();
-            return View(currentUser);
+            ViewBag.currentUser = currentUser;
+            ViewBag.cart = cart;
+            return View();
         }
 
         [HttpPost]
-        public ActionResult Payment(Order order)
+        public ActionResult Payment(string orderObj, string cart)
         {
-            order.Created = DateTime.Now;
-            order.TimeExpires = DateTime.Now.AddMinutes(10);
-            order.Status = 0; // pending
-            Random random = new Random(DateTime.Now.Ticks.GetHashCode());
-            var getYear = DateTime.Now.Year.ToString();
-            getYear = getYear.Substring(2);
-            var randomCode = random.Next(100000, 999999).ToString() + getYear;
-            var codeOrder = db.Orders.Any(x => x.CodeOrder.Equals(randomCode));
-            while (codeOrder)
-            {
-                randomCode = random.Next(100000, 999999).ToString() + getYear;
-            }
-            order.CodeOrder = randomCode;
-            //get all Address in one columns
-            order.Address = order.City + " - " + order.District + " - " + order.Commune + " - " + order.HouseNumber;
-            //get oder current custommer
-            var orderCurrentUSer = db.AddToCarts.Where(x => x.CustomerId == order.CustomerId).ToList();
-            //create List save Order detail
-            List<OrderDetail> list = new List<OrderDetail>();
-            double price = 0;
-            foreach (var item in orderCurrentUSer)
-            {
-                var priceQty = item.Price * item.Quantity;
-                price = price + priceQty;
-                //increase buy more 1
-                var SaleQuantity = db.Products.Where(x => x.ProductId == item.product.ProductId);
-                foreach (var saleQty in SaleQuantity)
-                {
-                    saleQty.ProductSaleQuantity++;
-                }
-                OrderDetail orderDetail = new OrderDetail();
-                orderDetail.CategoryName = item.product.Categories.CategoryName;
-                orderDetail.ProviderName = item.product.Providers.ProviderName;
-                orderDetail.AttrName = item.AttrName;
-                orderDetail.ProductId = item.product.ProductId;
-                orderDetail.ProductName = item.product.ProductName;
-                orderDetail.Discount = item.product.Discount;
-                orderDetail.FeatureImage = item.product.FeatureImage;
-                orderDetail.ProductId = item.product.ProductId;
-                orderDetail.Quantity = item.Quantity;
-                orderDetail.PriceOut = item.product.PriceOut;
-                orderDetail.Price = item.Price;
-                list.Add(orderDetail);
-            }
-            order.totalPrice = price;
-            //Save orderdetail as database
-            order.OrderDetails = list;
-            //Save order as database
             try
             {
-                db.Orders.Add(order);
+                orderObj = orderObj.Replace("\\\"", "");
+                Order order =
+                    JsonConvert.DeserializeObject<Order>(orderObj);
+
+                Random random = new Random(DateTime.Now.Ticks.GetHashCode());
+                var getYear = DateTime.Now.Year.ToString();
+                getYear = getYear.Substring(2);
+                var randomCode = random.Next(100000, 999999).ToString() + getYear;
+                var codeOrder = db.Orders.Any(x => x.CodeOrder.Equals(randomCode));
+                while (codeOrder)
+                {
+                    randomCode = random.Next(100000, 999999).ToString() + getYear;
+                }
+                var customerId = db.Customers.Where(x => x.Email == order.Email).SingleOrDefault();
+                Order orderTable = new Order()
+                {
+                    Created = DateTime.Now,
+                    TimeExpires = DateTime.Now.AddMinutes(10),
+                    Status = 0,
+                    CodeOrder = randomCode,
+                    CustomerId = customerId == null ? -1 : customerId.CustomerId,
+                    FullName = order.FullName,
+                    Email = order.Email,
+                    Phone = order.Phone,
+                    totalPrice = order.totalPrice,
+                    City = order.City,
+                    District = order.District,
+                    Address = order.Address,
+
+                };
+                //thêm đơn hàng vào bảng order
+                db.Orders.Add(orderTable);
                 db.SaveChanges();
-                //remove all cart after order succes
-                db.AddToCarts.RemoveRange(orderCurrentUSer);
-                db.SaveChanges();
-                return RedirectToAction("Index", "Home");
+                var productsID = cart.Split('-').Select(x => Int32.Parse(x)).ToList();
+                List<OrderDetail> arr = new List<OrderDetail>();
+                foreach (var item in productsID.Distinct())
+                {
+                    var product = db.Products.Where(x => x.ProductId == item).SingleOrDefault();
+                    OrderDetail orderDetail = new OrderDetail()
+                    {
+                        OrderId = orderTable.OrderId,
+                        ProductId = item,
+                        Quantity = productsID.Where(x => x == item).Count(),
+                        PriceOut = product.PriceOut,
+                        Discount = product.Discount,
+                        Price = product.PriceOut * (100 - product.Discount)
+                    };
+                    db.OrderDetails.Add(orderDetail);
+                    db.SaveChanges();
+                }
+                return Json(new { result = true, message = "Đặt hàng thành công" });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                ViewBag.error = "Đã xảy ra lỗi khi đặt hàng, vui lòng cập nhập lại giỏ hàng và thử lại";
-                return RedirectToAction("Payment");
+                return Json(new { result = false, message = "Đặt hàng thất bại" });
             }
         }
         #endregion

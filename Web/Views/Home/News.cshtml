@@ -31,14 +31,14 @@
         <div class="content-wrap">
             <div class="container clearfix">
                 <div class='row'>
-                    <div class='input--search sidebar_menu visible-xs'>
-                        <form action="/search" style='margin-bottom: 0px'>
-                            <input type="hidden" name="type" value="article">
-                            <input required id="searchtext" name="q" maxlength="40" class="form-control input-search" type="text" size="20" placeholder="Tìm kiếm bài viết...">
-                            <input type="hidden" name="view" value="blog">
-                            <button class="gid-btn" type='submit' style="width: 100%">Tìm bài viết</button>
-                        </form>
-                    </div>
+                    @*<div class='input--search sidebar_menu visible-xs'>
+                            <form action="/home/news" style='margin-bottom: 0px'>
+
+                                <input required id="searchtext" name="q" maxlength="40" class="form-control input-search" type="text" size="20" placeholder="Tìm kiếm bài viết...">
+
+                                <button class="gid-btn" type='submit' style="width: 100%">Tìm bài viết</button>
+                            </form>
+                        </div>*@
                     <!-- Post Content
                     ============================================= -->
 
@@ -47,21 +47,27 @@
                         ============================================= -->
                         <div id="posts" class="small-thumbs">
 
+                            @if (Request.QueryString["q"] != null)
+                            {
+                                <div class="">
+                                    <span class="subtext">
+                                        Kết quả tìm kiếm bài viết cho  <strong class="require_symbol">"@Request.QueryString["q"]"</strong>.
+                                    </span>
+                                </div>
+                            }
+                            else
+                            {
 
-
-                            <h4 class="blog-title">
-                                Tin tức
-                                @*<a href="/blogs/kien-thuc-chung" class="pull-right">
-                                        Xem thêm
-                                        <span class='glyphicon glyphicon-menu-right'></span>
-                                    </a>*@
-                            </h4>
+                                <h4 class="blog-title">
+                                    Tin tức
+                                </h4>
+                            }
                             @foreach (var item in Model)
                             {
                                 <!-- single article -->
                                 <div class="entry clearfix">
                                     <div class="entry-image">
-                                        <a href="//file.hstatic.net/1000104489/file/tre-moc-rang-bieng-an-bao-lau_68c2312501304fa385425f34f042ba2b_1024x1024.jpg" data-lightbox="image"><img class="image_fade" src="http://file.hstatic.net/1000104489/article/tre-moc-rang-bieng-an-bao-lau.jpg" alt="Chọn kem đánh răng cho bé tưởng đơn giản nhưng lại không hề đơn giản"></a>
+                                        <a href="//file.hstatic.net/1000104489/file/tre-moc-rang-bieng-an-bao-lau_68c2312501304fa385425f34f042ba2b_1024x1024.jpg" data-lightbox="image"><img class="image_fade" src="@item.FeatureImage" alt="@item.NewsTitle"></a>
                                     </div>
                                     <div class="entry-c">
                                         <div class="entry-title">
@@ -124,14 +130,14 @@
                                     Tìm kiếm bài viết
                                 </h4>
                                 <div class='input--search sidebar_menu'>
-                                    <form style='margin-bottom: 0px' method="get" id="form1">
+                                    <form style='margin-bottom: 0px' method="get" id="form1" action="/home/news">
                                         @*<input type="hidden" name="type" value="article">*@
-                                        <input required id="searchtext" name="key" maxlength="40" class="form-control input-search" type="text" size="20" placeholder="Từ khóa tìm kiếm...">
+                                        <input required id="searchtext" name="q" maxlength="40" class="form-control input-search" type="text" size="20" placeholder="Từ khóa tìm kiếm...">
                                         @*<input type="hidden" name="view" value="blog">*@
                                         <button class="gid-btn" type='submit'>Tìm</button>
                                     </form>
                                 </div>
-                                
+
                             </div>
                             <script>
                                 //$('#form1').submit(function () {

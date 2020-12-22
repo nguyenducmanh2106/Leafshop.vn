@@ -49,14 +49,13 @@ namespace Web.Controllers
             }
             customer.Password = GetMD5(customer.Password);
             customer.CreateDate = DateTime.Now;
-           
             customer.Status = 1;
             customer.isEmailVerified = true;
             customer.ActiveCode = Guid.NewGuid();
             db.Customers.Add(customer);
             db.SaveChanges();
 
-            return RedirectToAction("Index");
+            return Json(new { result = true, message = "Đăng ký thành công" });
         }
         //
         [HttpPost]
@@ -75,8 +74,16 @@ namespace Web.Controllers
                     customer_token.Value = isLogin.ActiveCode.ToString();
                     customer_token.Expires = DateTime.Now.AddHours(1);
                     Response.Cookies.Add(customer_token);
+                    return RedirectToAction("Index", "Home");
                 }
-                return RedirectToAction("Index", "Home");
+
+                else
+                {
+                    cookie.Value = isLogin.ActiveCode.ToString();
+                    cookie.Expires = DateTime.Now.AddHours(1);
+                    Response.Cookies.Add(cookie);
+                    return RedirectToAction("Index", "Home");
+                }
             }
             ViewBag.ms = "fail";
             return View("Index");
@@ -95,11 +102,32 @@ namespace Web.Controllers
         public ActionResult ChangeProfile(Customer customer)
         {
             var user = db.Customers.Where(x => x.Email == customer.Email).FirstOrDefault();
-            if (user != null)
+            if (user == null)
             {
-
+                return Json(new { result = false ,message="Cập nhật thông tin thất bại"});
             }
-            return View();
+            user.Phone = customer.Phone;
+            user.FullName = customer.FullName;
+            user.Address = customer.Address;
+            user.CreateDate = user.CreateDate;
+            user.DateofBirth = customer.DateofBirth;
+            user.Gender = customer.Gender;
+            user.Status = 1;
+            user.ActiveCode =user.ActiveCode;
+            user.Tinh = customer.Tinh;
+            user.Huyen = customer.Huyen;
+            user.TinhId = customer.TinhId;
+            user.HuyenId = customer.HuyenId;
+            db.SaveChanges();
+            return Json(new { result=true,message="Cập nhật thông tin thành công"});
+        }
+        public ActionResult Logout()
+        {
+            HttpCookie customer_token = Request.Cookies["customer_token"];
+            customer_token.Path = "/";
+            customer_token.Expires = DateTime.Now.AddDays(-1);
+            Response.Cookies.Add(customer_token);  
+            return RedirectToAction("Index", "Customer");
         }
     }
 }

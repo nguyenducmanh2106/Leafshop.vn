@@ -25,6 +25,7 @@
 
                     @if (user != null)
                     {
+                        <li>@Html.ActionLink("Blog", "News", "Home")</li>
                         <li>
                             <a style="display:inline !important" href='@Url.Action("Profile","Customer")'>
                                 <i class="far fa-user" style="color:#ADB5BD"></i>
@@ -32,10 +33,18 @@
                             </a>
                         </li>
                         <li>
-                            <a href='@Url.Action("Logout","Customer")' title="Đăng xuất">
+                            @*<a href='@Url.Action("Logout","Customer")' title="Đăng xuất">
+                                Đăng xuất
+                            </a>*@
+                            <a href='javascript:void(0)' onclick="logout()" title="Đăng xuất">
                                 Đăng xuất
                             </a>
-                           
+                            <script>
+                                function logout() {
+                                    $.cookie('customer_token', "", { path: '/', expires: -100 });
+                                    $(location).attr('href','/home/index')
+                                }
+                            </script>
                         </li>
                     }
                     else

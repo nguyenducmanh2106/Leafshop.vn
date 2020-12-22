@@ -108,7 +108,7 @@
                         </div>
                         <div class="col-md-6 col-sm-6 col-xs-12 topmargin nopadding">
                             <button name="update" id="update" class="cart_update_btn button button-3d nomargin fright">Cập nhật giỏ hàng</button>
-                            <button name='checkout' class="cart_checkout_btn button button-3d notopmargin fright">Thanh toán</button>
+                            <button name='checkout' id="checkout" class="cart_checkout_btn button button-3d notopmargin fright">Thanh toán</button>
                         </div>
                     </div>
                 </form>
@@ -192,6 +192,10 @@
         })
         $('#update').off('click').on('click', function () {
             window.location.reload()
+        })
+        $('#checkout').off('click').on('click', function (e) {
+            e.preventDefault()
+            $(location).attr('href','/Cart/Payment')
         })
     })
 </script>
