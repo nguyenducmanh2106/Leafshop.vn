@@ -169,7 +169,13 @@
                                  '<a data-toggle="modal" data-target="#myModal" data-id="' + data +'" class="btn btn-sm btn-icon btn-pure btn-outline edit-row-btn delete-typeattr" ><i data-toggle="tooltip" data-original-title="Xoá" style="font-size:15px" class="fa fa-close text-danger tooltip-danger" aria-hidden="true"></i></a>'
                          }
                      },
-                 ],
+                ],
+                "columnDefs": [
+                    { orderable: false, targets: [2] },
+                    { orderable: false, targets: [3] },
+                   
+                ]
+                ,
                  "oLanguage": {
                      "oPaginate": {
                          "sPrevious": "Trang trước",

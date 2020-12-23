@@ -217,7 +217,13 @@
                                 '<button  data-deleteid="' + id + '" class="mr-0 btn btn-sm btn-icon btn-pure btn-outline edit-row-btn btn-delete-attr" ><i data-toggle="tooltip" data-original-title="Xoá" style="font-size:15px" class="  ti-trash text-danger font-weight-bold tooltip-danger" aria-hidden="true"></i></button>'
                         }
                     }
+                ],
+                "columnDefs": [
+                    { orderable: false, targets: [4] },
+                    { orderable: false, targets: [3] },
+
                 ]
+                ,
 
             })
             //allow tooltip active
