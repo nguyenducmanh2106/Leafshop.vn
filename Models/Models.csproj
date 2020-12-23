@@ -74,13 +74,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="MobileShopContext.cs" />
     <Compile Include="Models\DataModels\AddToCart.cs" />
     <Compile Include="Models\DataModels\Attribute.cs" />
     <Compile Include="Models\DataModels\Banner.cs" />
     <Compile Include="Models\DataModels\Business.cs" />
     <Compile Include="Models\DataModels\Category.cs" />
+    <Compile Include="Models\DataModels\Contact.cs" />
     <Compile Include="Models\DataModels\Customer.cs" />
     <Compile Include="Models\DataModels\Feedback.cs" />
     <Compile Include="Models\DataModels\Group.cs" />

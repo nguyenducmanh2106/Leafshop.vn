@@ -1,0 +1,219 @@
+﻿@using Models.Models.DataModels;
+@{ 
+    Layout = null;
+    var ProductGreated = ViewData["products"] as List<Product>;
+    var ProductRelated = ViewData["ProductRelationship"] as List<Product>;
+    var ProductSale = ViewData["ProductSale"] as List<Product>;
+}
+
+        <!-- categories -->
+
+        <div class="widget widget_links clearfix hidden">
+            <h4>Danh mục</h4>
+            <ul class='sidebar_menu'>
+
+
+                <li><a href="/">Trang chủ</a></li>
+
+
+
+                <li><a href="/collections/all">Sản phẩm</a></li>
+
+
+
+                <li><a href="/pages/gioi-thieu-ve-leaf-shop">Giới thiệu</a></li>
+
+
+            </ul>
+        </div>
+
+        <!-- end categories -->
+        <!-- recent product -->
+
+        <div class="widget clearfix">
+
+            <h4><a href='/collections/sale'>Sản phẩm khuyến mãi</a></h4>
+            <div id="post-list-footer" class='sidebar_menu'>
+                @foreach (var item in ProductSale)
+                {
+                    <div class="spost clearfix">
+                        <div class="entry-image">
+                            <a href="@Url.Action("Productsdetail","Home",new { id=@item.ProductId})"><img src="//product.hstatic.net/1000104489/product/z2140456780189_926d65ce114cdd24d7b1e732c7605e3f_eea800234bc44b11984afd96a88d2ba8_small.jpg" alt="Sữa rửa mặt hữu cơ Avril lô hội dạng gel 100ml"></a>
+                        </div>
+                        <div class="entry-c">
+                            <div class="entry-title">
+                                <h4><a href="@Url.Action("Productsdetail","Home",new { id=@item.ProductId})">@item.ProductName</a></h4>
+                            </div>
+                            <ul class="entry-meta">
+                                <li class="color">
+                                    @if (item.Discount > 0)
+                                    {
+                                        <del class="sale-price">
+                                            @{
+                                                var vie = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+
+                                            }
+                                            @String.Format(vie, "{0:c00}", item.PriceOut)
+
+                                        </del>
+                                        <ins>
+                                            @{
+
+                                                var price = item.Discount > 0 ? item.PriceOut - item.PriceOut * item.Discount / 100 : @item.PriceOut;
+                                            }
+                                            @String.Format(vie, "{0:c00}", price)
+                                        </ins>
+                                    }
+                                    else
+                                    {
+                                        <ins>
+                                            @{
+                                                var vie = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+
+                                            }
+                                            @String.Format(vie, "{0:c00}", item.PriceOut)
+
+                                        </ins>
+                                    }
+                                </li>
+                                <!--<li><i class="icon-star3"></i> <i class="icon-star3"></i> <i class="icon-star3"></i> <i class="icon-star3"></i> <i class="icon-star-half-full"></i></li>-->
+                            </ul>
+                        </div>
+                    </div>
+
+
+                }
+            </div>
+
+        </div>
+
+        <!-- end recent product -->
+        <!-- most popular -->
+
+        <div class="widget clearfix">
+
+            <h4><a href='/collections/cham-soc-da-mat'>Sản phẩm nổi bật</a></h4>
+            <div id="Popular-item" class="sidebar_menu">
+                @foreach (var item in ProductGreated)
+                {
+                    <div class="spost clearfix">
+                        <div class="entry-image">
+                            <a href="@Url.Action("Productsdetail","Home",new { id=@item.ProductId})"><img src="//product.hstatic.net/1000104489/product/z2140456780189_926d65ce114cdd24d7b1e732c7605e3f_eea800234bc44b11984afd96a88d2ba8_small.jpg" alt="Sữa rửa mặt hữu cơ Avril lô hội dạng gel 100ml"></a>
+                        </div>
+                        <div class="entry-c">
+                            <div class="entry-title">
+                                <h4><a href="@Url.Action("Productsdetail","Home",new { id=@item.ProductId})">@item.ProductName</a></h4>
+                            </div>
+                            <ul class="entry-meta">
+                                <li class="color">
+                                    @if (item.Discount >0)
+                                    {
+                                        <del class="sale-price">
+                                            @{
+                                                var vie = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+
+                                            }
+                                            @String.Format(vie, "{0:c00}", item.PriceOut)
+
+                                        </del>
+                                        <ins>
+                                            @{
+
+                                                var price = item.Discount > 0 ? item.PriceOut - item.PriceOut * item.Discount / 100 : @item.PriceOut;
+                                            }
+                                            @String.Format(vie, "{0:c00}", price)
+                                        </ins>
+                                    }
+                                    else
+                                    {
+                                        <ins>
+                                            @{
+                                                var vie = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+
+                                            }
+                                            @String.Format(vie, "{0:c00}", item.PriceOut)
+
+                                        </ins>
+                                    }
+                                </li>
+                                <!--<li><i class="icon-star3"></i> <i class="icon-star3"></i> <i class="icon-star3"></i> <i class="icon-star3"></i> <i class="icon-star-half-full"></i></li>-->
+                            </ul>
+                        </div>
+                    </div>
+
+
+                }
+            </div>
+        </div>
+
+        <!-- end most recent -->
+        <!-- related product -->
+        <div class="widget clearfix">
+            <h4><a href='#'>Sản phẩm liên quan</a></h4>
+            @foreach (var item in ProductRelated)
+            {
+                <div id="Popular-item" class="sidebar_menu">
+                    <div class="spost clearfix">
+                        <div class="entry-image">
+                            <a href="@Url.Action("Productsdetail","Home",new { id=@item.ProductId})"><img src="//product.hstatic.net/1000104489/product/z2140456780189_926d65ce114cdd24d7b1e732c7605e3f_eea800234bc44b11984afd96a88d2ba8_small.jpg" alt="Sữa rửa mặt hữu cơ Avril lô hội dạng gel 100ml"></a>
+                        </div>
+                        <div class="entry-c">
+                            <div class="entry-title">
+                                <h4><a href="@Url.Action("Productsdetail","Home",new { id=@item.ProductId})">@item.ProductName</a></h4>
+                            </div>
+                            <ul class="entry-meta">
+                                <li class="color">
+                                    @if (item.Discount > 0)
+                                    {
+                                        <del class="sale-price">
+                                            @{
+                                                var vie = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+
+                                            }
+                                            @String.Format(vie, "{0:c00}", item.PriceOut)
+
+                                        </del>
+                                        <ins>
+                                            @{
+
+                                                var price = item.Discount > 0 ? item.PriceOut - item.PriceOut * item.Discount / 100 : @item.PriceOut;
+                                            }
+                                            @String.Format(vie, "{0:c00}", price)
+                                        </ins>
+                                    }
+                                    else
+                                    {
+                                        <ins>
+                                            @{
+                                                var vie = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+
+                                            }
+                                            @String.Format(vie, "{0:c00}", item.PriceOut)
+
+                                        </ins>
+                                    }
+                                </li>
+                                <!--<li><i class="icon-star3"></i> <i class="icon-star3"></i> <i class="icon-star3"></i> <i class="icon-star3"></i> <i class="icon-star-half-full"></i></li>-->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- recent view -->
+
+        @*<div class="widget clearfix">
+            <h4>Sản phẩm vừa xem</h4>
+            <div class="widget-last-view sidebar_menu">
+            </div>
+        </div>
+        <script>
+		if (typeof get_viewed_items_html == 'function')
+			var $strHTML = get_viewed_items_html('');
+		$('.widget .widget-last-view').html($strHTML);
+        </script>*@
+
+        <!-- end recent view -->
+
+  

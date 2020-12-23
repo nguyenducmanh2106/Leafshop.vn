@@ -187,7 +187,9 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
+    <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\UltityController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -4514,7 +4516,7 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Cart\Index.cshtml" />
     <Content Include="Views\Home\Categories.cshtml" />
-    <Content Include="Views\Home\Feedback.cshtml" />
+    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Introduce.cshtml" />
     <Content Include="Views\Home\News.cshtml" />
@@ -4550,6 +4552,14 @@
     <Content Include="Views\Home\DieuKhoanSuDung.cshtml" />
     <Content Include="Views\Home\QuickAddCart.cshtml" />
     <Content Include="Views\Home\ListProducts.cshtml" />
+    <Content Include="Views\Ultity\CountProduct.cshtml" />
+    <Content Include="Views\Ultity\SelectFilter.cshtml" />
+    <Content Include="Views\Home\CategoryProductDetail.cshtml" />
+    <Content Include="Views\Cart\ViewQuick.cshtml" />
+    <Content Include="Views\Cart\TotalProduct.cshtml" />
+    <Content Include="Views\Cart\ToastrProduct.cshtml" />
+    <Content Include="Views\Customer\Index.cshtml" />
+    <Content Include="Views\Customer\Profile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,110 @@
+﻿@model Models.Models.DataModels.Customer
+@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+    <input type="hidden" id="TinhId" value="@Model.TinhId"/>
+    <input type="hidden" id="HuyenId" value="@Model.HuyenId"/>
+    <input type="hidden" id="Tinh" value="@Model.Tinh"/>
+    <input type="hidden" id="Huyen" value="@Model.Huyen"/>
+}
+<!-- Page Title
+============================================= -->
+<section id="page-title">
+    <div class="container clearfix">
+
+        <ol class="breadcrumb col-md-6 col-sm-6">
+            <li><a href="/">Trang chủ</a></li>
+
+            <li><a href="/account">Tài khoản</a></li>
+
+            <li class='active'>Hồ sơ của tôi</li>
+
+
+
+        </ol>
+    </div>
+</section>
+<!-- #page-title end -->
+<section id="content">
+
+    <div class="content-wrap">
+
+        <div class="container clearfix">
+
+            <div class="accordion accordion-lg divcenter nobottommargin clearfix" style="max-width: 550px;">
+
+                <!-- register -->
+                <div id='register'>
+                    <div class="acctitle"><i class="acc-closed fa fa-user"></i><i class="acc-open fa fa-check-circle"></i>Thông tin khách hàng</div>
+                    <div class="acc_content clearfix">
+
+                        <form accept-charset='UTF-8' id='create_customer' method="post">
+                            @*@Html.AntiForgeryToken()*@
+                            @*@Html.ValidationSummary(true)*@
+                            <div class="col_full">
+                                <label for="first_name">Họ tên:<span class="required require_symbol">*</span></label>
+                                <input required type="text" id="first_name" name="customer[first_name]" value="@Model.FullName" class="form-control" />
+                            </div>
+                            <div class="col_full">
+                                <label for="register-form-email">Email:<span class="required require_symbol">*</span></label>
+                                <input required type="text" id="register-form-email" disabled name="customer[email]" value="@Model.Email" class="form-control" />
+                            </div>
+                            <div class="col_full">
+                                <label for="register-form-gender">Giới tính:</label>
+                                <select class="form-control" id="register-form-gender">
+                                    @if (Model.Gender == 1)
+                                    {
+                                        <option selected value="1">Nam</option>
+                                        <option value="0">Nữ</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="1">Nam</option>
+                                        <option selected value="0">Nữ</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col_full">
+                                <label for="register-form-date">Ngày sinh:</label>
+                                <input required type="date" id="register-form-date" name="customer[password]" value="@Model.DateofBirth.ToString("yyyy-MM-dd")" class="form-control" />
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="register-form-city">Tỉnh/Thành phố:</label>
+                                    <select class="form-control" id="register-form-city" >
+                                        <option value="-1">--Chọn Tỉnh/Thành phố--</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="register-form-district">Quận/Huyện:</label>
+                                    <select class="form-control" id="register-form-district">
+                                        <option value="-1">--Chọn Huyện--</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col_full">
+                                <label for="register-form-address">Địa chỉ:</label>
+                                <input required type="text" id="register-form-address" name="customer[password]" value="@Model.Address" class="form-control" />
+                            </div>
+
+                            <div class="col_full nobottommargin">
+                                <button class="button button-3d button-black nomargin" id="register-form-save" name="register-form-save" type='button'>Lưu</button>
+                            </div>
+
+                            <input id='b7ad78aa07434ecbbee77eff400c720a' name='g-recaptcha-response' type='hidden'>
+                            <script src='https://www.google.com/recaptcha/api.js?render=6LdD18MUAAAAAHqKl3Avv8W-tREL6LangePxQLM-'></script>
+                            <script>grecaptcha.ready(function () { grecaptcha.execute('6LdD18MUAAAAAHqKl3Avv8W-tREL6LangePxQLM-', { action: 'submit' }).then(function (token) { document.getElementById('b7ad78aa07434ecbbee77eff400c720a').value = token; }); });</script>
+                        </form>
+
+                    </div>
+                </div>
+                <!-- end register -->
+
+            </div>
+
+
+            <!-- check password confirm -->
+            <!-- end check password confirm -->
+        </div>
+
+    </div>
+</section>

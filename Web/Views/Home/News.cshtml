@@ -1,64 +1,265 @@
 ﻿@using PagedList;
 @using PagedList.Mvc;
+@using Models.Models.DataModels;
 @model PagedList.IPagedList<Models.Models.DataModels.News>
 @{
     ViewBag.Title = "News";
+    var users = ViewData["users"] as List<User>;
     Layout = "~/Views/Shared/_Layout1.cshtml";
+    var NewsRecent = Model.OrderByDescending(x => x.Created).Take(3).ToList();
 }
 
-<div class="main-css-fluid">
-    <section class="main-css padding-config">
-        <div class="main-container">
-            <!--START MAIN RIGHT -->
-            <div class="main-right woo-control-right fr">
-                <div class="category-control-right">
-                    <div class="category-fluid">
-                        <h1>Tin tức	</h1>
-                        @foreach (var item in Model)
-                        {
-                            <div class="style-category" id="post-737">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 style-category-box">
-                                    <article class="category-list">
-                                        <div class="category-left-style">
-                                            <a href="@Url.Action("NewsDetail","Home", new { id = item.NewsId })" title="@item.NewsTitle">
-                                                <img class="img-responsive" src="@item.FeatureImage" alt="@item.NewsTitle" width="250" height="180">
-                                            </a>
+<!-- Content
+============================================= -->
+<div class="zom_grr">
+
+    <!-- Page Title
+    ============================================= -->
+    <section id="page-title">
+        <div class="container clearfix">
+
+            <ol class="breadcrumb col-md-6 col-sm-6">
+                <li><a href="/">Trang chủ</a></li>
+
+                <li class='active'>Tất cả bài viết</li>
+
+            </ol>
+        </div>
+    </section>
+    <!-- #page-title end -->
+    <section id="content">
+        <div class="content-wrap">
+            <div class="container clearfix">
+                <div class='row'>
+                    <div class='input--search sidebar_menu visible-xs'>
+                        <form action="/search" style='margin-bottom: 0px'>
+                            <input type="hidden" name="type" value="article">
+                            <input required id="searchtext" name="q" maxlength="40" class="form-control input-search" type="text" size="20" placeholder="Tìm kiếm bài viết...">
+                            <input type="hidden" name="view" value="blog">
+                            <button class="gid-btn" type='submit' style="width: 100%">Tìm bài viết</button>
+                        </form>
+                    </div>
+                    <!-- Post Content
+                    ============================================= -->
+
+                    <div class="postcontent nobottommargin clearfix col-sm-9">
+                        <!-- Posts
+                        ============================================= -->
+                        <div id="posts" class="small-thumbs">
+
+
+
+                            <h4 class="blog-title">
+                                Tin tức
+                                @*<a href="/blogs/kien-thuc-chung" class="pull-right">
+                                        Xem thêm
+                                        <span class='glyphicon glyphicon-menu-right'></span>
+                                    </a>*@
+                            </h4>
+                            @foreach (var item in Model)
+                            {
+                                <!-- single article -->
+                                <div class="entry clearfix">
+                                    <div class="entry-image">
+                                        <a href="//file.hstatic.net/1000104489/file/tre-moc-rang-bieng-an-bao-lau_68c2312501304fa385425f34f042ba2b_1024x1024.jpg" data-lightbox="image"><img class="image_fade" src="http://file.hstatic.net/1000104489/article/tre-moc-rang-bieng-an-bao-lau.jpg" alt="Chọn kem đánh răng cho bé tưởng đơn giản nhưng lại không hề đơn giản"></a>
+                                    </div>
+                                    <div class="entry-c">
+                                        <div class="entry-title">
+                                            <h2><a href="@Url.Action("NewsDetail","Home", new { id = item.NewsId })">@item.NewsTitle</a></h2>
                                         </div>
-                                        <span class="cateogry-right-style">
-                                            <a href="@Url.Action("NewsDetail","Home", new { id = item.NewsId })">
-                                                <h2>@item.NewsTitle</h2>
-                                            </a>
-                                            <div class="cateogry-right-description">
-                                                @if (@item.ShortDescription.Length >= 180)
+                                        <ul class="entry-meta clearfix">
+                                            <li>
+                                                <i class="fa fa-calendar"></i>
+                                                @item.Created
+                                            </li>
+                                            @foreach (var user in users)
+                                            {
+                                                if (item.UserId == user.UserId)
                                                 {
-                                                    @item.ShortDescription.Substring(0, 180)<span>...</span>
+                                                    <li><i class="fa fa-user"></i> @user.UserName</li>
                                                 }
-                                                else
-                                                {
-                                                    @item.ShortDescription
-                                                }
+                                            }
+
+                                            <li><span><i class="fa fa-eye"></i> @item.CountView View</span></li>
+                                            <!--<li><a href="#"><i class="fa fa-camera-retro"></i></a></li>-->
+                                        </ul>
+                                        <div class="entry-content">
+                                            <!-- a -->
+                                            @if (@item.ShortDescription.Length >= 180)
+                                            {
+                                                @item.ShortDescription.Substring(0, 180)<span>...</span>
+                                            }
+                                            else
+                                            {
+                                                @item.ShortDescription
+                                            }...<a href="@Url.Action("NewsDetail","Home", new { id = item.NewsId })" class="more-link">Xem tiếp</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- end single article -->
+
+                            }
+
+                        </div><!-- #posts end -->
+                        <!-- Pagination
+                        ============================================= -->
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 style-category-box">
+                            @Html.PagedListPager(Model, page => Url.Action("News", "Home", new { page = page }))
+                        </div>
+                        @*<ul class="pager nomargin">
+
+                                <li class="previous"><a href="/blogs/all?page=2">&larr; Bài viết cũ hơn</a></li>
+
+
+                            </ul>*@<!-- .pager end -->
+
+                    </div><!-- .postcontent end -->
+                    <!-- Sidebar
+                    ============================================= -->
+                    <div class="sidebar nobottommargin col_last clearfix hidden-xs col-sm-3">
+                        <div class="sidebar-widgets-wrap">
+                            <div class='widget widget_links clearfix'>
+                                <h4>
+                                    Tìm kiếm bài viết
+                                </h4>
+                                <div class='input--search sidebar_menu'>
+                                    <form style='margin-bottom: 0px' method="get" id="form1">
+                                        @*<input type="hidden" name="type" value="article">*@
+                                        <input required id="searchtext" name="key" maxlength="40" class="form-control input-search" type="text" size="20" placeholder="Từ khóa tìm kiếm...">
+                                        @*<input type="hidden" name="view" value="blog">*@
+                                        <button class="gid-btn" type='submit'>Tìm</button>
+                                    </form>
+                                </div>
+                                
+                            </div>
+                            <script>
+                                //$('#form1').submit(function () {
+                                //    var key = $('#searchtext').val();
+                                //    $(location).attr('href', `/Home/News/?key=${key}`)
+                                //    return false;
+                                //})
+                            </script>
+                            <!-- categories -->
+                            @*<div class="widget widget_links clearfix">
+                                    <h4>Danh mục</h4>
+                                    <ul class='sidebar_menu'>
+
+                                        <li><a href="/blogs/kien-thuc-chung">Kiến thức chung</a></li>
+
+                                        <li><a href="/blogs/lam-dep">Làm đẹp</a></li>
+
+                                        <li><a href="/blogs/suc-khoe">Sức khoẻ</a></li>
+
+                                        <li><a href="/blogs/tri-lieu-huong-thom">Trị liệu hương thơm</a></li>
+
+                                        <li><a href="/blogs/cham-soc-be">Chăm sóc bé</a></li>
+
+                                        <li><a href="/blogs/thuc-pham">Thực phẩm</a></li>
+
+                                        <li><a href="/blogs/kinh-nghiem-hay">Kinh nghiệm hay</a></li>
+
+                                    </ul>
+                                </div>*@
+
+                            <!-- end categories -->
+                            <!-- recent article -->
+
+                            <div class="widget clearfix">
+                                <h4 style=''><a href=''>Bài viết mới nhất</a></h4>
+                                @foreach (var item in NewsRecent)
+                                {
+
+                                    <div class="tab-container sidebar_menu">
+
+                                        <!--<div class="tab-content clearfix" id="tabs-1">-->
+
+                                        <div class="spost clearfix">
+                                            <div class="entry-image">
+                                                <a href="@Url.Action("NewsDetail","Home", new { id = item.NewsId })" class="nobg a-circle"><img class="img-circle-custom" src="http://file.hstatic.net/1000104489/article/photo-1-15209593172381014275853.jpg" alt="Quá dễ dàng để thổi bay mùi hôi trong máy giặt, chỉ cần 2 nguyên liệu này thôi"></a>
                                             </div>
-                                        </span>
-                                        <span class="cateogry-right-style">
-                                            <div class="cateogry-right-description"></div>
-                                        </span>
-                                    </article>
-                                    <div class="clear"></div>
+                                            <div class="entry-c">
+                                                <div class="entry-title">
+                                                    <h4><a href="@Url.Action("NewsDetail","Home", new { id = item.NewsId })">@item.NewsTitle</a></h4>
+                                                </div>
+                                                <ul class="entry-meta">
+                                                    <li><span><i class="fa fa-eye"></i> @item.CountView Xem</span></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                }
+                            </div>
+                            <div class="widget clearfix" style='overflow:hidden;'>
+                                <div style="width: 100%;">
+                                    <!-- Page plugin's width will be 180px -->
+                                    <div class="fb-page" data-href="https://www.facebook.com/leafshop.vn/" data-width="320"></div>
+                                </div>
+
+                                <script>
+                                    (function (d, s, id) {
+                                        var js, fjs = d.getElementsByTagName(s)[0];
+                                        if (d.getElementById(id)) return;
+                                        js = d.createElement(s); js.id = id;
+                                        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=263266547210244&version=v2.0";
+                                        fjs.parentNode.insertBefore(js, fjs);
+                                    }(document, 'script', 'facebook-jssdk'));
+                                </script>
+                            </div>
+
+
+
+                            <div class="widget clearfix">
+
+                                <h4>Tags</h4>
+                                <div class="tagcloud sidebar_menu" style='border: none; padding: 10px 0;'>
+
+
+
                                 </div>
                             </div>
-                        }
+
+
+                        </div>
+                        <style>
+                            .gid-btn {
+                                background: none;
+                                border: solid 1px #eee;
+                                margin-top: 10px;
+                                padding: 8px 15px;
+                                background-color: #499644;
+                                color: #fff;
+                            }
+                        </style>
                     </div>
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 style-category-box">
-                        @Html.PagedListPager(Model, page => Url.Action("News", "Home", new { page = page }))
-                    </div>
+                    <!-- .sidebar end -->
                 </div>
             </div>
-            <!--END MAIN RIGHT -->
-            <!--START MAIN LEFT -->
-            @{Html.RenderAction("Mainleft", "Home");}
-            <!--END MAIN LEFT -->
+
         </div>
-        <!--END MAIN CONTAINER -->
+        <style>
+            .blog-title {
+                border-bottom: solid 1px #eee;
+                margin-bottom: 15px;
+                text-transform: uppercase;
+                display: block;
+                padding: 8px 15px;
+                background: #499644;
+                color: #fff;
+            }
+
+                .blog-title a {
+                    color: #fff;
+                    text-transform: none;
+                    font-size: 14px;
+                }
+
+                    .blog-title a span {
+                        font-size: 12px;
+                    }
+        </style>
     </section>
 </div>
 
+<!-- #content end -->

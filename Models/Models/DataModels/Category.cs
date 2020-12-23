@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models.Models.DataModels
 {
+   
     public class Category
     {
         [Key]

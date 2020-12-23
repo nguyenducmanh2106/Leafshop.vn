@@ -9,7 +9,7 @@
     Layout = "~/Views/Shared/_Layout1.cshtml";
     var Category = ViewData["Category"] as Category;
     var listCheck = ViewData["listCheck"];
-   
+    var PricesID = ViewData["FilterPrice"];
 }
 
 <!-- Content
@@ -33,7 +33,7 @@
     <!-- #page-title end -->
     <!-- Content
     ============================================= -->
-    <input type="hidden" id="listCheck" value="@listCheck"/>
+
     <input type='hidden' id='collection_id' value='=0'>
     <section id="content">
         <div class="content-wrap">
@@ -56,8 +56,24 @@
 
                     </div>
                     <div class="post_content pull-right col-sm-12 col-xs-12 col-md-9" style="margin-bottom: 15px !important;">
-                        <span>@Category.CategoryName</span>
-                        <input type="hidden" id="idCategory" value="@Category.CategoryId" />
+                        @if (Category != null)
+                        {
+                            <span>
+                                @Category.CategoryName
+                            </span>
+                        }
+                        else
+                        {
+                            <span>
+                                Sale
+                            </span>
+                        }
+
+                        <input type="hidden" id="idCategory" value="@if (Category != null) {
+                        @String.Format(Category.CategoryId.ToString());
+                        } else {
+                            @String.Format("unknown")
+                        }" />
                         <!-- Shop
                         ============================================= -->
                         <div id="shop" class="product-3 clearfix">
@@ -68,33 +84,249 @@
                             <div class='sort-wrapper'>
                                 <div class="browse-tags" style='margin-bottom:20px;line-height: 30px; overflow:hidden;'>
                                     <div class="col-sm-6 col-md-8 noleftpadding">
-                                        <p class="subtext nobottommargin">
+                                        <p class="subtext nobottommargin" id="textT">
 
-                                            @*Có <span class='require_symbol'>@NumberProducts</span> sản phẩm.*@
+                                            Có <span class='require_symbol'>@NumberProducts</span> sản phẩm.
 
                                         </p>
                                     </div>
 
                                     <div class='col-sm-6 col-md-4 noleftpadding text-right norightpadding'>
                                         <span class='col-sm-5 col-xs-4 nopadding text-left'>Sắp xếp theo:</span>
-                                        <span class="custom-dropdown custom-dropdown--white pull-right col-sm-7 col-xs-8 norightpadding">
+                                        <span id="SelectFilter" class="custom-dropdown custom-dropdown--white pull-right col-sm-7 col-xs-8 norightpadding">
+                                            @*LIst Filter select*@
+
                                             <select id='sortControl' class="form-control input-sm"
                                                     onchange="window.location.href =this.options[this.selectedIndex].value">
-                                                <option value='@Url.Action("Products","Home",new {orderby="price_asc",page=Request.QueryString["page"],listProviderID=@listCheck})'>Giá: Tăng dần</option>
-                                                <option value='@Url.Action("Products","Home",new {orderby="price_desc",page=Request.QueryString["page"],listProviderID=@listCheck})'>Giá: Giảm dần</option>
-                                                <option value='@Url.Action("Products","Home",new {orderby="name_asc",page=Request.QueryString["page"],listProviderID=@listCheck})' selected="selected">Tên: A-Z</option>
-                                                <option value='@Url.Action("Products","Home",new {orderby="name_desc",page=Request.QueryString["page"],listProviderID=@listCheck})'>Tên: Z-A</option>
-                                                <option value='@Url.Action("Products","Home",new {orderby="oldest_day",page=Request.QueryString["page"],listProviderID=@listCheck})'>Cũ nhất</option>
-                                                <option value='@Url.Action("Products","Home",new {orderby="recent_day",page=Request.QueryString["page"],listProviderID=@listCheck})'>Mới nhất</option>
-                                                <option value='@Url.Action("Products","Home",new {orderby="best_selling",page=Request.QueryString["page"],listProviderID=@listCheck})'>Bán chạy nhất</option>
+                                                @{
+                                                    var checkSlt = Request.QueryString["orderby"];
+
+
+                                                }
+                                                @switch (checkSlt)
+                                                {
+
+                                                    case "price_asc":
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="oldest_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Cũ nhất
+                                                        </option>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="recent_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Mới nhất
+                                                        </option>
+                                                        <option selected value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Giá: Tăng dần
+                                                        </option>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Giá: Giảm dần
+                                                        </option>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Tên: A-Z
+                                                        </option>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Tên: Z-A
+                                                        </option>
+
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="best_selling",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Bán chạy nhất
+                                                        </option>
+                                                        break;
+                                                    case "price_desc":
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="oldest_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Cũ nhất
+                                                        </option>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="recent_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Mới nhất
+                                                        </option>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Giá: Tăng dần
+                                                        </option>
+                                                        <option selected value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Giá: Giảm dần
+                                                        </option>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Tên: A-Z
+                                                        </option>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Tên: Z-A
+                                                        </option>
+
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="best_selling",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Bán chạy nhất
+                                                        </option>
+                                                        break;
+                                                    case "name_asc":
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="oldest_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Cũ nhất
+                                                        </option>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="recent_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Mới nhất
+                                                        </option>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Giá: Tăng dần
+                                                        </option>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Giá: Giảm dần
+                                                        </option>
+                                                        <option selected value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Tên: A-Z
+                                                        </option>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Tên: Z-A
+                                                        </option>
+
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="best_selling",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Bán chạy nhất
+                                                        </option>
+                                                        break;
+                                                    case "name_desc":
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="oldest_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Cũ nhất
+                                                        </option>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="recent_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Mới nhất
+                                                        </option>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Giá: Tăng dần
+                                                        </option>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Giá: Giảm dần
+                                                        </option>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Tên: A-Z
+                                                        </option>
+                                                        <option selected value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Tên: Z-A
+                                                        </option>
+
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="best_selling",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Bán chạy nhất
+                                                        </option>
+                                                        break;
+                                                    case "oldest_day":
+                                                        <option selected value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="oldest_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Cũ nhất
+                                                        </option>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="recent_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Mới nhất
+                                                        </option>
+
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Giá: Tăng dần
+                                                        </option>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Giá: Giảm dần
+                                                        </option>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Tên: A-Z
+                                                        </option>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Tên: Z-A
+                                                        </option>
+
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="best_selling",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Bán chạy nhất
+                                                        </option>
+                                                        break;
+                                                    case "recent_day":
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="oldest_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Cũ nhất
+                                                        </option>
+                                                        <option selected value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="recent_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Mới nhất
+                                                        </option>
+
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Giá: Tăng dần
+                                                        </option>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Giá: Giảm dần
+                                                        </option>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Tên: A-Z
+                                                        </option>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Tên: Z-A
+                                                        </option>
+
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="best_selling",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Bán chạy nhất
+                                                        </option>
+                                                        break;
+                                                    case "best_selling":
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="oldest_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Cũ nhất
+                                                        </option>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="recent_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Mới nhất
+                                                        </option>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="best_selling",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Bán chạy nhất
+                                                        </option>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Giá: Tăng dần
+                                                        </option>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Giá: Giảm dần
+                                                        </option>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Tên: A-Z
+                                                        </option>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Tên: Z-A
+                                                        </option>
+
+                                                        <option selected value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="best_selling",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Bán chạy nhất
+                                                        </option>
+                                                        break;
+                                                    default:
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="oldest_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Cũ nhất
+                                                        </option>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="recent_day",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Mới nhất
+                                                        </option>
+                                                        <option selected value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Giá: Tăng dần
+                                                        </option>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="price_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Giá: Giảm dần
+                                                        </option>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_asc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Tên: A-Z
+                                                        </option>
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="name_desc",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Tên: Z-A
+                                                        </option>
+
+                                                        <option value='@Url.Action("Products","Home",new {Sale=Request.QueryString["Sale"],orderby="best_selling",page=Request.QueryString["page"],listProviderID=@listCheck,listPriceID=@PricesID})'>
+                                                            Bán chạy nhất
+                                                        </option>
+                                                        break;
+                                                }
                                             </select>
+
+
                                         </span>
+
+
                                     </div>
+
+
                                 </div>
 
+
+
                             </div>
+
+
                             <div id='grid_pagination'>
 
+
+                                <input type="hidden" id="listCheck" value="@listCheck" />
+
+
+                                <input type="hidden" id="NumberProducts" value="@NumberProducts" />
                                 @*Dữ liệu products*@
                                 <div class='grid'>
                                     @if (NumberProducts <= 0)
@@ -105,13 +337,13 @@
                                     {
                                         <div class='col-sm-4 col-xs-12 noleftpadding norightpadding product_single'>
                                             <div class="product clearfix">
-                                                <div class="haravan-product-reviews-badge" data-id="@item.ProductId">
+                                                <div class="haravan-product-reviews-badge" >
                                                 </div>
                                                 <div class="product-image">
                                                     <a href="@Url.Action("Productsdetail","Home",new { id=@item.ProductId})"><img src="https://product.hstatic.net/1000104489/product/mi_spa_ban_lut_196f9793c75c460e81773e905cbf46f2.jpg" data-lazyload="https://product.hstatic.net/1000104489/product/mi_spa_ban_lut_196f9793c75c460e81773e905cbf46f2.jpg" alt="@item.ProductName"></a>
                                                     <div class="product-overlay">
-                                                        <a href="/products/thanh-ly-mi-spaghetti-ban-lut-huu-co-markal-500g" class="product_quick_add" data-toggle='tooltip' title='Thêm vào giỏ'><i class="fa fa-shopping-cart"></i><span class='hidden-md hidden-lg'> Thêm vào giỏ</span></a>
-                                                        <a href="#product-pop-up" onclick="Quick(@item.ProductId)" class="item-quick-view fancybox-fast-view hidden-sm hidden-xs" @*product_url="/products/thanh-ly-mi-spaghetti-ban-lut-huu-co-markal-500g"*@ data-toggle='tooltip' title='Xem nhanh'><i class="fa fa-eye"></i><span class='hidden-md hidden-lg'> Xem nhanh</span></a>
+                                                        <a href="javascript:void(0)" data-id="@item.ProductId" class="product_quick_add" data-toggle='tooltip' title='Thêm vào giỏ'><i class="fa fa-shopping-cart"></i><span class='hidden-md hidden-lg'> Thêm vào giỏ</span></a>
+                                                        <a href="#product-pop-up" onclick="Quick(@item.ProductId)" class="item-quick-view fancybox-fast-view hidden-sm hidden-xs"  data-toggle='tooltip' title='Xem nhanh'><i class="fa fa-eye"></i><span class='hidden-md hidden-lg'> Xem nhanh</span></a>
                                                     </div>
                                                 </div>
                                                 <div class="product-title">
@@ -119,12 +351,12 @@
                                                     <span>@item.ProductId</span>
                                                 </div>
                                                 <div class="product-desc">
-                                                    @if (item.Discount != null)
+                                                    @if (item.Discount > 0)
                                                     {
                                                         <div class="sale-flash">- @item.Discount%</div>
                                                     }
                                                     <div class="product-price">
-                                                        @if (item.Discount != null)
+                                                        @if (item.Discount > 0)
                                                         {
                                                             <del class="sale-price">
                                                                 @{
@@ -155,7 +387,7 @@
                                                         }
                                                     </div>
                                                     <div class="buy_all">
-                                                        <a class="product_quick_add" href="/products/thanh-ly-mi-spaghetti-ban-lut-huu-co-markal-500g">Mua Ngay</a>
+                                                        <a class="product_quick_add" data-id="@item.ProductId" href="javascript:void(0)">Mua Ngay</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -165,7 +397,7 @@
 
                                 </div>
                                 <div class='pagination_wrapper'>
-                                    @Html.PagedListPager(Model, page => Url.Action("Products", "Home", new { orderby = Request.QueryString["orderby"], listProviderID = @listCheck, page }))
+                                    @Html.PagedListPager(Model, page => Url.Action("Products", "Home", new { Sale = Request.QueryString["Sale"], orderby = Request.QueryString["orderby"], listProviderID = @listCheck, listPriceID = @PricesID, page }))
 
                                     <!-- BEGIN: AJAX-FILTER -->
                                     <script>
@@ -314,6 +546,7 @@
 
                                         /** align single element ***/
                                         $(document).ready(function () {
+
                                             align_single_element();
                                         });
                                         var align_single_element = function () {
@@ -327,19 +560,6 @@
                                     <!-- END: AJAX-FILTER -->
 
                                 </div>
-                                @*<script>
-                                               $(document).ready(function () {
-                                                   $.ajax({
-                                        url: '@Url.Action("ListProducts","Home",new { id=2})',
-                                        method: "GET"
-
-                                        , success: function (response) {
-                                            console.log(response)
-                                            $('#grid_pagination').html(response)
-                                        }
-                                    })
-                                               })
-                                            </script>*@
 
                             </div>
                         </div><!-- #shop end -->

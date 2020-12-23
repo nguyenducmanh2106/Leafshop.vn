@@ -1,0 +1,99 @@
+﻿@model Models.ViewModels.Cart
+@{
+    Layout = null;
+    var products = Model.products as List<Models.Models.DataModels.Product>;
+    var productsID = Model.productsId as List<int>;
+}
+
+@if (products != null)
+{
+    <div class="top-cart-title">
+        <h4>Giỏ hàng</h4>
+    </div>
+    <div class="top-cart-items">
+        @for (var i=0;i<products.Count;i++)
+        {
+            var item = products[i];
+            <div class="top-cart-item clearfix">
+                <input type="hidden" class="item_id" value="@item.ProductId" />
+                @{
+                    var vie = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+
+                    var price = item.Discount > 0 ? item.PriceOut - item.PriceOut * @item.Discount / 100 : @item.PriceOut;
+                }
+                @{
+                    var quantity = productsID.Where(x => x == item.ProductId).Count();
+                }
+                <input type="hidden" class="item_qty" value="@quantity" />
+                <input type="hidden" class="item_unit_price_not_formated" value="@price" />
+                <div class="top-cart-item-image">
+                    <a href="@Url.Action("Productsdetail","Home",new { id=item.ProductId})"><img src="//product.hstatic.net/1000104489/product/alphanova_bebe_creme_shampooing_bio_200ml_2017_small.jpg" alt="Dầu gội hữu cơ cho bé 2 trong 1 Alphanova Bebe 200ml" /></a>
+                </div>
+                <div class="top-cart-item-desc">
+                    <a href="@Url.Action("Productsdetail","Home",new { id=item.ProductId})">@item.ProductName</a>
+                    <span class="top-cart-item-price">
+                        @{
+
+                            var price1 = item.Discount > 0 ? item.PriceOut - item.PriceOut * @item.Discount / 100 : @item.PriceOut;
+                            var priceProduct = price1 * quantity;
+                        }
+                        @String.Format(vie, "{0:c00}", priceProduct)
+                    </span>
+                    <span class="top-cart-item-quantity" >x @quantity</span>
+                    <a class='top_cart_item_remove' data-id="@item.ProductId" href="javascript:void(0)">
+                        <i class='fa fa-times-circle'></i>
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+    
+    <div class="top-cart-action clearfix">
+        <span class="fleft top-checkout-price">
+            @{
+                var vie1 = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+                var total = products.Sum(item => (item.PriceOut - item.PriceOut * item.Discount / 100) * productsID.Where(productId => productId == item.ProductId).Count());
+            }
+            @String.Format(vie1, "{0:c00}", total)
+        </span>
+        <input type="hidden" class="top_cart_total_price_not_format" value="16740000" />
+        <button onclick='window.location.href="/cart"' class="button button-small nomargin fright">Xem giỏ hàng</button>
+    </div>
+}
+else
+{
+    <div> Chưa có sản phẩm trong giỏ!</div>
+}
+<script>
+    $(document).ready(function () {
+        //remove sp trong giỏ hàng trên thanh nav
+        $('.top_cart_item_remove').each(function () {
+            $(this).off('click').on('click', function () {
+                
+                var productId = $(this).attr('data-id');
+                productsId = productsId.filter(item => {
+                    return item != productId
+                })
+                var strId = productsId.join('-');
+                $.cookie('cart_token', strId, { path: '/', expires: 10 });
+                console.log(productsId)
+                $.ajax({
+                    'url': '/Cart/ViewQuick',
+                    'type': 'GET',
+                    'success': function (data) {
+                        //console.log(data);
+                        $('#viewCart').html(data);
+                    },
+                });
+                $.ajax({
+                    'url': '/Cart/TotalProduct',
+                    'type': 'GET',
+                    'success': function (data) {
+                        //console.log(data);
+                        $('#totalProducts').html(data);
+                    },
+                });
+            })
+        })
+    })
+</script>

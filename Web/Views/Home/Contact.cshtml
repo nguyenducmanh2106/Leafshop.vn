@@ -1,10 +1,12 @@
-﻿@model Models.Models.DataModels.Feedback
+﻿
 @{
     ViewBag.Title = "Liên hệ hỗ trợ";
     Layout = "~/Views/Shared/_Layout1.cshtml";
-    HttpCookie cookie = HttpContext.Current.Request.Cookies["InfoCustomer"];
-    var currentEmail = Request.Cookies["InfoCustomer"] != null ? @cookie["Email"] : "";
+    //HttpCookie cookie = HttpContext.Current.Request.Cookies["InfoCustomer"];
+    //var currentEmail = Request.Cookies["InfoCustomer"] != null ? @cookie["Email"] : "";
+
 }
+<!--Pop-up thông báo-->
 <!-- Content
 ============================================= -->
 <div class="zom_grr">
@@ -49,46 +51,87 @@
                     <div id="contact-form-result" data-notify-type="success" data-notify-msg="<i class=fa fa-check-circle></i> Message Sent Successfully!"></div>
 
                     <!--<form class="nobottommargin" id="template-contactform" name="template-contactform" action="include/sendemail.php" method="post">-->
-                    <form accept-charset='UTF-8' action='/contact' class='contact-form' method='post'>
-                        <input name='form_type' type='hidden' value='contact'>
-                        <input name='utf8' type='hidden' value='✓'>
+                    <form accept-charset='UTF-8' method="post">
+                        @*<input name='form_type' type='hidden' value='contact'>
+                            <input name='utf8' type='hidden' value='✓'>*@
 
 
                         <div class="form-process"></div>
 
                         <div class="col_one_third">
                             <label for="template-contactform-name">Tên <small class='require_symbol'>*</small></label>
-                            <input required type="text" id="template-contactform-name" name="contact[name]" value="" placeholder='Họ tên của bạn' class="sm-form-control required" />
+                            <input required type="text" id="template-contactform-name" name="Fullname" value="" placeholder='Họ tên của bạn' class="sm-form-control required" />
                         </div>
 
                         <div class="col_one_third">
                             <label for="template-contactform-email">Email <small class='require_symbol'>*</small></label>
-                            <input required type="email" id="template-contactform-email" name="contact[email]" value="" placeholder='Nhập email của bạn' class="required email sm-form-control" />
+                            <input required type="email" id="template-contactform-email" name="Email" value="" placeholder='Nhập email của bạn' class="required email sm-form-control" />
                         </div>
 
                         <div class="col_one_third col_last">
                             <label for="template-contactform-phone">Số điện thoại<small class='require_symbol'>*</small></label>
-                            <input required type="text" id="template-contactform-phone" name="contact[phone]" value="" placeholder='Nhập số điện thoại của bạn' class="sm-form-control" />
+                            <input required type="text" id="template-contactform-phone" name="Sdt" value="" placeholder='Nhập số điện thoại của bạn' class="sm-form-control" />
                         </div>
 
                         <div class="clear"></div>
 
                         <div class="col_full">
                             <label for="template-contactform-message">Viết bình luận <small class='require_symbol'>*</small></label>
-                            <textarea required class="required sm-form-control" id="template-contactform-message" name="contact[body]" rows="6" cols="30"></textarea>
+                            <textarea required class="required sm-form-control" id="template-contactform-message" name="Noidung" rows="6" cols="30"></textarea>
                         </div>
 
                         <div class="col_full">
-                            <button class="button nomargin" type="submit" id="template-contactform-submit" name="template-contactform-submit" value="submit">Gửi liên hệ</button>
+                            <button class="button nomargin" data-target="#staticBackdrop" data-toggle="modal" type="submit" id="template-contactform-submit">Gửi liên hệ</button>
                         </div>
 
-                        <input id='0ebf7cca413147d288a1f9cbffafcdda' name='g-recaptcha-response' type='hidden'>
-                        <script src='https://www.google.com/recaptcha/api.js?render=6LdD18MUAAAAAHqKl3Avv8W-tREL6LangePxQLM-'></script>
-                        <script>grecaptcha.ready(function() {grecaptcha.execute('6LdD18MUAAAAAHqKl3Avv8W-tREL6LangePxQLM-', {action: 'submit'}).then(function(token) {document.getElementById('0ebf7cca413147d288a1f9cbffafcdda').value = token;});});</script>
+
+
                     </form>
-                    <!-- </form>-->
+                    <!--Pop-up thông báo-->
+
+                    @if (Request.Form["Fullname"] != null)
+                    {
+                        <script type="text/javascript">
+                            $(document).ready(function () {
+                                    toastr.options = {
+                                  
+                                        "fadeIn": 300,
+                                        "fadeOut": 1000,
+                                        "timeOut": 5000,
+                                        "extendedTimeOut": 1000
+                                    }
+                                toastr.success('Gửi yêu cầu thành công!');
+                            });
+                           
+                        </script>
+                       
+                    }
 
                 </div><!-- .postcontent end -->
+                @*<script>
+                        $('#template-contactform-submit').click(function () {
+                            if ($('#template-contactform-name').val() && $('#template-contactform-email').val() && $('#template-contactform-phone').val()) {
+                                create()
+                            }
+
+                        })
+                        function create() {
+                            $.ajax({
+                                url: "/Home/Contact",
+                                method: "POST",
+                                data: {
+                                    "Fullname": $('#template-contactform-name').val(),
+                                    "Email": $('#template-contactform-email').val(),
+                                    "Sdt": $('#template-contactform-phone').val(),
+                                    "Noidung": $('#template-contactform-message').val()
+
+                                }
+                                , success: function (response) {
+                                    $('#staticBackdrop').attr('display', 'block !important')
+                                }
+                            });
+                        }
+                    </script>*@
                 <!-- Sidebar
                 ============================================= -->
                 <div class="sidebar col_last nobottommargin">
@@ -105,7 +148,6 @@
             </div>
 
         </div>
-
     </section><!-- #content end -->
     <style>
         h3 {
@@ -136,5 +178,3 @@
 </div>
 
 <!-- #content end -->
-
-

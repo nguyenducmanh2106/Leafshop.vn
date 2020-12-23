@@ -10,7 +10,7 @@ namespace Models
         public MobileShopContext()
             : base("name=MobileShopContext")
         {
-            Database.SetInitializer(new MigrateDatabaseToLatestVersion<MobileShopContext, Migrations.Configuration>("MobileShopContext"));
+            //Database.SetInitializer(new MigrateDatabaseToLatestVersion<MobileShopContext, Migrations.Configuration>("MobileShopContext"));
         }
 
         public virtual DbSet<Customer> Customers { get; set; }
@@ -31,6 +31,9 @@ namespace Models
         public virtual DbSet<News> News { get; set; }
         public virtual DbSet<Banner> Banners { get; set; }
         public virtual DbSet<Feedback> Feedbacks { get; set; }
+        public virtual DbSet<Contact> Contacts { get; set; }
+
+      
 
 
         //self category

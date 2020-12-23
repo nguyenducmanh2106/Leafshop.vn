@@ -5,7 +5,7 @@
     var products = ViewData["products"] as List<Product>;
     var listCheck = Request.QueryString["listProviderID"];
     string Checks = "-1";
-    
+
     if (listCheck != null)
     {
         Checks = listCheck.Replace("%2C", ",");
@@ -13,6 +13,7 @@
 
     var list = Checks.Split(',').Select(Int64.Parse).ToList();
 
+    var pricesID = Request.QueryString["listPriceID"];
 }
 <!-- begin: filters -->
 
@@ -42,7 +43,7 @@
                 <li class="">
                     <a href="@url" class="one1">
                         @item.CategoryName@if (url == "javascript:void(0)")
-                    {<i class="fa fa-angle-right right-icon " aria-hidden="true"></i>}
+                        {<i class="fa fa-angle-right right-icon " aria-hidden="true"></i>}
                     </a>
                     <ul class="lv2">
                         @foreach (var item1 in Model)
@@ -201,9 +202,10 @@
 <div class="panel-group filter_group">
     <div class="panel panel-default">
         <div class="panel-heading">
+
             <a href="javascrip:0">
                 <h4 class="panel-title">
-                    LỌC SẢN PHẨM<!--<i class='fa fa-angle-down'></i>-->
+                    LỌC SẢN PHẨM@*<i class='fa fa-angle-down' ></i>*@
                 </h4>
             </a>
         </div>
@@ -258,9 +260,10 @@
             <script>
                 var TH=$('#thuonghieu')
                 var listId = []
-                var idCategory = $('#idCategory').val();
+                var idCategory = $('#idCategory').val() != "unknown" ? $('#idCategory').val():-1;
+
                 TH.find('input[data-type="checkAll"]').each(function () {
-                    $(this).click(function () {
+                    $(this).off('click').click(function () {
                         listId = []
                         TH.find('input:checkbox').not(this).prop('checked', this.checked);
                         TH.find('input[type="checkbox"]').each(function () {
@@ -268,19 +271,18 @@
                             if ($(this).is(":checked")) {
                                 if (dataId != undefined) {
                                     listId.push(dataId);
-                                    console.log(listId)
-                                    deleteAll()
                                 }
                             }
                             else {
                                 var index = listId.indexOf(dataId);
                                 if (index > -1) {
                                     listId.splice(index, 1);
-                                    deleteAll()
                                 }
-                                console.log(listId)
+
                             }
                         })
+                        //deleteAll()
+                        console.log(listId)
                     })
                 })
                 TH.find('input[type="checkbox"]').each(function () {
@@ -290,25 +292,29 @@
                             if ($(this).is(":checked")) {
                                 listId.push(dataId);
                                 console.log(listId)
-                                deleteAll()
+
+                                //deleteAll()
+
                             }
                             else {
                                 var index = listId.indexOf(dataId);
                                 if (index > -1) {
                                     listId.splice(index, 1);
-                                    deleteAll()
+
+                                    //deleteAll()
+
                                 }
                                 console.log(listId)
                             }
                         })
                     }
                 })
-
+                //dùng nếu gọi ajax luôn
                 function deleteAll() {
                     var data = listId.toString();
                     if (data.length != 0) {
                         $.ajax({
-                            url: `/Home/ListProducts/?id=${idCategory}&orderby=@Request.QueryString["orderby"]`,
+                            url: `/Home/ListProducts/?id=${idCategory}&Sale=@Request.QueryString["Sale"]&orderby=@Request.QueryString["orderby"]`,
                             method: "GET",
                             data: {
                                 listProviderID:
@@ -324,6 +330,7 @@
                         console.log("Bạn chưa chọn hiện vật để xóa")
                     }
                 }
+
             </script>
 
             <!-- END: Vendor filter -->
@@ -333,57 +340,303 @@
             <!-- END: Color filter -->
             <!-- BEGIN: Price filter -->
 
-            <div class="widget_links clearfix">
+            <div class="widget_links clearfix" id="price_filter">
                 <a href='#filter_group_4' data-toggle='collapse'><h4>Giá<i class='fa-angle-down fa'></i></h4></a>
                 <ul id='filter_group_4' class='panel-collapse collapse in filter_list'>
-                    <li>
-                        <label class='filter_checkbox'>
-                            <span>
-                                <input class="price" type="checkbox" value="(price:product<=100000)">
-                            </span>
-                            dưới 100,000₫
-                        </label>
-                    </li>
-                    <li>
-                        <label class='filter_checkbox'>
-                            <span>
-                                <input class="price" type="checkbox" value="((price:product>=100000)&&(price:product<=300000))">
-                            </span>
-                            100,000₫ - 300,000₫
-                        </label>
-                    </li>
-                    <li>
-                        <label class='filter_checkbox'>
-                            <span>
-                                <input class="price" type="checkbox" value="((price:product>=300000)&&(price:product<=500000))">
-                            </span>
-                            300,000₫ - 500,000₫
-                        </label>
-                    </li>
-                    <li>
-                        <label class='filter_checkbox'>
-                            <span>
-                                <input class="price" type="checkbox" value="((price:product>=500000)&&(price:product<=1000000))">
-                            </span>
-                            500,000₫ - 1,000,000₫
-                        </label>
-                    </li>
-                    <li>
-                        <label class='filter_checkbox'>
-                            <span>
-                                <input class="price" type="checkbox" value="(price:product>=1000000)">
-                            </span>
-                            trên 1,000,000₫
-                        </label>
-                    </li>
+                    @switch (pricesID)
+                    {
+
+                        case "1":
+                            <li>
+                                <label class='filter_checkbox'>
+                                    <span>
+                                        <input class="price" type="radio" data-id-box="-1" name="price">
+                                    </span>
+                                    Tất cả
+                                </label>
+                            </li>
+                            <li>
+                                <label class='filter_checkbox'>
+                                    <span>
+                                        <input class="price" type="radio" data-id-box="1" checked name="price">
+                                    </span>
+                                    dưới 100,000₫
+                                </label>
+                            </li>
+                            <li>
+                                <label class='filter_checkbox'>
+                                    <span>
+                                        <input class="price" type="radio" data-id-box="2" name="price">
+                                    </span>
+                                    100,000₫ - 300,000₫
+                                </label>
+                            </li>
+                            <li>
+                                <label class='filter_checkbox'>
+                                    <span>
+                                        <input class="price" type="radio" data-id-box="3" name="price">
+                                    </span>
+                                    300,000₫ - 500,000₫
+                                </label>
+                            </li>
+                            <li>
+                                <label class='filter_checkbox'>
+                                    <span>
+                                        <input class="price" type="radio" data-id-box="4" name="price">
+                                    </span>
+                                    Trên 500,000₫
+                                </label>
+                            </li>
+                            break;
+                        case "2":
+                            <li>
+                                <label class='filter_checkbox'>
+                                    <span>
+                                        <input class="price" type="radio" data-id-box="-1" name="price">
+                                    </span>
+                                    Tất cả
+                                </label>
+                            </li>
+                            <li>
+                                <label class='filter_checkbox'>
+                                    <span>
+                                        <input class="price" type="radio" data-id-box="1" name="price">
+                                    </span>
+                                    dưới 100,000₫
+                                </label>
+                            </li>
+                            <li>
+                                <label class='filter_checkbox'>
+                                    <span>
+                                        <input class="price" type="radio" data-id-box="2" checked name="price">
+                                    </span>
+                                    100,000₫ - 300,000₫
+                                </label>
+                            </li>
+                            <li>
+                                <label class='filter_checkbox'>
+                                    <span>
+                                        <input class="price" type="radio" data-id-box="3" name="price">
+                                    </span>
+                                    300,000₫ - 500,000₫
+                                </label>
+                            </li>
+                            <li>
+                                <label class='filter_checkbox'>
+                                    <span>
+                                        <input class="price" type="radio" data-id-box="4" name="price">
+                                    </span>
+                                    Trên 500,000₫
+                                </label>
+                            </li>
+                            break;
+                        case "3":
+                            <li>
+                                <label class='filter_checkbox'>
+                                    <span>
+                                        <input class="price" type="radio" data-id-box="-1" name="price">
+                                    </span>
+                                    Tất cả
+                                </label>
+                            </li>
+                            <li>
+                                <label class='filter_checkbox'>
+                                    <span>
+                                        <input class="price" type="radio" data-id-box="1" name="price">
+                                    </span>
+                                    dưới 100,000₫
+                                </label>
+                            </li>
+                            <li>
+                                <label class='filter_checkbox'>
+                                    <span>
+                                        <input class="price" type="radio" data-id-box="2" name="price">
+                                    </span>
+                                    100,000₫ - 300,000₫
+                                </label>
+                            </li>
+                            <li>
+                                <label class='filter_checkbox'>
+                                    <span>
+                                        <input class="price" type="radio" data-id-box="3" checked name="price">
+                                    </span>
+                                    300,000₫ - 500,000₫
+                                </label>
+                            </li>
+                            <li>
+                                <label class='filter_checkbox'>
+                                    <span>
+                                        <input class="price" type="radio" data-id-box="4" name="price">
+                                    </span>
+                                    Trên 500,000₫
+                                </label>
+                            </li>
+                            break;
+                        case "4":
+                            <li>
+                                <label class='filter_checkbox'>
+                                    <span>
+                                        <input class="price" type="radio" data-id-box="-1" name="price">
+                                    </span>
+                                    Tất cả
+                                </label>
+                            </li>
+                            <li>
+                                <label class='filter_checkbox'>
+                                    <span>
+                                        <input class="price" type="radio" data-id-box="1" name="price">
+                                    </span>
+                                    dưới 100,000₫
+                                </label>
+                            </li>
+                            <li>
+                                <label class='filter_checkbox'>
+                                    <span>
+                                        <input class="price" type="radio" data-id-box="2" name="price">
+                                    </span>
+                                    100,000₫ - 300,000₫
+                                </label>
+                            </li>
+                            <li>
+                                <label class='filter_checkbox'>
+                                    <span>
+                                        <input class="price" type="radio" data-id-box="3" name="price">
+                                    </span>
+                                    300,000₫ - 500,000₫
+                                </label>
+                            </li>
+                            <li>
+                                <label class='filter_checkbox'>
+                                    <span>
+                                        <input class="price" type="radio" data-id-box="4" checked name="price">
+                                    </span>
+                                    Trên 500,000₫
+                                </label>
+                            </li>
+                            break;
+                        default:
+                            <li>
+                                <label class='filter_checkbox'>
+                                    <span>
+                                        <input class="price" type="radio" data-id-box="-1" checked name="price">
+                                    </span>
+                                    Tất cả
+                                </label>
+                            </li>
+                            <li>
+                                <label class='filter_checkbox'>
+                                    <span>
+                                        <input class="price" type="radio" data-id-box="1" name="price">
+                                    </span>
+                                    dưới 100,000₫
+                                </label>
+                            </li>
+                            <li>
+                                <label class='filter_checkbox'>
+                                    <span>
+                                        <input class="price" type="radio" data-id-box="2" name="price">
+                                    </span>
+                                    100,000₫ - 300,000₫
+                                </label>
+                            </li>
+                            <li>
+                                <label class='filter_checkbox'>
+                                    <span>
+                                        <input class="price" type="radio" data-id-box="3" name="price">
+                                    </span>
+                                    300,000₫ - 500,000₫
+                                </label>
+                            </li>
+                            <li>
+                                <label class='filter_checkbox'>
+                                    <span>
+                                        <input class="price" type="radio" data-id-box="4" name="price">
+                                    </span>
+                                    Trên 500,000₫
+                                </label>
+                            </li>
+                            break;
+                    }
+
                 </ul>
+
 
                 <div class="mfj">
                     <a class="view_sss view_ops" href="javascript:0">Xem Thêm</a>
                     <a class="view_smalls view_ops" href="javascript:0">Thu Nhỏ</a>
                 </div>
             </div>
+            <div class="widget_links clearfix" id="mjk">
 
+                <h4 style="cursor:pointer">Lọc</h4>
+
+
+            </div>
+            <style>
+                #mjk:hover {
+                    background: #ff9900
+                }
+            </style>
+            <script>
+                var TH1 = $('#price_filter')
+                var listIdPice = "-1";
+                    var idCategory = $('#idCategory').val() != "unknown" ? $('#idCategory').val():-1;
+                    TH1.find('input[type="radio"]').click(function () {
+                        var dataId1 = $(this).attr("data-id-box");
+                        console.log($(this).attr("data-id-box"))
+                        if ($(this).is(":checked")) {
+                            listIdPice=dataId1;
+                            console.log(listIdPice)
+
+                        //FilterPrice()
+
+                        }
+                    })
+                //dùng nếu gọi luôn ajax
+                function FilterPrice() {
+                        var data2 = listIdPice.toString();
+                        if (data2 != "") {
+                        $.ajax({
+                            url: `/Home/ListProducts/?id=${idCategory}&Sale=@Request.QueryString["Sale"]&orderby=@Request.QueryString["orderby"]`,
+                            method: "GET",
+                            data: {
+                                listPriceID:
+                                    data2
+                            }
+                            , success: function (response) {
+
+                                $('#grid_pagination').html(response)
+                            }
+                            })
+                    }
+                        else {
+                        console.log("Bạn chưa chọn hiện vật để xóa")
+                        }
+                    }
+
+            </script>
+            <script>
+                   function Filter() {
+                     $.ajax({
+                        url: `/Home/ListProducts/?id=${idCategory}&Sale=@Request.QueryString["Sale"]&orderby=@Request.QueryString["orderby"]`,
+                            method: "GET",
+                         data: {
+                            listProviderID: listId.toString().length != 0 ? listId.toString() : "-1",
+                                listPriceID:
+                                listIdPice
+
+                            }
+                            , success: function (response) {
+
+                                $('#grid_pagination').html(response)
+                            }
+                        })
+                }
+                $('#mjk').click(function () {
+                        Filter()
+                })
+
+            </script>
             <!-- END: Price filter -->
             <!-- BEGIN: Tag_Custom_1 filter -->
             <!-- END: Tag_Custom_1 filter -->
@@ -517,7 +770,7 @@
                         </div>
                         <ul class="entry-meta">
                             <li class="color">
-                                @if (item.Discount != null)
+                                @if (item.Discount > 0)
                                 {
                                     <del class="sale-price">
                                         @{

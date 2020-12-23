@@ -42,19 +42,13 @@
                     <div class="sidebar nobottommargin left-sidebar col-sm-3 hidden-xs hidden-sm">
                         <div class="sidebar-widgets-wrap">
 
-                            @{Html.RenderAction("Categories", "Home");}
+                            @{Html.RenderAction("CategoryProductDetail", "Home",new { idProductPresent = Model.ProductId });}
 
                             <div class="widget clearfix" style='overflow:hidden'>
-
-
-
                                 <div style="width: 100%;">
                                     <!-- Page plugin's width will be 180px -->
                                     <div class="fb-page" data-href="https://www.facebook.com/leafshop.vn/" data-width="320"></div>
                                 </div>
-
-
-
                                 <script>
                                     (function (d, s, id) {
                                         var js, fjs = d.getElementsByTagName(s)[0];
@@ -65,8 +59,6 @@
                                     }(document, 'script', 'facebook-jssdk'));
                                 </script>
                             </div>
-
-
                         </div>
                     </div>
                     <div class='product-page col-md-9'>
@@ -196,7 +188,7 @@
 
                                             <div class="product-price col-sm-12 col-md-12 noleftpadding">
 
-                                                @if (Model.Discount != null)
+                                                @if (Model.Discount >0)
                                                 {
                                                     <del class="sale-price">
                                                         @{
@@ -304,9 +296,9 @@
                                             </script>
 
 
-                                            <button type="submit" id='' class="add-to-cart button nomargin col-xs-12 col-md-6 nopadding" style="height: 40px !important; width: 50% !important; padding: 0 !Important">Thêm vào giỏ</button>
+                                            <button type="button" data-id="@Model.ProductId" class="product_quick_add add-to-cart button nomargin col-xs-12 col-md-6 nopadding" style="height: 40px !important; width: 50% !important; padding: 0 !Important">Thêm vào giỏ</button>
 
-                                            <button type="submit" id='' class="button col-xs-12 nopadding buynow">Mua ngay</button>
+                                            <button type="submit" data-id="@Model.ProductId" id='muangay' class="button col-xs-12 nopadding buynow">Mua ngay</button>
 
 
 
@@ -330,12 +322,10 @@
 
                                                     <ul class="social-icons">
                                                         <!-- check null: == nill -->
-                                                        <div class="fb-send" data-href="/products/thanh-ly-mi-spaghetti-ban-lut-huu-co-markal-500g"></div>
+                                                        <div class="fb-send" data-href="@Url.Action("Productsdetail","Home",new { id=Model.ProductId})"></div>
                                                         <div class="item">
-                                                            <div class="fb-like fix_top" data-href="/products/thanh-ly-mi-spaghetti-ban-lut-huu-co-markal-500g" data-layout="button" data-action="like" data-show-faces="true" data-share="true" style='margin-right: 5px;'></div>
+                                                            <div class="fb-like fix_top" data-href="@Url.Action("Productsdetail","Home",new { id=Model.ProductId})" data-layout="button" data-action="like" data-show-faces="true" data-share="true" style='margin-right: 5px;'></div>
                                                         </div>
-
-                                                        <!-- old style: <li><a class="facebook" data-original-title="facebook" href="#"></a></li>   ...twitter,googleplus,evernote,tumblr -->
 
                                                         <script>
                                                             (function () {

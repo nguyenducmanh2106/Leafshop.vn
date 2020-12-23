@@ -27,7 +27,7 @@ namespace Models.Models.DataModels
         public double PriceOut { get; set; }
 
         [DisplayName("Giảm giá")]
-        public int? Discount { get; set; }//giảm giá
+        public int Discount { get; set; } = 0;//giảm giá
 
         [DisplayName("Số lượng")]
         [Required(ErrorMessage = "Vui lòng nhập số lượng")]

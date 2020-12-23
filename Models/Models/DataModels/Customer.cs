@@ -14,7 +14,7 @@ namespace Models.Models.DataModels
         public int CustomerId { get; set; }
 
         [DisplayName("Tên người dùng")]
-        [Required(ErrorMessage ="Vui lòng nhập Họ Tên")]
+        [Required(ErrorMessage = "Vui lòng nhập Họ Tên")]
         public string FullName { get; set; }
         public string Password { get; set; }
         [DisplayName("Địa chỉ Email")]
@@ -29,10 +29,10 @@ namespace Models.Models.DataModels
 
         [DisplayName("Ngày Sinh")]
         [DataType(DataType.Date)]
-        [DateMinimumAge(18)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{dd/MM/yyyy}")]
+        //[DateMinimumAge(18)]
+        //[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{dd/MM/yyyy}")]
         public DateTime DateofBirth { get; set; }
-        
+
         public DateTime? ExpiredTime { get; set; }
 
         [DisplayName("Giới tính")]
@@ -45,32 +45,36 @@ namespace Models.Models.DataModels
         public System.Guid ActiveCode { get; set; }
 
         public string ResetPasswordCode { get; set; }
+        public string Tinh { get; set; }
+        public string Huyen { get; set; }
+        public int TinhId { get; set; }
+        public int HuyenId{get;set;}
     }
 
-    public class DateMinimumAgeAttribute : ValidationAttribute
-    {
-        public DateMinimumAgeAttribute(int minimumAge)
-        {
-            MinimumAge = minimumAge;
-            ErrorMessage = "Yêu cầu {1} tuổi trở lên.";
-        }
+    //public class DateMinimumAgeAttribute : ValidationAttribute
+    //{
+    //    public DateMinimumAgeAttribute(int minimumAge)
+    //    {
+    //        MinimumAge = minimumAge;
+    //        ErrorMessage = "Yêu cầu {1} tuổi trở lên.";
+    //    }
 
-        public override bool IsValid(object value)
-        {
-            DateTime date;
-            if ((value != null && DateTime.TryParse(value.ToString(), out date)))
-            {
-                return date.AddYears(MinimumAge) < DateTime.Now;
-            }
+    //    public override bool IsValid(object value)
+    //    {
+    //        DateTime date;
+    //        if ((value != null && DateTime.TryParse(value.ToString(), out date)))
+    //        {
+    //            return date.AddYears(MinimumAge) < DateTime.Now;
+    //        }
 
-            return false;
-        }
+    //        return false;
+    //    }
 
-        public override string FormatErrorMessage(string name)
-        {
-            return string.Format(ErrorMessageString, name, MinimumAge);
-        }
+    //    public override string FormatErrorMessage(string name)
+    //    {
+    //        return string.Format(ErrorMessageString, name, MinimumAge);
+    //    }
 
-        public int MinimumAge { get; }
-    }
+    //    public int MinimumAge { get; }
+    //}
 }

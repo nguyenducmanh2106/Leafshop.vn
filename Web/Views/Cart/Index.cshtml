@@ -1,188 +1,198 @@
-﻿@{
+﻿@model Models.ViewModels.Cart
+
+@{
     ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+    var products = Model.products as List<Models.Models.DataModels.Product>;
+    var productsID = Model.productsId as List<int>;
 }
-<div class="main-css-fluid">
-    <section class="main-css padding-config">
-        <div class="main-container">
-            <!--START MAIN RIGHT -->
-            <div class="main-right woo-control-right fr">
-                <div class="page-control-right">
-                    <div class="page-woo-css">
-                        <div class="rdfa_breadcrumb-fluid">
-                            <div class="rdfa_breadcrumb">
-                            </div>
+<!-- Page Title
+============================================= -->
+<section id="page-title">
+    <div class="container clearfix">
+        <ol class="breadcrumb col-md-6 col-sm-6">
+            <li><a href="/">Trang chủ</a></li>
+            <li class='active'>Giỏ hàng</li>
+        </ol>
+    </div>
+</section>
+<!-- #page-title end -->
+<section id="content">
+    <div class="content-wrap">
+        <div class="container clearfix">
+            @if (Model.productsId != null && Model.products != null)
+            {
+                <form action="/cart" method="post" id="cartformpage">
+                    <div class="cart">
+                        <div class='thead row hidden-xs'>
+                            <div class="col-sm-1 td cart-product-thumbnail">Sản phầm</div>
+                            <div class="col-sm-4 td cart-product-name">Mô tả</div>
+                            <div class="col-sm-2 td cart-product-price">Đơn giá</div>
+                            <div class="col-sm-2 td cart-product-quantity">Số lượng</div>
+                            <div class="col-sm-2 td cart-product-subtotal">Thành tiền</div>
+                            <div class="col-sm-1 td cart-product-remove">Xoá</div>
                         </div>
-                        <div class="clear"></div>
-                        <h1>Giỏ hàng</h1>
-                        <div class="img-responsive">
-                            <div class="woocommerce rel_table_cart">
-                                @using (Html.BeginForm("UpdateQuantity", "Cart", FormMethod.Post, new { @id = "formsubmit" }))
-                                {
-                                    <table id="reload_table_cart" class="shop_table shop_table_responsive cart l_current_tb_cart" cellspacing="0">
-                                        @if (String.IsNullOrEmpty(ViewBag.cartnull))
-                                        {
-                                            <thead class="l_current_thead_cart">
-                                                <tr>
-                                                    <th class="product-remove">&nbsp;</th>
-                                                    <th class="product-thumbnail">&nbsp;</th>
-                                                    <th class="product-name">Sản phẩm</th>
-                                                    <th class="product-price">Giá</th>
-                                                    <th class="product-quantity">Số lượng</th>
-                                                    <th class="product-subtotal">Tổng cộng</th>
-                                                    <th class="product-subtotal">Tổng cộng</th>
-                                                </tr>
-                                            </thead>
-                                        }
-                                        else
-                                        {
-                                            <tr>
-                                                <td>
-                                                    @ViewBag.cartnull
-                                                </td>
-                                                <td class="actions">
-                                                    <a href="@Url.Action("Index", "Home")">Trang chủ</a>
-                                                </td>
-                                            </tr>
-                                        }
-                                        <tbody id="cartView"></tbody>
-                                    </table>
-                                }
+                        <div class='tbody'>
+                            @foreach (var item in products)
+                            {
+                                <div class="row cart_item">
+                                    <div class="td col-sm-1 cart-product-thumbnail">
+                                        <a href="@Url.Action("Productsdetail","Home",new { id=item.ProductId})"><img src="//product.hstatic.net/1000104489/product/dau_hao_chay_huu_co_229437fc5fc24694b99b31a1e6b28dfa_small.jpg" alt="Dầu hào chay hữu cơ"></a>
+                                    </div>
+
+                                    <div class="td col-sm-4 cart-product-name">
+                                        <a href="@Url.Action("Productsdetail","Home",new { id=item.ProductId})">
+                                            @item.ProductName
+                                        </a>
+                                        <p style='margin-bottom: 0;'>Default Title</p>
+                                    </div>
+
+                                    <div class="td col-sm-2 cart-product-price">
+                                        <span class="amount">
+                                            @{
+                                                var vie = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+                                                var price = item.Discount > 0 ? item.PriceOut - item.PriceOut * @item.Discount / 100 : @item.PriceOut;
+                                            }
+                                            @String.Format(vie, "{0:c00}", price)
+                                        </span>
+                                    </div>
+
+                                    <div class="td col-sm-2 cart-product-quantity">
+                                        <div class="quantity clearfix">
+                                            @{
+                                                var quantity = productsID.Where(x => x == item.ProductId).Count();
+                                            }
+                                            <input type="number" name="updates[]" min="1" data-id="@item.ProductId" value="@quantity" class="qty" id='product-quantity2updates_1065040234' />
+                                        </div>
+                                    </div>
+
+                                    <div class="td col-sm-2 cart-product-subtotal">
+                                        <span class="amount">
+                                            @{
+
+                                                var prices = price * quantity;
+                                            }
+                                            @String.Format(vie, "{0:c00}", prices)
+                                        </span>
+                                    </div>
+
+                                    <div class="td col-sm-1 cart-product-remove">
+                                        <a href="javascript:void(0)" data-id="@item.ProductId" class="remove" title="Remove this item"><i class="fa fa-trash-o"></i></a>
+                                    </div>
+
+                                </div>
+
+                            }
+                            <div class='row total_price'>
+                                <div class='col-sm-2 col-xs-6 td col-sm-push-7'><h4 class='nomargin'>Tổng tiền </h4></div>
+                                <div class='col-md-3 col-xs-6 td col-sm-push-7'>
+                                    <span class="amount color lead">
+                                        <strong>
+                                            @{
+                                                var vie1 = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+                                                var total = products.Sum(item => (item.PriceOut - item.PriceOut * item.Discount / 100) * productsID.Where(productId => productId == item.ProductId).Count());
+                                            }
+                                            @String.Format(vie1, "{0:c00}", total)
+                                        </strong>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div class="row clearfix">
+                        <div class="col-md-6 col-sm-6 col-xs-12 nopadding">
+                            <div class="checkout-buttons clearfix">
+                                <label for="note">Ghi chú </label>
+                                <textarea style='height:85px' id="note" class='sm-form-control' name="note" rows="8" cols="50"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-12 topmargin nopadding">
+                            <button name="update" id="update" class="cart_update_btn button button-3d nomargin fright">Cập nhật giỏ hàng</button>
+                            <button name='checkout' class="cart_checkout_btn button button-3d notopmargin fright">Thanh toán</button>
+                        </div>
+                    </div>
+                </form>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <p>Không có sản phẩm nào trong giỏ hàng</p>
+                    <a href="/"><i class="fa fa-undo"></i> Tiếp tục mua hàng</a>
                 </div>
-            </div>
-            <!--END MAIN RIGHT -->
-            <!--START MAIN LEFT -->
-            @{Html.RenderAction("Mainleft", "Home");}
-            <!--END MAIN LEFT -->
+            }
         </div>
-        <!--END MAIN CONTAINER -->
-    </section>
-</div>
 
-<div class="modal fade" id="modelDelete">
-    <div class="modal-dialog modal-sm">
-        <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-body">
-                <h4 class="modal-title text-danger bold">Thông báo</h4>
-            </div>
-
-            <!-- Modal body -->
-            <div class="modal-body text-success">
-                Bạn chắc chắn muốn bỏ sản phẩm này?
-            </div>
-
-            <!-- Modal footer -->
-            <div class="modal-footer col-auto">
-                <button id="confirmdelete" type="button" class="btn btn-info">Có</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Không</button>
-            </div>
-
-        </div>
     </div>
-</div>
-@section datatable{
-    <script src="~/Areas/Admin/Assets/plugins/bower_components/jquery/dist/jquery.min.js"></script>
-    <!-- Bootstrap Core JavaScript -->
-    <script src="~/Areas/Admin/Assets/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="~/Areas/Admin/Assets/js/notify.min.js" charset="utf-8"></script>
-    <script>
-        $(document).ready(function () {
-            function GetAll() {
-                $.ajax({
-                    type: "GET",
-                    url: "@Url.Action("GetallCart", "Cart")",
-                    success: function (res) {
-                        $("#cartView").html(res);
+</section>
+<script type="text/javascript">
+    var arr = $.cookie('cart_token') ? $.cookie('cart_token').split('-') : [];
+    $(document).ready(function () {
+        $('.qty').each(function () {
+            $(this).on('change', function () {
+                arr = []
+                $('.qty').each(function () {
+                    var id = $(this).attr('data-id')
+                    var value = $(this).val();
+                    for (var i = 0; i < value; i++) {
+                        arr.push(id)
                     }
                 })
-            }
-            GetAll();
-            function validateForm() {
-
-                var z = document.getElementById("Quantity").value
-
-                if (!/^[0-9]+$/.test(z)) {
-                    alert("Vui lòng chọn số hợp lệ")
-                    GetAll();
-                }
-
-            }
-            //test update
-            $(document).on('click','._update_cart', function (e) {
-                e.preventDefault();
-                validateForm();
-                var carId = $(this).data("id");
-                var qty = $("#Quantity").val();
-                if (qty >= 0 || id != undefined) {
-                    $.ajax({
-                        type: "post",
-                        url: "@Url.Action("UpdateQuantity","Cart")",
-                        data: { id: carId, quantity: qty },
-                        dataType: "JSON",
-
-                        success: function (res) {
-                            if (res.success) {
-                                $('.notifyjs-wrapper').remove();
-                                $.notify(res.success, {
-                                    globalPosition: "top center",
-                                    className: "success",
-                                })
-                                GetAll();
-                            } else {
-                                $('.notifyjs-wrapper').remove();
-                                $.notify(res.error, {
-                                    globalPosition: "top center",
-                                    className: "error",
-                                })
-                            }
-                        }
-                    })
-                }
-            })
-            //Showmodel delete
-            var id;
-            $(document).on('click', 'a.remove-cart-product', function (e) {
-                e.preventDefault();
-                id = $(this).data("product_id");
-                $("#modelDelete").modal('show');
-            });
-            //Confirm delete
-            $(document).on('click', '#confirmdelete', function () {
-                if (id != undefined) {
-                    $.ajax({
-                        type: "POST",
-                        url: "@Url.Action("Delete","Cart")",
-                        data: { id: id },
-                        success: function (res) {
-                            if (res.success) {
-                                $(".rel_table_cart").load("@Url.Action("Index","Cart") .l_current_tb_cart");
-                                $(".card_content_load").load("@Url.Action("Index","Cart") .card_content_load_pvagain");
-                                $.notify(res.success, {
-                                    globalPosition: "top center",
-                                    className: "success",
-                                })
-                                GetAll();
-                                $("#modelDelete").modal('hide');
-                            } else {
-                                $.notify(res.error, {
-                                    globalPosition: "top center",
-                                    className: "error",
-                                })
-                            }
-                        }
-                    })
-                } else {
-                    $.notify("Không tìm thấy sản phẩm", {
-                        globalPosition: "top center",
-                        className: "error",
-                    })
-                }
+                console.log(arr)
+                var strId = arr.join('-');
+                $.cookie('cart_token', strId, { path: '/', expires: 10 });
+                $.ajax({
+                    'url': '/Cart/ViewQuick',
+                    'type': 'GET',
+                    'success': function (data) {
+                        //console.log(data);
+                        $('#viewCart').html(data);
+                    },
+                });
+                $.ajax({
+                    'url': '/Cart/TotalProduct',
+                    'type': 'GET',
+                    'success': function (data) {
+                        //console.log(data);
+                        $('#totalProducts').html(data);
+                    },
+                });
             })
         })
-    </script>
-}
+        //remove sp trong giỏ hàng trên thanh nav
+        $('.remove').each(function () {
+            $(this).off('click').on('click', function () {
+               
+                var productId = $(this).attr('data-id');
+                productsId = productsId.filter(item => {
+                    return item != productId
+                })
+                var strId = productsId.join('-');
+                $.cookie('cart_token', strId, { path: '/', expires: 10 });
+                console.log(productsId);
+              
+                $.ajax({
+                    'url': '/Cart/ViewQuick',
+                    'type': 'GET',
+                    'success': function (data) {
+                        //console.log(data);
+                        $('#viewCart').html(data);
+                    },
+                });
+                $.ajax({
+                    'url': '/Cart/TotalProduct',
+                    'type': 'GET',
+                    'success': function (data) {
+                        //console.log(data);
+                        $('#totalProducts').html(data);
+                    },
+                });
+                window.location.reload();
+
+            })
+        })
+        $('#update').off('click').on('click', function () {
+            window.location.reload()
+        })
+    })
+</script>
+<!-- #content end -->
