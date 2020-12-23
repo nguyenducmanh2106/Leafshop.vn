@@ -157,9 +157,15 @@
                             }
                             @Html.ValidationMessageFor(model => model.ProductAttrs, "", new { @class = "text-danger" })
                         </div>
+                        <!--<div class="col-md-12">-->
                         <div class="col-md-12">
-                            <!--Ảnh sản phẩm-->
                             <div class="form-group">
+                                <label> ảnh</label>
+                                <input type="file" name="Image" id="Image" />
+                            </div>
+                        </div>
+                            <!--Ảnh sản phẩm-->
+                            <!--<div class="form-group">
                                 <label class="">Ảnh sản phẩm</label>
                                 <div class="">
                                     <div class="fileinput input-group" data-provides="fileinput">
@@ -176,9 +182,9 @@
                                     @Html.ValidationMessageFor(model => model.FeatureImage, "", new { @class = "text-danger" })
                                 </div>
                                 <div class="show-ckfilder-FeatureImage"></div>
-                            </div>
+                            </div>-->
                             <!--Nhiều ảnh-->
-                            <div class="form-group">
+                            <!--<div class="form-group">
                                 <label class="">Thêm ảnh sản phẩm</label>
                                 <div class="">
                                     <div class="fileinput input-group" data-provides="fileinput">
@@ -195,7 +201,7 @@
                                 </div>
                                 <div class="show-ckfilder-Images"></div>
                             </div>
-                        </div>
+                        </div>-->
                         <div class="col-md-12">
                             <div class="form-group has-children">
                                 <label for="textarea" class="control-label">Mô tả ngắn</label>
