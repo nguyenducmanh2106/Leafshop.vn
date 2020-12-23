@@ -26,7 +26,10 @@
             <div class="form-group">
                 <label class="col-md-12">Ảnh dại diện tin tức</label>
                 <div class="col-md-12">
-                    <div class="fileinput input-group" data-provides="fileinput">
+                    <div class="form-control">
+                        <input type="file" name="file"/>
+                    </div>
+                    @*<div class="fileinput input-group" data-provides="fileinput">
                         <div class="form-control featureImage-news" data-trigger="fileinput">
                             <span class="icon-feature-url-input"></span>
                             <span class="fileinput-freature-filename">
@@ -45,9 +48,10 @@
                             <input id="FeatureImage" type="hidden" name="FeatureImage" value="@Model.FeatureImage">
                         </span>
                         <a href="#" class="input-group-addon remove-url-feature btn btn-default" style="display:none">Remove</a>
-                    </div>
+                    </div>*@
                     @Html.ValidationMessageFor(model => model.FeatureImage, "", new { @class = "text-danger" })
                     <div class="show-ckfilder-FeatureImage"><img src="@Model.FeatureImage" width="200" /></div>
+                    <input type="hidden" name="FeatureImage" value="@Model.FeatureImage" />
                 </div>
             </div>
             <!--Mô tả ngắn-->

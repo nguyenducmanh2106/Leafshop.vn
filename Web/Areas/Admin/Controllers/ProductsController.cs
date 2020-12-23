@@ -52,8 +52,9 @@ namespace Web.Areas.Admin.Controllers
         [HttpPost]
         [ValidateInput(false)]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(ProductViewModel p)
+        public async Task<ActionResult> Create(ProductViewModel p, HttpPostedFileBase file)
         {
+
             ViewBag.ProviderId = new SelectList(await db.Providers.Where(x => x.Status == 1).ToListAsync(), "ProviderId", "ProviderName");
             ViewBag.category = await db.Categories.ToListAsync();
             ViewBag.TypeAttr = await db.TypeAttrs.Include(x => x.Attributes).Where(x => x.Attributes.Count() > 0).ToListAsync();
@@ -65,6 +66,7 @@ namespace Web.Areas.Admin.Controllers
             {
                 try
                 {
+
                     Product product = new Product();
                     product.ProductName = p.ProductName;
                     product.CategoryId = p.CategoryId;
@@ -73,9 +75,14 @@ namespace Web.Areas.Admin.Controllers
                     product.PriceOut = p.PriceOut;
                     product.Discount = p.Discount;
                     product.Quantity = p.Quantity;
-                    
-                    string filename = Request.Files["Image"].FileName;
-                    string fullserverpath = "..\\..\\Content\\uploads\\productimages\\" + filename;
+                    string path = $"/Content/uploads/productimages/";
+                    //string path = "..\\..\\Content\\uploads\\productimages\\";
+                    string filename = file.FileName;
+                    string fullserverpath = path + filename;
+                    string physicalPath = Server.MapPath(fullserverpath);
+                    // save image in folder
+                    file.SaveAs(physicalPath);
+                    //
                     product.FeatureImage = fullserverpath;
                     product.Images = fullserverpath;
                     product.Description = p.Description;
@@ -126,7 +133,7 @@ namespace Web.Areas.Admin.Controllers
         [HttpPost]
         [ValidateInput(false)]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(Product p)
+        public async Task<ActionResult> Edit(Product p, HttpPostedFileBase file)
         {
             ViewBag.category = await db.Categories.ToListAsync();
             ViewBag.TypeAttr = await db.TypeAttrs.Include(x => x.Attributes).Where(x => x.Attributes.Count() > 0).ToListAsync();
@@ -138,7 +145,7 @@ namespace Web.Areas.Admin.Controllers
                     var _product = await db.Products.SingleOrDefaultAsync(x => x.ProductId == p.ProductId && x.Status == true);
                     if (_product != null)
                     {
-                        if (Request.Files["Image"].FileName != null)
+                        if (file != null&& file.FileName != null)
                         {
                             _product.ProductName = p.ProductName;
                             _product.CategoryId = p.CategoryId;
@@ -150,8 +157,14 @@ namespace Web.Areas.Admin.Controllers
                             _product.Description = p.Description;
                             _product.Specifications = p.Specifications;
                             _product.ProductDetail = p.ProductDetail;
-                            string filename = Request.Files["Image"].FileName;
-                            string fullserverpath = "..\\..\\Content\\uploads\\productimages\\" + filename;
+                            //string path = "..\\..\\Content\\uploads\\productimages\\";
+                            string path = $"/Content/uploads/productimages/";
+                            string filename = file.FileName;
+                            string fullserverpath = path + filename;
+                            string physicalPath = Server.MapPath(fullserverpath);
+                            // save image in folder
+                            file.SaveAs(physicalPath);
+                            //
                             _product.FeatureImage = fullserverpath;
                             _product.Images = fullserverpath;
                             _product.Condition = p.Condition;
@@ -173,8 +186,36 @@ namespace Web.Areas.Admin.Controllers
                         }
                         else
                         {
-                            ModelState.AddModelError("FeatureImage", "Vui lòng chọn ảnh sản phẩm");
-                            return View(p);
+                            _product.ProductName = p.ProductName;
+                            _product.CategoryId = p.CategoryId;
+                            _product.ProviderId = p.ProviderId;
+                            _product.PriceIn = p.PriceIn;
+                            _product.PriceOut = p.PriceOut;
+                            _product.Discount = p.Discount;
+                            _product.Quantity = p.Quantity;
+                            _product.Description = p.Description;
+                            _product.Specifications = p.Specifications;
+                            _product.ProductDetail = p.ProductDetail;
+                           
+                            //
+                            _product.FeatureImage = p.FeatureImage;
+                            _product.Images = p.Images;
+                            _product.Condition = p.Condition;
+                            db.ProductAttrs.RemoveRange(db.ProductAttrs.Where(x => x.ProductId == p.ProductId));
+                            //thêm attr mới
+                            if (p.ProductAttrs != null)
+                            {
+                                foreach (var item in p.ProductAttrs)
+                                {
+                                    item.ProductId = p.ProductId;
+                                }
+                                db.ProductAttrs.AddRange(p.ProductAttrs);
+                                _product.ProductAttrs = p.ProductAttrs;
+                            }
+                            await db.SaveChangesAsync();
+                            setAlert("Success !", "Sửa sản phẩm thành công !", "top-right", "success", 4000);
+                            ModelState.Clear();
+                            return RedirectToAction("Index", "Products");
                         }
                     }
                     else

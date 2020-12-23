@@ -40,6 +40,7 @@
     <!-- Fonts START -->
     <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Lato+Sans+Narrow|Source+Sans+Pro:200,300,400,600,700,900&amp;subset=all" rel="stylesheet" type="text/css">
     <!-- Fonts END -->
+    <link href="~/Content/plugins/loading-modal/css/jquery.loadingModal.css" rel="stylesheet" />
     <link href='//hstatic.net/0/0/global/design/plugins/bootstrap/3.3.6/css/bootstrap.min.css' rel='stylesheet' type='text/css' media='all' />
     <link href='//hstatic.net/0/0/global/design/plugins/fancybox/jquery.fancybox.css' rel='stylesheet' type='text/css' media='all' />
     <link href='//hstatic.net/0/0/global/design/plugins/font-awesome/4.5.0/css/font-awesome.min.css' rel='stylesheet' type='text/css' media='all' />
@@ -62,6 +63,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
     <!--Add file js-->
+    <script src="~/Content/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <script src="~/Content/plugins/loading-modal/js/jquery.loadingModal.min.js"></script>
+    <script src="~/Content/plugins/toastr/toastr.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
     <script src="~/Content/js/site.js" type="text/javascript"></script>
     <script type='text/javascript'>
         //<![CDATA[
@@ -84,11 +89,11 @@
         gtag('config', 'AW-767364388');
     </script>
     <meta name="google-site-verification" content="XW2b4mPOxp6F6qoGvz2yzH4SQzSwEp4GF9tXstwLpfo" />
-    <script>
-        //<![CDATA[
-        (function () { function asyncLoad() { var urls = ["https://inapp.haravan.com/productreviews/content/scripts/productreviews.js", "//static.zotabox.com/5/9/5999743831190073a6a36283f85a4d2c/widgets.js", "https://sdk.beeketing.com/js/beeketing.js", "//hstatic.net/489/1000104489/20/2016/9-18/noname_c1ca4ca4-a5e1-470a-6938-e3524b087dfa.js", "https://onapp.haravan.com/windowpopup/embed/asset/frontend/windowpopup.js?shop=leafshop.myharavan.com&ver=1606273049514"]; for (var i = 0; i < urls.length; i++) { var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = urls[i]; var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x); } } window.attachEvent ? window.attachEvent('onload', asyncLoad) : window.addEventListener('load', asyncLoad, false); })();
-        //]]>
-    </script>
+    @*<script>
+            //<![CDATA[
+            (function () { function asyncLoad() { var urls = ["https://inapp.haravan.com/productreviews/content/scripts/productreviews.js", "//static.zotabox.com/5/9/5999743831190073a6a36283f85a4d2c/widgets.js", "https://sdk.beeketing.com/js/beeketing.js", "//hstatic.net/489/1000104489/20/2016/9-18/noname_c1ca4ca4-a5e1-470a-6938-e3524b087dfa.js", "https://onapp.haravan.com/windowpopup/embed/asset/frontend/windowpopup.js?shop=leafshop.myharavan.com&ver=1606273049514"]; for (var i = 0; i < urls.length; i++) { var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.src = urls[i]; var x = document.getElementsByTagName('script')[0]; x.parentNode.insertBefore(s, x); } } window.attachEvent ? window.attachEvent('onload', asyncLoad) : window.addEventListener('load', asyncLoad, false); })();
+            //]]>
+        </script>*@
     <script type='text/javascript'>!function () { var hrv_analytics = window.hrv_analytics = window.hrv_analytics || []; if (!hrv_analytics.initialize) if (hrv_analytics.invoked) window.console && console.error && console.error("Segment snippet included twice."); else { hrv_analytics.invoked = !0; hrv_analytics.methods = ["start", "trackSubmit", "trackClick", "trackLink", "trackForm", "pageview", "identify", "reset", "group", "track", "ready", "alias", "debug", "page", "once", "off", "on"]; hrv_analytics.factory = function (t) { return function () { var e = Array.prototype.slice.call(arguments); e.unshift(t); hrv_analytics.push(e); return hrv_analytics } }; for (var t = 0; t < hrv_analytics.methods.length; t++) { var e = hrv_analytics.methods[t]; hrv_analytics[e] = hrv_analytics.factory(e) } hrv_analytics.load = function (t, e) { var n = document.createElement("script"); n.type = "text/javascript"; n.async = !0; n.src = "https://stats.hstatic.net/analyticsv3.min.js"; var a = document.getElementsByTagName("script")[0]; a.parentNode.insertBefore(n, a); hrv_analytics._loadOptions = e }; hrv_analytics.SNIPPET_VERSION = "4.1.0"; hrv_analytics.start('pro:web:1000104489'); hrv_analytics.page(); hrv_analytics.load(); } }();</script>
     <style>
         .grecaptcha-badge {

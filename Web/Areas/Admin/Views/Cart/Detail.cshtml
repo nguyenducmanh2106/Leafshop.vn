@@ -25,6 +25,7 @@
     {
         statusOrders = "<span class='text-success'>Đã giao hàng</span>";
     }
+    var products = ViewBag.products as List<Models.Models.DataModels.Product>;
 
 }
 
@@ -71,21 +72,27 @@
                         <tbody>
                             @foreach (var item in Model.OrderDetails)
                             {
-                                <tr>
-                                    <td class="text-center">
-                                        <img src="@item.FeatureImage" width="70" />
-                                    </td>
-                                    <td>@item.ProductName </td>
-                                    <td class="text-right">@item.Quantity</td>
-                                    <td class="text-right">@String.Format(vie, "{0:c00}", item.Price) </td>
-                                    <td class="text-right">
-                                        @{
-                                            @String.Format(vie, "{0:c00}", item.Price * item.Quantity);
-                                            totalPrice += item.Price * item.Quantity;
-                                        }
+                                foreach (var pro in products)
+                                {
+                                    if (item.ProductId == pro.ProductId)
+                                    {
+                                        <tr>
+                                            <td class="text-center">
+                                                <img src="@pro.Images" width="70" />
+                                            </td>
+                                            <td>@pro.ProductName </td>
+                                            <td class="text-right">@item.Quantity</td>
+                                            <td class="text-right">@String.Format(vie, "{0:c00}", item.Price) </td>
+                                            <td class="text-right">
+                                                @{
+                                                    @String.Format(vie, "{0:c00}", item.Price * item.Quantity);
+                                                    totalPrice += item.Price * item.Quantity;
+                                                }
 
-                                    </td>
-                                </tr>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
                             }
                         </tbody>
                     </table>

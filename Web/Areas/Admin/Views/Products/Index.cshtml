@@ -44,7 +44,7 @@
                         var info = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
                         <tr id="row_@item.ProductId">
                             <td>
-                                <img src="@item.FeatureImage" width="50" />
+                                <img src="@item.Images" width="50" />
                                 @Html.DisplayFor(modelItem => item.ProductName)
                             </td>
                             <td>@Html.DisplayFor(modelItem => item.Categories.CategoryName)</td>

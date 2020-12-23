@@ -75,7 +75,13 @@
                 });
             </script>
 
-
+            <style>
+                .index_sale {
+                    margin-top: 25px;
+                    display: flex;
+                    flex-wrap: wrap;
+                }
+            </style>
             <!-- end popular brand -->
             <!-- collection group -->
             <div class="product_sale">
@@ -281,8 +287,8 @@
                     @foreach (var item in listNews)
                     {
                         <div class="col-xs-12 col-md-4 arc-item">
-                            <a href="@Url.Action("NewsDetail","Home", new { id = item.NewsId })"><img src="//file.hstatic.net/1000104489/article/anh_4.700_10404819b0e241db9debdf4bef302a96_55751c2d28e94f4da32dc8c4e9174480.jpg" alt=""></a>
-                            <a href="@Url.Action("NewsDetail","Home", new { id = item.NewsId })" title="Kem chống nắng có hại như thế nào đến môi trường biển?" class="title_blogss ">@item.NewsTitle</a>
+                            <a href="@Url.Action("NewsDetail","Home", new { id = item.NewsId })"><img src="@item.FeatureImage" alt="@item.NewsTitle"></a>
+                            <a href="@Url.Action("NewsDetail","Home", new { id = item.NewsId })" title="@item.NewsTitle" class="title_blogss ">@item.NewsTitle</a>
                             <p class="des-blogs">
                                 @item.ShortDescription
                             </p>

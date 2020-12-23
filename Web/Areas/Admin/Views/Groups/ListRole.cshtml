@@ -122,6 +122,11 @@
                         return '<a data-id="'+id+'" data-toggle="modal" data-target="#EditRole" class="mr-5 btn btn-sm btn-icon btn-pure btn-outline edit-row-btn btn-edit-role"><i data-toggle="tooltip" data-original-title="Chỉnh sửa" style="font-size:15px" class="fa fa-pencil text-primary tooltip-primary" aria-hidden="true"></i></a>'
                     }
                 },
+            ],
+            "columnDefs": [
+                { orderable: false, targets: [2] },
+                { orderable: false, targets: [3] },
+
             ]
         })
         //allow tooltip active

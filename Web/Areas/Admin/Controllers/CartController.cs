@@ -56,6 +56,7 @@ namespace Web.Areas.Admin.Controllers
             {
                 return View("Unauthorized");
             }
+            ViewBag.products = db.Products.Where(x => x.Status != false).ToList();
             return View(order);
         }
         [HttpPost]

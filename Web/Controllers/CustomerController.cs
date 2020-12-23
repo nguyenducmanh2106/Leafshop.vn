@@ -141,5 +141,20 @@ namespace Web.Controllers
             ViewBag.products = products;
             return View();
         }
+        [HttpPost]
+        public JsonResult ChangeStatusOrder(Order order)
+        {
+            var dbOrder = db.Orders.Where(x => x.OrderId == order.OrderId).FirstOrDefault();
+            if (dbOrder != null)
+            {
+                dbOrder.Status = -1;
+                db.SaveChanges();
+                return Json(new { result=true,message = "Huỷ đơn hàng thành công !" }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new { result = false, message = "Huỷ đơn hàng thất bại !" }, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }

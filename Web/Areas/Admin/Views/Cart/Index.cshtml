@@ -62,7 +62,7 @@
                 <button id="confirm-order" type="button" class="btn btn-danger">Xác nhận</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
             </div>
-
+            
         </div>
     </div>
 </div>
@@ -139,6 +139,12 @@
                             }
                         }
                     },
+                ],
+                "columnDefs": [
+                    { orderable: false, targets: [6] },
+                    { orderable: false, targets: [3] },
+                    { orderable: false, targets: [7] },
+
                 ],
                 "oLanguage": {
                     "oPaginate": {

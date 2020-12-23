@@ -55,7 +55,7 @@ namespace Web.Areas.Admin.Controllers
         [HttpPost]
         [ValidateInput(false)]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(News news)
+        public ActionResult Create(News news, HttpPostedFileBase file)
         {
             var user = (User)HttpContext.Session["User"];
             if (user == null)
@@ -66,6 +66,13 @@ namespace Web.Areas.Admin.Controllers
             {
                 try
                 {
+                    string path = $"/Content/uploads/newsimages/";
+                    string filename = file.FileName;
+                    string fullserverpath = path + filename;
+                    string physicalPath = Server.MapPath(fullserverpath);
+                    // save image in folder
+                    file.SaveAs(physicalPath);
+                    news.FeatureImage = fullserverpath;
                     news.CountView = 0;
                     news.Created = DateTime.Now;
                     news.UserId = user.UserId;
@@ -104,7 +111,7 @@ namespace Web.Areas.Admin.Controllers
         [HttpPost]
         [ValidateInput(false)]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(News news)
+        public ActionResult Edit(News news, HttpPostedFileBase file)
         {
             var user = (User)HttpContext.Session["User"];
             if (news == null)
@@ -118,14 +125,34 @@ namespace Web.Areas.Admin.Controllers
                     var result = db.News.Where(n => n.NewsId == news.NewsId).FirstOrDefault();
                     if (result != null)
                     {
-                        result.NewsTitle = news.NewsTitle;
-                        result.FeatureImage = news.FeatureImage;
-                        result.ShortDescription = news.ShortDescription;
-                        result.Description = news.Description;
-                        result.Status = news.Status;
-                        db.SaveChanges();
-                        setAlert("Success !", "Chỉnh sửa thành công !!", "top-right", "success", 4000);
-                        return RedirectToAction("Index");
+                        if (file != null && file.FileName != null)
+                        {
+                            string path = $"/Content/uploads/newsimages/";
+                            string filename = file.FileName;
+                            string fullserverpath = path + filename;
+                            string physicalPath = Server.MapPath(fullserverpath);
+                            // save image in folder
+                            file.SaveAs(physicalPath);
+                            result.NewsTitle = news.NewsTitle;
+                            result.FeatureImage = fullserverpath;
+                            result.ShortDescription = news.ShortDescription;
+                            result.Description = news.Description;
+                            result.Status = news.Status;
+                            db.SaveChanges();
+                            setAlert("Success !", "Chỉnh sửa thành công !!", "top-right", "success", 4000);
+                            return RedirectToAction("Index");
+                        }
+                        else
+                        {
+                            result.NewsTitle = news.NewsTitle;
+                            result.FeatureImage = news.FeatureImage;
+                            result.ShortDescription = news.ShortDescription;
+                            result.Description = news.Description;
+                            result.Status = news.Status;
+                            db.SaveChanges();
+                            setAlert("Success !", "Chỉnh sửa thành công !!", "top-right", "success", 4000);
+                            return RedirectToAction("Index");
+                        }
                     }
                     else
                     {

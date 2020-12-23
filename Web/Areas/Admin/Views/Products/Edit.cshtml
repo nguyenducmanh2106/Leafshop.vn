@@ -96,7 +96,7 @@
                                     <button class="btn btn-default btn-outline bootstrap-touchspin-down" type="button"><i class="ti-minus"></i></button>
                                 </span>
                                 <span class="input-group-addon bootstrap-touchspin-prefix" style="display: none;"></span>
-                                @Html.EditorFor(model => model.Discount, new { htmlAttributes = new { @class = "form-control", @Value = "0", @min = "0", @Type = "text" } })
+                                @Html.EditorFor(model => model.Discount, new { htmlAttributes = new { @class = "form-control", @Value = Model.Discount, @min = "0", @Type = "text" } })
                             </div>
                         </div>
                     </div>
@@ -110,7 +110,7 @@
                         <div class="form-group">
                             <label class="control-label">Số lượng</label>
                             <div class="input-group bootstrap-touchspin">
-                                @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "vertical-spin form-control", @Value = "1", @type = "text" } })
+                                @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "vertical-spin form-control", @Value = Model.Quantity, @type = "text" } })
                                 <span class="input-group-btn-vertical">
                                     <button class="btn btn-default btn-outline bootstrap-touchspin-up" type="button"><i class="ti-plus"></i></button>
                                     <button class="btn btn-default btn-outline bootstrap-touchspin-down" type="button"><i class="ti-minus"></i></button>
@@ -215,8 +215,15 @@
     </div>-->
                     <div class="col-md-12">
                         <div class="form-group">
-                            <label> ảnh</label>
-                            <input type="file" name="Image" id="Image" />
+                            <label> Ảnh</label>
+                            <img src="@Model.Images" />
+                            <input type="hidden" name="Images" value="@Model.Images"/>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label> Chọn Ảnh</label>
+                            <input type="file" name="file" id="Image" />
                         </div>
                     </div>
                     <div class="col-md-12">
