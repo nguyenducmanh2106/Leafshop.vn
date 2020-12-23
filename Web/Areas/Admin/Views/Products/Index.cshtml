@@ -54,11 +54,11 @@
                             <td>@Html.DisplayFor(modelItem => item.Quantity)</td>
                             <td>@Html.DisplayFor(modelItem => item.Description)</td>
                             <td>
-                                @if (item.Condition == 1)
+                                @if (item.Quantity >0)
                                 {
                                     <span style="font-weight: 700;padding: 5px 14px 4px;" class="label label-success">Còn hàng</span>
                                 }
-                                else if (item.Condition == 0)
+                                else if (item.Quantity == 0)
                                 {
                                     <span style="font-weight: 700;padding: 5px 14px 4px;" class="label label-danger">Hết hàng</span>
                                 }
