@@ -137,7 +137,7 @@
                                         <div class="haravan-product-reviews-badge" data-id="@item.ProductId">
                                         </div>
                                         <div class="product-image">
-                                            <a href='@Url.Action("Productsdetail","Home",new { id=@item.ProductId})'><img src="https://product.hstatic.net/1000104489/product/z2158787192620_d8bf412273c37facc66cfe7e60266411_54cfe19e36b24d0a8ffa305da1463bcc.jpg" data-lazyload="https://product.hstatic.net/1000104489/product/z2158787192620_d8bf412273c37facc66cfe7e60266411_54cfe19e36b24d0a8ffa305da1463bcc.jpg" alt="@item.ProductName"></a>
+                                            <a href='@Url.Action("Productsdetail","Home",new { id=@item.ProductId})'><img src="@item.Images" data-lazyload="@item.Images" alt="@item.ProductName"></a>
                                             <div class="product-overlay">
                                                 @if (item.Quantity > 0)
                                                 {
@@ -240,7 +240,7 @@
                                             <div class="selling">
                                                 <span>Bán chạy</span>
                                             </div>
-                                            <a href='@Url.Action("Productsdetail","Home",new { id=@item.ProductId})'><img src="https://product.hstatic.net/1000104489/product/3_acb7596363ad47bf9eedccde5054d624.jpg" data-lazyload="https://product.hstatic.net/1000104489/product/3_acb7596363ad47bf9eedccde5054d624.jpg" alt="Nước tinh chất hoa hồng hữu cơ Gravier 200ml"></a>
+                                            <a href='@Url.Action("Productsdetail","Home",new { id=@item.ProductId})'><img src="@item.Images" data-lazyload="@item.Images" alt="Nước tinh chất hoa hồng hữu cơ Gravier 200ml"></a>
                                             <div class="product-overlay">
                                                 @if (item.Quantity > 0)
                                                 {

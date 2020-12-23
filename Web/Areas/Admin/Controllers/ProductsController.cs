@@ -4,6 +4,7 @@ using Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -60,7 +61,7 @@ namespace Web.Areas.Admin.Controllers
             {
                 return RedirectToAction("CreateProvider", "Categories");
             }
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 try
                 {
@@ -72,8 +73,11 @@ namespace Web.Areas.Admin.Controllers
                     product.PriceOut = p.PriceOut;
                     product.Discount = p.Discount;
                     product.Quantity = p.Quantity;
-                    product.FeatureImage = p.FeatureImage;
-                    product.Images = p.Images;
+                    
+                    string filename = Request.Files["Image"].FileName;
+                    string fullserverpath = "..\\..\\Content\\uploads\\productimages\\" + filename;
+                    product.FeatureImage = fullserverpath;
+                    product.Images = fullserverpath;
                     product.Description = p.Description;
                     product.Specifications = p.Specifications;
                     product.ProductDetail = p.ProductDetail;
@@ -134,7 +138,7 @@ namespace Web.Areas.Admin.Controllers
                     var _product = await db.Products.SingleOrDefaultAsync(x => x.ProductId == p.ProductId && x.Status == true);
                     if (_product != null)
                     {
-                        if (p.FeatureImage != null)
+                        if (Request.Files["Image"].FileName != null)
                         {
                             _product.ProductName = p.ProductName;
                             _product.CategoryId = p.CategoryId;
@@ -146,8 +150,10 @@ namespace Web.Areas.Admin.Controllers
                             _product.Description = p.Description;
                             _product.Specifications = p.Specifications;
                             _product.ProductDetail = p.ProductDetail;
-                            _product.FeatureImage = p.FeatureImage;
-                            _product.Images = p.Images;
+                            string filename = Request.Files["Image"].FileName;
+                            string fullserverpath = "..\\..\\Content\\uploads\\productimages\\" + filename;
+                            _product.FeatureImage = fullserverpath;
+                            _product.Images = fullserverpath;
                             _product.Condition = p.Condition;
                             db.ProductAttrs.RemoveRange(db.ProductAttrs.Where(x => x.ProductId == p.ProductId));
                             //thêm attr mới

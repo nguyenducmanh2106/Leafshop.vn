@@ -20,7 +20,7 @@ namespace Web.Areas.Admin.Controllers
             return View();
         }
         
-        public JsonResult Getdata(string isvk)
+        /*public JsonResult Getdata(string isvk)
         {
             var orders = from o in db.Orders
                          select o;
@@ -43,7 +43,7 @@ namespace Web.Areas.Admin.Controllers
                     break;
             }
             return Json(orders.ToList(), JsonRequestBehavior.AllowGet);
-        }
+        }*/
 
         public ActionResult Detail(int? id)
         {
