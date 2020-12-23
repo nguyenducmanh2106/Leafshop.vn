@@ -17,6 +17,7 @@ namespace Web.Areas.Admin.Controllers
     [CustomAuth(Roles = "VIEW")]
     public class ProductsController : BaseController
     {
+        
         MobileShopContext db = new MobileShopContext();
         #region Products
         // GET: Admin/Products
@@ -76,19 +77,20 @@ namespace Web.Areas.Admin.Controllers
                     product.Discount = p.Discount;
                     product.Quantity = p.Quantity;
                     string path = $"/Content/uploads/productimages/";
-                    if (!System.IO.Directory.Exists(path))
-                    {
-                        System.IO.Directory.CreateDirectory(path);
-                    }
+
 
                     string filename = file.FileName;
-                    string fullserverpath = path + filename;
-                    string physicalPath = Server.MapPath(fullserverpath);
+                    
+                    string physicalPath = Server.MapPath(path);
+                    if (!Directory.Exists(physicalPath))
+                    {
+                        Directory.CreateDirectory(physicalPath);
+                    }
                     // save image in folder
-                    file.SaveAs(physicalPath);
+                    file.SaveAs(physicalPath + filename);
                     //
-                    product.FeatureImage = fullserverpath;
-                    product.Images = fullserverpath;
+                    product.FeatureImage = path+filename;
+                    product.Images = path + filename;
                     product.Description = p.Description;
                     product.Specifications = p.Specifications;
                     product.ProductDetail = p.ProductDetail;
@@ -161,18 +163,21 @@ namespace Web.Areas.Admin.Controllers
                             _product.Description = p.Description;
                             _product.Specifications = p.Specifications;
                             _product.ProductDetail = p.ProductDetail;
-                           
-                            string path = $"/Content/uploads/productimages/";
-                            if (!System.IO.Directory.Exists(path))
-                                System.IO.Directory.CreateDirectory(path);
+
+                            string path = "/Content/uploads/productimages/";
+
                             string filename = file.FileName;
-                            string fullserverpath = path + filename;
-                            string physicalPath = Server.MapPath(fullserverpath);
+                            
+                            string physicalPath = Server.MapPath(path);
+                            if (!Directory.Exists(physicalPath))
+                            {
+                                Directory.CreateDirectory(physicalPath);
+                            }
                             // save image in folder
-                            file.SaveAs(physicalPath);
+                            file.SaveAs(physicalPath + filename);
                             //
-                            _product.FeatureImage = fullserverpath;
-                            _product.Images = fullserverpath;
+                            _product.FeatureImage = path + filename;
+                            _product.Images = path + filename;
                             _product.Condition = p.Condition;
                             db.ProductAttrs.RemoveRange(db.ProductAttrs.Where(x => x.ProductId == p.ProductId));
                             //thêm attr mới
