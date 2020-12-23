@@ -27,7 +27,7 @@
                 <input type="hidden" class="item_qty" value="@quantity" />
                 <input type="hidden" class="item_unit_price_not_formated" value="@price" />
                 <div class="top-cart-item-image">
-                    <a href="@Url.Action("Productsdetail","Home",new { id=item.ProductId})"><img src="//product.hstatic.net/1000104489/product/alphanova_bebe_creme_shampooing_bio_200ml_2017_small.jpg" alt="Dầu gội hữu cơ cho bé 2 trong 1 Alphanova Bebe 200ml" /></a>
+                    <a href="@Url.Action("Productsdetail","Home",new { id=item.ProductId})"><img src="@item.Images" alt="@item.ProductName" /></a>
                 </div>
                 <div class="top-cart-item-desc">
                     <a href="@Url.Action("Productsdetail","Home",new { id=item.ProductId})">@item.ProductName</a>

@@ -3891,6 +3891,7 @@
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\images\avatar.png" />
     <Content Include="Content\js\site.js" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\plugins\bootstrap-colorpicker\css\bootstrap-colorpicker.css" />
@@ -6259,6 +6260,7 @@
     <Content Include="Views\Cart\ToastrProduct.cshtml" />
     <Content Include="Views\Customer\Index.cshtml" />
     <Content Include="Views\Customer\Profile.cshtml" />
+    <Content Include="Views\Customer\Orders.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

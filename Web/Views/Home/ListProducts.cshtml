@@ -24,10 +24,10 @@
                 <div class="haravan-product-reviews-badge" data-id="@item.ProductId">
                 </div>
                 <div class="product-image">
-                    <a href="@Url.Action("Productsdetail","Home",new { id=@item.ProductId})"><img src="https://product.hstatic.net/1000104489/product/mi_spa_ban_lut_196f9793c75c460e81773e905cbf46f2.jpg" data-lazyload="https://product.hstatic.net/1000104489/product/mi_spa_ban_lut_196f9793c75c460e81773e905cbf46f2.jpg" alt="@item.ProductName"></a>
+                    <a href="@Url.Action("Productsdetail","Home",new { id=@item.ProductId})"><img src="@item.Images" data-lazyload="@item.Images" alt="@item.ProductName"></a>
                     <div class="product-overlay">
                         <a href="/products/thanh-ly-mi-spaghetti-ban-lut-huu-co-markal-500g" class="product_quick_add" data-toggle='tooltip' title='Thêm vào giỏ'><i class="fa fa-shopping-cart"></i><span class='hidden-md hidden-lg'> Thêm vào giỏ</span></a>
-                        <a href="#product-pop-up" onclick="Quick(@item.ProductId)" class="item-quick-view fancybox-fast-view hidden-sm hidden-xs" @*product_url="/products/thanh-ly-mi-spaghetti-ban-lut-huu-co-markal-500g"*@ data-toggle='tooltip' title='Xem nhanh'><i class="fa fa-eye"></i><span class='hidden-md hidden-lg'> Xem nhanh</span></a>
+                        <a href="#product-pop-up" onclick="Quick(@item.ProductId)" class="item-quick-view fancybox-fast-view hidden-sm hidden-xs"  data-toggle='tooltip' title='Xem nhanh'><i class="fa fa-eye"></i><span class='hidden-md hidden-lg'> Xem nhanh</span></a>
                     </div>
                 </div>
                 <div class="product-title">

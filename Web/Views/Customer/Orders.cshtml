@@ -1,0 +1,141 @@
+﻿@using Models.Models.DataModels
+@{
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+    var orders = ViewBag.orders as Order;
+    var orderDetail = ViewBag.orderDetail as List<OrderDetail>;
+    var products = ViewBag.products as List<Product>;
+  
+}
+<!-- Page Title
+============================================= -->
+<section id="page-title">
+    <div class="container clearfix">
+        <ol class="breadcrumb col-md-6 col-sm-6">
+            <li><a href="/">Trang chủ</a></li>
+            <li><a href="/account">Tài khoản</a></li>
+            <li class="active">Đơn hàng #@orders.CodeOrder</li>
+        </ol>
+    </div>
+</section>
+<!-- #page-title end -->
+<section id="content" style="margin-bottom: 0px;">
+    <div class="content-wrap">
+        <div class="container clearfix">
+            <div class="fancy-title title-bottom-border">
+                <h3>
+                    Đơn hàng: #@orders.CodeOrder, đặt ngày: @orders.Created.ToString("dd-MM-yyyy"), lúc @orders.Created.ToString("hh:mm")<br>
+                </h3>
+            </div>
+            <a class="back-to-account" href="/customer/profile">Quay lại trang tài khoản</a>
+            <div class="col-md-12">
+                <div class="col-md-6 col-sm-6">
+                    <h4>Địa chỉ thanh toán</h4>
+                    <p>
+                        Tình trạng thanh toán:
+                        @{
+                            var trangthai = orders.Status == 1 ? "Đã nhận" : "Đang xử lý";
+                        }
+                        @trangthai
+                    </p>
+                    <div class="order-customer-address account-detail">
+                        <p>@orders.FullName </p>
+                        <p></p>
+                        <p>@orders.Address</p>
+                        <p></p>
+                        <p>@orders.District</p>
+                        <p>@orders.City</p>
+                        <p>@orders.Phone</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-sm-6">
+                    <h4>Địa chỉ gửi hàng</h4>
+                    <p>
+                        @*Vận chuyển: not fulfilled*@
+                    </p>
+                    <div class="order-customer-address account-detail">
+                        <p>@orders.FullName</p>
+                        <p></p>
+                        <p>@orders.Address</p>
+                        <p></p>
+                        <p>@orders.District</p>
+                        <p>@orders.City</p>
+                        <p>@orders.Phone</p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="table-responsive account-table col-md-12 order-detail-table">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr class="active">
+                            <th>Sản phẩm</th>
+                            <th>Mã sản phẩm</th>
+                            <th>Giá</th>
+                            <th>Số lượng</th>
+                            <th>Tổng cộng</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var item in orderDetail)
+                        {
+                            foreach (var product in products)
+                            {
+                                if (product.ProductId == item.ProductId)
+                                {
+                                    <tr>
+                                        <td>
+                                            <a href="/home/productsdetail/@product.ProductId" title="">@product.ProductName</a><br>
+                                        </td>
+                                        <td>#@product.ProviderId</td>
+                                    <td>
+                                        @{
+                                            var vie = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+                                        }
+                                        @String.Format(vie, "{0:c00}", item.PriceOut * (1 - (float)item.Discount / 100))
+                                    </td>
+                                        <td>
+                                            @item.Quantity
+                                        </td>
+                                        <td>
+                                            @String.Format(vie, "{0:c00}", item.Price)
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+
+                        <tr>
+                            <td colspan="4"><strong>Giá sản phẩm</strong></td>
+                            <td>
+                                <strong>
+                                    @{
+                                        var vie1 = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+                                    }
+                                    @String.Format(vie1, "{0:c00}", orders.totalPrice)
+                                </strong>
+                            </td>
+                        </tr>
+
+                        @*<tr>
+            <td colspan="4"><strong>Giao hàng tận nơi</strong></td>
+            <td><strong>35,000₫</strong></td>
+        </tr>*@
+
+
+                        <tr>
+                            <td colspan="4"><strong>Tổng tiền</strong></td>
+                            <td>
+                                <strong>
+                                    @String.Format(vie1, "{0:c00}", orders.totalPrice)
+                                </strong>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+

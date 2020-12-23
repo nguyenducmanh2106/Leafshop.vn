@@ -26,7 +26,7 @@ namespace Models.Models.DataModels
 
         //public string ProductName { get; set; }
 
-        public float? Discount { get; set; }
+        public double? Discount { get; set; }
 
         //public string FeatureImage { get; set; }
 

@@ -1,10 +1,16 @@
 ﻿@model Models.Models.DataModels.Customer
+@using Models.Models.DataModels
 @{
     Layout = "~/Views/Shared/_Layout1.cshtml";
-    <input type="hidden" id="TinhId" value="@Model.TinhId"/>
-    <input type="hidden" id="HuyenId" value="@Model.HuyenId"/>
-    <input type="hidden" id="Tinh" value="@Model.Tinh"/>
-    <input type="hidden" id="Huyen" value="@Model.Huyen"/>
+    var Order = ViewBag.Order as List<Order>;
+
+    <input type="hidden" id="TinhId" value="@Model.TinhId" />
+
+    <input type="hidden" id="HuyenId" value="@Model.HuyenId" />
+
+    <input type="hidden" id="Tinh" value="@Model.Tinh" />
+
+    <input type="hidden" id="Huyen" value="@Model.Huyen" />
 }
 <!-- Page Title
 ============================================= -->
@@ -50,7 +56,7 @@
                             </div>
                             <div class="col_full">
                                 <label for="register-form-email">Số điện thoại:<span class="required require_symbol">*</span></label>
-                                @{ 
+                                @{
                                     var phone = Model.Phone != null ? Model.Phone : "";
                                 }
                                 <input required type="text" id="register-form-phone" name="customer[email]" value="@phone" class="form-control" />
@@ -112,6 +118,54 @@
             <!-- check password confirm -->
             <!-- end check password confirm -->
         </div>
+        <div class="container clearfix">
+            <div class="fancy-title title-bottom-border">
+                <h3>Đơn hàng đã đặt</h3>
+            </div>
+            <div class="table-responsive account-table">
+                @if (Order!=null&&Order.Count>0)
+                {
+                    <table class="table">
+                        <thead>
+                            <tr class="active">
+                                <th>Mã đơn hàng</th>
+                                <th>Ngày đặt</th>
+                                <th>Trạng thái thanh toán</th>
+                                @*<th>Vận chuyển</th>*@
+                                <th>Tổng tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Order)
+                            {
 
+                                <tr>
+                                    <td><a href="/customer/orders/?codeOrder=@item.CodeOrder" title="">#@item.CodeOrder</a></td>
+                                    <td>@item.Created.Day Tháng @item.Created.Month @item.Created.Year</td>
+                                    <td>
+                                        @{ 
+                                            var trangthai = item.Status == 1 ? "Đã nhận" : "Đang xử lý";
+                                        }
+                                        @trangthai
+                                    </td>
+                                    @*<td>not fulfilled</td>*@
+                                <td>
+                                    @{
+                                        var vie = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+                                    }
+                                    @String.Format(vie, "{0:c00}", item.totalPrice)
+                                </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <span>Bạn chưa từng đặt hàng!</span>
+                }
+            </div>
+
+        </div>
     </div>
 </section>

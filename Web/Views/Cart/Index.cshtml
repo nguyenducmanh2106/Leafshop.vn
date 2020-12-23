@@ -37,7 +37,7 @@
                             {
                                 <div class="row cart_item">
                                     <div class="td col-sm-1 cart-product-thumbnail">
-                                        <a href="@Url.Action("Productsdetail","Home",new { id=item.ProductId})"><img src="//product.hstatic.net/1000104489/product/dau_hao_chay_huu_co_229437fc5fc24694b99b31a1e6b28dfa_small.jpg" alt="Dầu hào chay hữu cơ"></a>
+                                        <a href="@Url.Action("Productsdetail","Home",new { id=item.ProductId})"><img src="@item.Images" alt="@item.ProductName"></a>
                                     </div>
 
                                     <div class="td col-sm-4 cart-product-name">

@@ -168,7 +168,7 @@ namespace Web.Controllers
                         Quantity = productsID.Where(x => x == item).Count(),
                         PriceOut = product.PriceOut,
                         Discount = product.Discount,
-                        Price = product.PriceOut * (100 - product.Discount)
+                        Price = (product.PriceOut * (1 - (float)product.Discount / 100)) * productsID.Where(x => x == item).Count()
                     };
                     db.OrderDetails.Add(orderDetail);
                     db.SaveChanges();

@@ -95,7 +95,9 @@ namespace Web.Controllers
             if (customer_token != null && customer_token.Value!="")
             {
                 user = db.Customers.Where(x => x.ActiveCode.ToString() == customer_token.Value).FirstOrDefault();
+                ViewBag.Order = db.Orders.Where(x => x.CustomerId == user.CustomerId).ToList();
             }
+           
             return View(user);
         }
         [HttpPost]
@@ -128,6 +130,16 @@ namespace Web.Controllers
             customer_token.Expires = DateTime.Now.AddDays(-1);
             Response.Cookies.Add(customer_token);  
             return RedirectToAction("Index", "Customer");
+        }
+        public ActionResult Orders(string codeOrder)
+        {
+            var orders = db.Orders.Where(x => x.CodeOrder == codeOrder).SingleOrDefault();
+            var orderDetail=db.OrderDetails.Where(x=>x.OrderId==orders.OrderId).ToList();
+            var products = db.Products.ToList();
+            ViewBag.orders = orders;
+            ViewBag.orderDetail = orderDetail;
+            ViewBag.products = products;
+            return View();
         }
     }
 }
