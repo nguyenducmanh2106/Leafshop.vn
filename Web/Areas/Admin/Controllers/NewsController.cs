@@ -67,6 +67,10 @@ namespace Web.Areas.Admin.Controllers
                 try
                 {
                     string path = $"/Content/uploads/newsimages/";
+                    if (!System.IO.Directory.Exists(path))
+                    {
+                        System.IO.Directory.CreateDirectory(path);
+                    }
                     string filename = file.FileName;
                     string fullserverpath = path + filename;
                     string physicalPath = Server.MapPath(fullserverpath);
@@ -128,6 +132,11 @@ namespace Web.Areas.Admin.Controllers
                         if (file != null && file.FileName != null)
                         {
                             string path = $"/Content/uploads/newsimages/";
+                            if (!System.IO.Directory.Exists(path))
+                            {
+                                System.IO.Directory.CreateDirectory(path);
+                            }
+
                             string filename = file.FileName;
                             string fullserverpath = path + filename;
                             string physicalPath = Server.MapPath(fullserverpath);

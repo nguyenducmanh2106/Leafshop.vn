@@ -76,7 +76,11 @@ namespace Web.Areas.Admin.Controllers
                     product.Discount = p.Discount;
                     product.Quantity = p.Quantity;
                     string path = $"/Content/uploads/productimages/";
-                    //string path = "..\\..\\Content\\uploads\\productimages\\";
+                    if (!System.IO.Directory.Exists(path))
+                    {
+                        System.IO.Directory.CreateDirectory(path);
+                    }
+
                     string filename = file.FileName;
                     string fullserverpath = path + filename;
                     string physicalPath = Server.MapPath(fullserverpath);
@@ -145,7 +149,7 @@ namespace Web.Areas.Admin.Controllers
                     var _product = await db.Products.SingleOrDefaultAsync(x => x.ProductId == p.ProductId && x.Status == true);
                     if (_product != null)
                     {
-                        if (file != null&& file.FileName != null)
+                        if (file != null && file.FileName != null)
                         {
                             _product.ProductName = p.ProductName;
                             _product.CategoryId = p.CategoryId;
@@ -157,8 +161,10 @@ namespace Web.Areas.Admin.Controllers
                             _product.Description = p.Description;
                             _product.Specifications = p.Specifications;
                             _product.ProductDetail = p.ProductDetail;
-                            //string path = "..\\..\\Content\\uploads\\productimages\\";
+                           
                             string path = $"/Content/uploads/productimages/";
+                            if (!System.IO.Directory.Exists(path))
+                                System.IO.Directory.CreateDirectory(path);
                             string filename = file.FileName;
                             string fullserverpath = path + filename;
                             string physicalPath = Server.MapPath(fullserverpath);
@@ -196,7 +202,7 @@ namespace Web.Areas.Admin.Controllers
                             _product.Description = p.Description;
                             _product.Specifications = p.Specifications;
                             _product.ProductDetail = p.ProductDetail;
-                           
+
                             //
                             _product.FeatureImage = p.FeatureImage;
                             _product.Images = p.Images;
@@ -225,7 +231,7 @@ namespace Web.Areas.Admin.Controllers
                     }
 
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     setAlert("Error !", "Có lỗi khi sửa sản phẩm !", "top-right", "error", 5000);
                     return View(p);
