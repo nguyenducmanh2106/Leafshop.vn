@@ -161,10 +161,10 @@ function hideLoading() {
 function setDatetime(type) {//Set all element that have class = datepicker to daterangepicker plugin
     $('.datepicker').daterangepicker({ // allow set single datetime
         singleDatePicker: true,
-        timePicker: true,
+        //timePicker: true,
         startDate: new Date(),
         locale: {
-            format: "DD/MM/YYYY HH:mm:ss",
+            format: "DD/MM/YYYY",
             cancelLabel: 'Xóa',
             applyLabel: 'Lưu'
         }
