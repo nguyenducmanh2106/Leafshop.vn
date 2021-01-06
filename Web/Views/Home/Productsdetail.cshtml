@@ -42,12 +42,12 @@
                     <div class="sidebar nobottommargin left-sidebar col-sm-3 hidden-xs hidden-sm">
                         <div class="sidebar-widgets-wrap">
 
-                            @{Html.RenderAction("CategoryProductDetail", "Home",new { idProductPresent = Model.ProductId });}
+                            @{Html.RenderAction("CategoryProductDetail", "Home", new { idProductPresent = Model.ProductId });}
 
                             <div class="widget clearfix" style='overflow:hidden'>
                                 <!--<div style="width: 100%;">-->
-                                    <!-- Page plugin's width will be 180px -->
-                                    <!--<div class="fb-page" data-href="https://www.facebook.com/leafshop.vn/" data-width="320"></div>
+                                <!-- Page plugin's width will be 180px -->
+                                <!--<div class="fb-page" data-href="https://www.facebook.com/leafshop.vn/" data-width="320"></div>
                                 </div>
                                 <script>
                                     (function (d, s, id) {
@@ -181,7 +181,7 @@
 
                                             <div class="product-price col-sm-12 col-md-12 noleftpadding">
 
-                                                @if (Model.Discount >0)
+                                                @if (Model.Discount > 0)
                                                 {
                                                     <del class="sale-price">
                                                         @{
@@ -289,9 +289,9 @@
                                             </script>
 
 
-                                            <button type="button" data-id="@Model.ProductId" class="product_quick_add add-to-cart button nomargin col-xs-12 col-md-6 nopadding" style="height: 40px !important; width: 50% !important; padding: 0 !Important">Thêm vào giỏ</button>
+                                            <button type="button" data-id="@Model.ProductId" id="product_quick_add" class="@*product_quick_add add-to-cart*@ button nomargin col-xs-12 col-md-6 nopadding" style="height: 40px !important; width: 50% !important; padding: 0 !Important">Thêm vào giỏ</button>
 
-                                            <button type="submit" data-id="@Model.ProductId" id='muangay' class="button col-xs-12 nopadding buynow">Mua ngay</button>
+                                            <button type="submit" data-id="@Model.ProductId" id='muangay_redirect' class="button col-xs-12 nopadding buynow">Mua ngay</button>
 
 
 
@@ -409,12 +409,12 @@
                                 </div>
                                 @*<div class='col-md-8 col-sm-10 bottom_buy nopadding col-xs-12'>
 
-                                    <button type="submit" id='' class="add-to-cart button nomargin col-sm-6 col-xs-12 norightpadding">Thêm vào giỏ</button>
+                                        <button type="submit" id='' class="add-to-cart button nomargin col-sm-6 col-xs-12 norightpadding">Thêm vào giỏ</button>
 
-                                    <button type="submit" id='' class="button col-xs-12 col-sm-6 nomargin nopadding buynow buttonz">Mua ngay</button>
+                                        <button type="submit" id='' class="button col-xs-12 col-sm-6 nomargin nopadding buynow buttonz">Mua ngay</button>
 
 
-                                </div>*@
+                                    </div>*@
                             </form>
                         </div>
                     </div>
@@ -426,14 +426,87 @@
         </div>
     </section><!-- #content end -->
     <script>
+        var productsId = $.cookie('cart_token') ? $.cookie('cart_token').split('-') : [];
         $(document).ready(function () {
-            if ($('#product_quantity').val() == '0') {
-                $('.add-to-cart').attr('disabled', 'disabled');
-            }
-            else {
-                $('.add-to-cart').removeAttr('disabled');
-            }
+
+            $('#product_quick_add').off('click').on('click', function () {
+                var productId = $(this).attr('data-id');
+                
+                var value = $("#product_quantity").val();
+                console.log(value)
+                for (var i = 0; i < value; i++) {
+                    productsId.push(productId);
+                }
+                //productsId.push(productId);
+                var strId = productsId.join('-');
+                $.cookie('cart_token', strId, { path: '/', expires: 10 });
+                console.log(productsId)
+                //Toastr để thông báo mua sản phẩm
+                toastrClick(productId)
+                $.ajax({
+                    'url': '/Cart/ViewQuick',
+                    'type': 'GET',
+                    'success': function (data) {
+                        //console.log(data);
+                        $('#viewCart').html(data);
+                    },
+                });
+                $.ajax({
+                    'url': '/Cart/TotalProduct',
+                    'type': 'GET',
+                    'success': function (data) {
+                        //console.log(data);
+                        $('#totalProducts').html(data);
+                    },
+                });
+            })
+            //button mua ngay
+            $('#muangay_redirect').off('click').on('click', function () {
+                var productId = $(this).attr('data-id');
+
+                var value = $("#product_quantity").val();
+                console.log(value)
+                for (var i = 0; i < value; i++) {
+                    productsId.push(productId);
+                }
+                //productsId.push(productId);
+                var strId = productsId.join('-');
+                $.cookie('cart_token', strId, { path: '/', expires: 10 });
+               
+                $.ajax({
+                    'url': '/Cart/ViewQuick',
+                    'type': 'GET',
+                    'success': function (data) {
+                        //console.log(data);
+                        $('#viewCart').html(data);
+                    },
+                });
+                $.ajax({
+                    'url': '/Cart/TotalProduct',
+                    'type': 'GET',
+                    'success': function (data) {
+                        //console.log(data);
+                        $('#totalProducts').html(data);
+                    },
+                });
+                $(location).attr('href','/cart')
+            })
         });
+        function toastrClick(productId) {
+            var obj = {
+                productId: productId
+            }
+            $.ajax({
+                'url': '/Cart/ToastrProduct',
+                'type': 'GET',
+                'data': obj,
+                'success': function (data) {
+                    console.log(data);
+                    $('#jGrowl').html(data)
+                },
+            });
+        }
+
     </script>
 
     <script>
@@ -508,14 +581,14 @@
 
 
 	<script type="text/javascript">
-		 <![CDATA[ 
+		 <![CDATA[
 var google_conversion_id = 856573560;
 var google_conversion_language = "en";
 var google_conversion_format = "3";
 var google_conversion_color = "ffffff";
 var google_conversion_label = "q0QzCKWai3AQ-Iy5mAM";
 var google_remarketing_only = false;
- ]]> 
+ ]]>
 	</script>
 	<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
 	</script>

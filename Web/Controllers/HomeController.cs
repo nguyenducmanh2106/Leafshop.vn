@@ -76,7 +76,7 @@ namespace Web.Controllers
         }
         #region Product
         //GET: /Product by category
-        public async Task<ActionResult> Products(int id = -1, string Sale = "default", string orderby = "default", string listProviderID = "-1", string listPriceID = "-1",string key="",int page = 1, int pageSize = 2)
+        public async Task<ActionResult> Products(int id = -1, string Sale = "default", string orderby = "default", string listProviderID = "-1", string listPriceID = "-1",string key="",int page = 1, int pageSize = 6)
         {
             var list = listProviderID.Split(',').Select(Int64.Parse).ToList();
             List<Product> products;
@@ -220,7 +220,7 @@ namespace Web.Controllers
             return View(products.ToPagedList(page, pageSize));
         }
 
-        public async Task<ActionResult> ListProducts(int id = -1, string Sale = "default", string orderby = "default", string listProviderID = "-1", string listPriceID = "-1",string key="",int page = 1, int pageSize = 2)
+        public async Task<ActionResult> ListProducts(int id = -1, string Sale = "default", string orderby = "default", string listProviderID = "-1", string listPriceID = "-1",string key="",int page = 1, int pageSize = 6)
         {
             var list = listProviderID.Split(',').Select(Int64.Parse).ToList();
             List<Product> products;

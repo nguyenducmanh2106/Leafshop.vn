@@ -19,7 +19,7 @@
 
                 </div>
             </div>
-            @if (item.Discount != null)
+            @if (item.Discount != null&&item.Discount>0)
             {
                 <div class="sale-flash">-@item.Discount%</div>
             }
