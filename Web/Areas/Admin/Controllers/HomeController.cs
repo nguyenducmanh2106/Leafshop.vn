@@ -57,7 +57,7 @@ namespace Web.Areas.Admin.Controllers
         }
         public JsonResult GetAllFeedback()
         {
-            var feedback = db.Feedbacks.ToList();
+            var feedback = db.Contacts.ToList();
             return Json(new { data = feedback }, JsonRequestBehavior.AllowGet);
         }
 
@@ -67,7 +67,7 @@ namespace Web.Areas.Admin.Controllers
             {
                 return RedirectToAction("Feedback");
             }
-            Feedback feedback = db.Feedbacks.Find(id);
+            Contact feedback = db.Contacts.Find(id);
             if (feedback == null)
             {
                 return RedirectToAction("Feedback");
@@ -76,10 +76,10 @@ namespace Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public JsonResult HandleFeedback(Feedback f)
+        public JsonResult HandleFeedback(Contact f)
         {
 
-            var feedback = db.Feedbacks.Where(x => x.FeedBackId == f.FeedBackId).FirstOrDefault();
+            var feedback = db.Contacts.Where(x => x.ID == f.ID).FirstOrDefault();
             if (feedback == null)
             {
                 return Json(new { error = "Not Found !!" }, JsonRequestBehavior.AllowGet);

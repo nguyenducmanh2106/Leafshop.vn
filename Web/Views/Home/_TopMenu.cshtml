@@ -21,11 +21,11 @@
 
 
                     <li><a href="/">Khuyến mãi</a></li>
-
+                    <li>@Html.ActionLink("Blog", "News", "Home")</li>
 
                     @if (user != null)
                     {
-                        <li>@Html.ActionLink("Blog", "News", "Home")</li>
+
                         <li>
                             <a style="display:inline !important" href='@Url.Action("Profile","Customer")'>
                                 <img src="~/Content/images/avatar.png" style="width: 42px; height: 26px;">
@@ -34,22 +34,22 @@
                         </li>
                         <li>
                             @*<a href='@Url.Action("Logout","Customer")' title="Đăng xuất">
-                                Đăng xuất
-                            </a>*@
+                    Đăng xuất
+                </a>*@
                             <a href='javascript:void(0)' onclick="logout()" title="Đăng xuất">
                                 Đăng xuất
                             </a>
                             <script>
                                 function logout() {
                                     $.cookie('customer_token', "", { path: '/', expires: -100 });
-                                    $(location).attr('href','/home/index')
+                                    $(location).attr('href', '/home/index')
                                 }
                             </script>
                         </li>
                     }
                     else
                     {
-                        <li>@Html.ActionLink("Blog", "News", "Home")</li>
+                       
                         <li><a href='@Url.Action("Index","Customer")'>Tài khoản</a></li>
                         <li><a href='@Url.Action("Index","Customer")'>Đăng nhập / Đăng ký</a></li>
 

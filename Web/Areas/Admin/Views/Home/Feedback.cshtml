@@ -47,7 +47,7 @@
                 },
                 columns: [
                     {
-                        data: "Subject", render: function (Subject) {
+                        data: "Noidung", render: function (Subject) {
                             if (Subject.length >= 50) {
                                 return '' + Subject.slice(0, 50) + "..." + '';
                             } else {
@@ -55,7 +55,7 @@
                             }
                         },
                     },
-                    { data: "FullName" },
+                    { data: "Fullname" },
                     { data: "Email" },
                     {
                         data: "Created", render: function (data, type, row) {
@@ -74,7 +74,7 @@
                         },
                     },
                     {
-                        data: "FeedBackId", render: function (data) {
+                        data: "ID", render: function (data) {
                             return '<a href="@Url.Action("FeedbackDetail","Home")/' + data + '" class="btn btn-sm btn-icon btn-pure btn-outline edit-row-btn" ><i data-toggle="tooltip" data-original-title="Chi tiết" style="font-size:15px" data-icon="" class="linea-icon linea-basic fa-fw text-primary tooltip-primary" aria-hidden="true"></i></a>';  '<button data-id="' + data +'" class="mr-0 btn btn-sm btn-icon btn-pure btn-outline edit-row-btn btn-delete-banner" ><i data-toggle="tooltip" data-original-title="Xoá" style="font-size:15px" class="ti-trash text-danger font-weight-bold tooltip-danger" aria-hidden="true"></i></button>'
                         },
                     },

@@ -1,4 +1,4 @@
-﻿@model Models.Models.DataModels.Feedback
+﻿@model Models.Models.DataModels.Contact
 @{
     ViewBag.Title = "Chi tiết phản hồi";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
@@ -6,19 +6,23 @@
 <div class="col-md-12">
     <div class="white-box">
         <div class="panel">
-            <div style="font-size:20px" class="">@Model.Subject</div>
             <div class="tab-content">
                 <div class="tab-pane active">
                     <div class="row">
                         <div class="col-md-3 col-xs-6 b-r">
                             <strong>Họ Tên</strong>
                             <br>
-                            <p class="text-muted">@Model.FullName</p>
+                            <p class="text-muted">@Model.Fullname</p>
                         </div>
                         <div class="col-md-3 col-xs-6 b-r">
                             <strong>Email</strong>
                             <br>
                             <p class="text-muted">@Model.Email</p>
+                        </div>
+                        <div class="col-md-3 col-xs-6 b-r">
+                            <strong>Điện Thoại</strong>
+                            <br>
+                            <p class="text-muted">@Model.Sdt</p>
                         </div>
                         <div class="col-md-3 col-xs-6 b-r">
                             <strong>Ngày phản hồi</strong>
@@ -45,14 +49,14 @@
                         </div>
                     </div>
                     <hr>
-                    <p class="m-t-30">@Model.Description</p>
+                    <p class="m-t-30">@Model.Noidung</p>
                 </div>
             </div>
         </div>
         <div class="text-right re-load-btn">
             @if (Model.Status == 0)
             {
-                <button data-id="@Model.FeedBackId" class="btn btn-primary feeback-handle"> Xử lý phản hồi </button>
+                <button data-id="@Model.ID" class="btn btn-primary feeback-handle"> Xử lý phản hồi </button>
             }
         </div>
     </div>
@@ -97,12 +101,12 @@
                     var feedback = {};
                     if ($('#processed').is(":checked")) {
                         // it is checked
-                        feedback.FeedBackId = id;
+                        feedback.ID = id;
                         feedback.Status = $("#processed").val();
                     }
                     if ($('#destruction').is(":checked")) {
                         // it is checked
-                        feedback.FeedBackId = id;
+                        feedback.ID = id;
                         feedback.Status = $("#destruction").val()
                     }
                     $.ajax({
