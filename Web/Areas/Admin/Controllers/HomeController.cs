@@ -32,23 +32,23 @@ namespace Web.Areas.Admin.Controllers
         }
         #endregion
 
-        #region Chart data
-        public JsonResult ChartData()
-        {
-            var orders = db.Orders.Where(x => x.Status == 2).GroupBy(x => new
-            {
-                Month = x.Created.Month,
-                Year = x.Created.Year
-            }).Select(c => new ChartData
-            {
-                Month = c.Key.Month,
-                Year = c.Key.Year,
-                MonthOfYear = c.Key.Month + "/" + c.Key.Year,
-                Total = c.Count()
-            }).OrderBy(x => x.Year).AsEnumerable();
-            return Json(orders, JsonRequestBehavior.AllowGet);
-        }
-        #endregion
+        //#region Chart data
+        //public JsonResult ChartData()
+        //{
+        //    var orders = db.Orders.Where(x => x.Status == 2).GroupBy(x => new
+        //    {
+        //        Month = x.Created.Month,
+        //        Year = x.Created.Year
+        //    }).Select(c => new ChartData
+        //    {
+        //        Month = c.Key.Month,
+        //        Year = c.Key.Year,
+        //        MonthOfYear = c.Key.Month + "/" + c.Key.Year,
+        //        Total = c.Count()
+        //    }).OrderBy(x => x.Year).AsEnumerable();
+        //    return Json(orders, JsonRequestBehavior.AllowGet);
+        //}
+        //#endregion
 
         #region Feedback, detail, handle feedback
         public ActionResult Feedback()
@@ -102,34 +102,34 @@ namespace Web.Areas.Admin.Controllers
         }
         #endregion
 
-        #region AutoSend
-        [HttpPost]
-        public JsonResult TestAutoSend()
-        {
-            if (HttpContext.Session["User"] != null)
-            {
-                if (HttpRuntime.Cache["LoggedInUsers"] != null)//check if the list has been created
-                {
-                    //the list is not null so we retrieve it from the cache
-                    List<User> loggedInUsers = (List<User>)HttpRuntime.Cache["LoggedInUsers"];
-                    var curentUser = (User)HttpContext.Session["User"];
-                    foreach (var user in loggedInUsers)
-                    {
-                        if (user.Email.Contains(curentUser.Email))//if the user is in the list
-                        {
-                            //then remove them
-                            loggedInUsers.Remove(user);
-                            Session.Remove("User");
-                            break;
-                        }
-                        // else do nothing
-                    }
-                    return Json(new { success = "thành công", JsonRequestBehavior.AllowGet });
-                }
-            }
-            return Json(new { error = "Không thành công", JsonRequestBehavior.AllowGet });
-        }
-        #endregion
+        //#region AutoSend
+        //[HttpPost]
+        //public JsonResult TestAutoSend()
+        //{
+        //    if (HttpContext.Session["User"] != null)
+        //    {
+        //        if (HttpRuntime.Cache["LoggedInUsers"] != null)//check if the list has been created
+        //        {
+        //            //the list is not null so we retrieve it from the cache
+        //            List<User> loggedInUsers = (List<User>)HttpRuntime.Cache["LoggedInUsers"];
+        //            var curentUser = (User)HttpContext.Session["User"];
+        //            foreach (var user in loggedInUsers)
+        //            {
+        //                if (user.Email.Contains(curentUser.Email))//if the user is in the list
+        //                {
+        //                    //then remove them
+        //                    loggedInUsers.Remove(user);
+        //                    Session.Remove("User");
+        //                    break;
+        //                }
+        //                // else do nothing
+        //            }
+        //            return Json(new { success = "thành công", JsonRequestBehavior.AllowGet });
+        //        }
+        //    }
+        //    return Json(new { error = "Không thành công", JsonRequestBehavior.AllowGet });
+        //}
+        //#endregion
 
         #region partialView
         public PartialViewResult MainLeft()
