@@ -26,7 +26,7 @@ namespace Web.Areas.Admin.Controllers
         {
             ViewBag.invoice = db.Orders.Where(x => x.Status == 2).Count();
             ViewBag.product = db.Products.Where(x => x.Status == true).Count();
-            ViewBag.users = db.Users.Where(x => x.Status == 1 || x.Status == 0).Count();
+            //ViewBag.users = db.Users.Where(x => x.Status == 1 || x.Status == 0).Count();
             ViewBag.customers = db.Customers.Where(x => x.Status == 1 || x.Status == 0).Count();
             return View();
         }

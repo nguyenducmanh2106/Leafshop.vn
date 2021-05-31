@@ -23,14 +23,14 @@ namespace Web.Controllers
         public async Task<ActionResult> Index()
         {
             //TempData["ReturnUrl"] = Request.Url.AbsoluteUri;
-            ViewBag.products = await db.Products.Where(x => x.Status == true).ToListAsync();
+            //ViewBag.products = await db.Products.Where(x => x.Status == true).ToListAsync();
             ViewBag.News = await db.News.Where(x => x.Status == 1).Take(3).OrderBy(x => x.Created).ToListAsync();
             ViewBag.ProductSaleQuick = await db.Products.Where(x => x.Status == true).Take(8).OrderBy(x => x.ProductSaleQuantity).ToListAsync();
-            ViewBag.banner = await db.Banners.Where(x => x.Status == 1).Take(6).OrderBy(x => x.Orderby).ToListAsync();
+            //ViewBag.banner = await db.Banners.Where(x => x.Status == 1).Take(6).OrderBy(x => x.Orderby).ToListAsync();
             ViewBag.ProductsNew = await db.Products.Where(x => x.Status == true).OrderBy(x => x.CreateDate).Take(8).ToListAsync();
-            var providers = await db.Providers.Where(x => x.Status == 1).OrderBy(x => x.Orderby).Take(3).ToListAsync();
-            ViewBag.SalePrice = await db.Products.Where(x => x.Status == true).OrderBy(x => (x.PriceOut - x.PriceOut * x.Discount / 100)).Take(8).ToListAsync();
-            return View(providers);
+            //var providers = await db.Providers.Where(x => x.Status == 1).OrderBy(x => x.Orderby).Take(3).ToListAsync();
+            //ViewBag.SalePrice = await db.Products.Where(x => x.Status == true).OrderBy(x => (x.PriceOut - x.PriceOut * x.Discount / 100)).Take(8).ToListAsync();
+            return View();
         }
         public ActionResult TopMenu()
         {
